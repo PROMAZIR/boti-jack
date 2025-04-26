@@ -1,50 +1,64 @@
-const CACHE_NAME = 'controle-financeiro-v1';
-const urlsToCache = [
+const CACHE_NAME = 'jak-app-v1.0.0';
+const ASSETS = [
   '/',
   '/index.html',
-  '/site.webmanifest',
-  '/favicon.ico',
-  '/favicon-16x16.png',
-  '/favicon-32x32.png',
-  '/apple-touch-icon.png',
-  '/android-chrome-192x192.png',
-  '/android-chrome-512x512.png'
+  '/manifest.json',
+  '/icons/apple-touch-icon.png',
+  '/icons/favicon-32x32.png',
+  '/icons/favicon-16x16.png'
 ];
 
-self.addEventListener('install', function(event) {
+// Instalação do Service Worker
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(function(cache) {
-        return cache.addAll(urlsToCache);
+      .then(cache => {
+        return cache.addAll(ASSETS);
       })
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      }
-    )
-  );
-});
-
-self.addEventListener('activate', function(event) {
-  const cacheWhitelist = [CACHE_NAME];
+// Ativação do Service Worker
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(function(cacheName) {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
+        cacheNames.filter(cacheName => {
+          return cacheName !== CACHE_NAME;
+        }).map(cacheName => {
+          return caches.delete(cacheName);
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
+});
+
+// Estratégia de cache: Network First, fallback para cache
+self.addEventListener('fetch', event => {
+  // Não interceptar requisições para o Google Apps Script
+  if (event.request.url.includes('script.google.com')) {
+    return;
+  }
+  
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        // Clonar a resposta para armazenar no cache
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseClone);
+          });
+        return response;
+      })
+      .catch(() => caches.match(event.request))
+  );
+});
+
+// Escutar mensagens do cliente
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
