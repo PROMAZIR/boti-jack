@@ -233,6 +233,8 @@
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
             </iframe>
         </div>
+         <!-- Botão de instalação -->
+        <button id="install-button">Adicionar à tela inicial</button>
     </div>
 
     <script>
@@ -253,6 +255,10 @@
     const updateNotification = document.getElementById('update-notification');
     const frameContainer = document.getElementById('frame-container');
     const appFrame = document.getElementById('app-frame');
+    const installButton = document.getElementById('install-button');
+    
+    // Variáveis para instalação PWA
+    let deferredPrompt;
     
     // Atualizar número da versão na interface
     versionNumber.textContent = APP_VERSION;
@@ -265,6 +271,38 @@
         
         state.classList.remove('hidden');
     }
+        // Adicionar lógica para instalação PWA
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevenir o prompt automático
+        e.preventDefault();
+        // Armazenar o evento para uso posterior
+        deferredPrompt = e;
+        // Mostrar o botão de instalação
+        installButton.style.display = 'block';
+        
+        // Registrar evento de instalação disponível
+        console.log('Instalação disponível');
+    });
+    
+    // Adicionar evento de clique ao botão de instalação
+    installButton.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+            return;
+        }
+        
+        // Mostrar o prompt de instalação
+        deferredPrompt.prompt();
+        
+        // Aguardar a escolha do usuário
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Resultado da instalação: ${outcome}`);
+        
+        // Limpar a referência
+        deferredPrompt = null;
+        
+        // Esconder o botão
+        installButton.style.display = 'none';
+    });
     
     // Função para verificar atualizações
     function checkForUpdates() {
@@ -289,6 +327,13 @@
                 loadApp(); // Carregar o app mesmo se houver erro na verificação
             });
     }
+        // Detectar quando o app foi instalado
+    window.addEventListener('appinstalled', (evt) => {
+        // Esconder o botão de instalação
+        installButton.style.display = 'none';
+        // Registrar evento de instalação
+        console.log('Aplicativo instalado');
+    });
     
     // Função para verificar a versão do Apps Script
     async function checkAppsScriptVersion() {
