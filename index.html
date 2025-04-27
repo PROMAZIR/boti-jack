@@ -366,6 +366,55 @@
                     console.error('Erro ao registrar Service Worker:', error);
                 });
             }
+               // Verificar atualizações após um breve atraso
+            setTimeout(checkForUpdates, 1500);
+            
+            // Adicionar evento para detectar quando o iframe terminar de carregar
+            appFrame.addEventListener('load', function() {
+                // Esconder a tela de carregamento quando o iframe estiver pronto
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            });
+            
+            // Adicionar evento para detectar mudanças no estado de conexão
+            window.addEventListener('online', function() {
+                if (loadingScreen.style.display !== 'none') {
+                    checkForUpdates();
+                }
+            });
+            
+            window.addEventListener('offline', function() {
+                if (loadingScreen.style.display !== 'none') {
+                    showState(offlineState);
+                } else {
+                    // Mostrar notificação de offline se o app já estiver carregado
+                    const offlineNotification = document.createElement('div');
+                    offlineNotification.style.position = 'fixed';
+                    offlineNotification.style.top = '10px';
+                    offlineNotification.style.left = '50%';
+                    offlineNotification.style.transform = 'translateX(-50%)';
+                    offlineNotification.style.backgroundColor = '#f44336';
+                    offlineNotification.style.color = 'white';
+                    offlineNotification.style.padding = '10px 20px';
+                    offlineNotification.style.borderRadius = '5px';
+                    offlineNotification.style.zIndex = '2000';
+                    offlineNotification.textContent = 'Você está offline. Algumas funcionalidades podem não estar disponíveis.';
+                    
+                    document.body.appendChild(offlineNotification);
+                    
+                    setTimeout(() => {
+                        offlineNotification.style.opacity = '0';
+                        offlineNotification.style.transition = 'opacity 0.5s';
+                        setTimeout(() => {
+                            document.body.removeChild(offlineNotification);
+                        }, 500);
+                    }, 5000);
+                }
+            });
+        });
     </script>
 </body>
 </html>
+
