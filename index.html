@@ -10,7 +10,7 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cred.boti-jack.starktech.net.br/">
+    <meta property="og:url" content="https://credi.boti-jack.starktech.net.br/">
     <meta property="og:title" content="Parcelados-jak">
     <meta property="og:description" content="💳 Compre agora, pague do seu jeito!Descubra um novo jeito de comprar com o nosso app!Aqui você encontra as melhores marcas e pode parcelar suas compras com facilidade, segurança e condições que cabem no seu bolso.✅ Várias lojas em um só lugar✅ Parcelamento flexível✅ Sem burocracia✅ Tudo 100% digitalBaixe agora e tenha o controle das suas compras na palma da mão!.">
     <meta property="og:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
@@ -19,7 +19,7 @@
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://cred-boti.jack.starktech.net.br/">
+    <meta name="twitter:url" content="https://credi-boti.jack.starktech.net.br/">
     <meta name="twitter:title" content="CREDIARIO">
     <meta name="twitter:description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
     <meta name="twitter:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
@@ -48,6 +48,11 @@
         
         .loading-container {
             text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 80%;
         }
         
         .spinner {
@@ -65,7 +70,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        .update-button {
+        .button {
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -74,17 +79,75 @@
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
-            margin: 10px 2px;
+            margin: 10px 5px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+        
+        .button.secondary {
+            background-color: #f44336;
+        }
+        
+        .button.secondary:hover {
+            background-color: #d32f2f;
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        
+        .version-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .update-available {
+            background-color: #FFF3CD;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #FFEEBA;
         }
     </style>
 </head>
 <body>
     <div class="loading-container">
-        <div class="spinner"></div>
-        <p>Carregando aplicativo...</p>
-        <button id="update-button" class="update-button" style="display: none;">Atualizar Aplicativo</button>
+        <img src="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png" alt="Logo" class="logo">
+        <h2>Crediário Jak</h2>
+        
+        <div id="loading-state">
+            <div class="spinner"></div>
+            <p>Carregando aplicativo...</p>
+        </div>
+        
+        <div id="update-state" class="hidden">
+            <div class="update-available">
+                <p>Uma nova versão do aplicativo está disponível!</p>
+            </div>
+            <button id="update-now-button" class="button">Atualizar Agora</button>
+            <button id="update-later-button" class="button secondary">Mais Tarde</button>
+        </div>
+        
+        <div id="offline-state" class="hidden">
+            <p>Você está offline. Verifique sua conexão com a internet.</p>
+            <button id="retry-button" class="button">Tentar Novamente</button>
+        </div>
+        
+        <div class="version-info">
+            Versão: <span id="version-number">1.0.3</span>
+        </div>
     </div>
 
     <script>
@@ -92,43 +155,76 @@
         const APP_VERSION = "1.0.3";
         const APP_URL = "https://script.google.com/macros/s/AKfycbz3XMziut1bs8Urp6Gyr4y1mRCz78Q9_g_75eLprcCPh3vwua_v-h15MAwUSGF8DoCp/exec";
         
+        // Elementos da interface
+        const loadingState = document.getElementById('loading-state');
+        const updateState = document.getElementById('update-state');
+        const offlineState = document.getElementById('offline-state');
+        const versionNumber = document.getElementById('version-number');
+        const updateNowButton = document.getElementById('update-now-button');
+        const updateLaterButton = document.getElementById('update-later-button');
+        const retryButton = document.getElementById('retry-button');
+        
+        // Atualizar número da versão na interface
+        versionNumber.textContent = APP_VERSION;
+        
+        // Função para mostrar um estado específico
+        function showState(state) {
+            loadingState.classList.add('hidden');
+            updateState.classList.add('hidden');
+            offlineState.classList.add('hidden');
+            
+            state.classList.remove('hidden');
+        }
+        
         // Função para verificar atualizações
         function checkForUpdates() {
-            // Armazenar a última versão verificada
-            const lastVersion = localStorage.getItem('appVersion') || APP_VERSION;
-            
-            // Armazenar a última data de verificação
-            const lastCheck = localStorage.getItem('lastUpdateCheck');
-            const now = new Date().getTime();
-            
-            // Verificar apenas uma vez por dia
-            if (lastCheck && now - parseInt(lastCheck) < 86400000) {
-                redirectToApp();
+            // Se estiver offline, mostrar estado offline
+            if (!navigator.onLine) {
+                showState(offlineState);
                 return;
             }
             
-            // Fazer uma solicitação para verificar a versão (usando um proxy ou API própria)
-            fetch('/api/check-version', { 
-                method: 'GET',
-                cache: 'no-cache'
-            })
-            .then(response => response.json())
-            .then(data => {
-                localStorage.setItem('lastUpdateCheck', now.toString());
-                
-                if (data.version && data.version !== lastVersion) {
-                    // Nova versão disponível
-                    localStorage.setItem('appVersion', data.version);
-                    clearCacheAndRedirect();
-                } else {
-                    // Mesma versão, apenas redirecionar
-                    redirectToApp();
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao verificar atualizações:', error);
+            // Verificar a última versão conhecida
+            const lastKnownVersion = localStorage.getItem('appVersion') || APP_VERSION;
+            
+            // Verificar se há uma nova versão disponível (simulado)
+            // Em um ambiente real, você faria uma solicitação para seu servidor
+            const hasUpdate = checkForNewVersion();
+            
+            if (hasUpdate) {
+                showState(updateState);
+            } else {
+                // Não há atualizações, redirecionar para o app
                 redirectToApp();
-            });
+            }
+        }
+        
+        // Função para simular verificação de nova versão
+        // Em um ambiente real, isso seria substituído por uma chamada de API
+        function checkForNewVersion() {
+            // Verificar se o usuário já viu a notificação de atualização hoje
+            const lastUpdatePrompt = localStorage.getItem('lastUpdatePrompt');
+            const now = new Date().getTime();
+            
+            // Se já mostrou a notificação hoje, não mostrar novamente
+            if (lastUpdatePrompt && now - parseInt(lastUpdatePrompt) < 86400000) {
+                return false;
+            }
+            
+            // Verificar se há uma nova versão disponível (simulado)
+            // Aqui você pode implementar sua lógica real de verificação
+            const serverVersion = localStorage.getItem('serverVersion');
+            
+            // Para fins de demonstração, vamos simular uma nova versão disponível
+            // a cada 7 dias (ou na primeira execução)
+            const lastVersionCheck = localStorage.getItem('lastVersionCheck');
+            if (!lastVersionCheck || now - parseInt(lastVersionCheck) > 604800000) {
+                localStorage.setItem('lastVersionCheck', now.toString());
+                localStorage.setItem('serverVersion', (parseFloat(APP_VERSION) + 0.1).toFixed(1));
+                return true;
+            }
+            
+            return serverVersion && serverVersion !== APP_VERSION;
         }
         
         // Função para limpar o cache e redirecionar
@@ -141,6 +237,15 @@
                         })
                     );
                 }).then(() => {
+                    // Atualizar a versão armazenada
+                    const serverVersion = localStorage.getItem('serverVersion');
+                    if (serverVersion) {
+                        localStorage.setItem('appVersion', serverVersion);
+                    }
+                    
+                    // Registrar que o usuário viu a notificação
+                    localStorage.setItem('lastUpdatePrompt', new Date().getTime().toString());
+                    
                     redirectToApp();
                 }).catch(error => {
                     console.error('Erro ao limpar cache:', error);
@@ -154,15 +259,19 @@
         // Função para redirecionar para o aplicativo
         function redirectToApp() {
             // Adicionar timestamp para evitar cache
-            window.location.href = APP_URL + '?t=' + new Date().getTime();
+            const timestamp = new Date().getTime();
+            const redirectUrl = `${APP_URL}?t=${timestamp}`;
+            
+            // Redirecionar para o aplicativo
+            window.location.href = redirectUrl;
         }
         
-        // Mostrar botão de atualização manual
-        document.getElementById('update-button').addEventListener('click', function() {
-            clearCacheAndRedirect();
-        });
+        // Eventos de botões
+        updateNowButton.addEventListener('click', clearCacheAndRedirect);
+        updateLaterButton.addEventListener('click', redirectToApp);
+        retryButton.addEventListener('click', checkForUpdates);
         
-        // Verificar atualizações ao carregar a página
+        // Inicializar ao carregar a página
         window.addEventListener('load', () => {
             // Registrar service worker
             if ('serviceWorker' in navigator) {
@@ -175,17 +284,8 @@
                 });
             }
             
-            // Verificar se está offline
-            if (!navigator.onLine) {
-                document.querySelector('.loading-container p').textContent = 'Você está offline. Verifique sua conexão.';
-                document.getElementById('update-button').style.display = 'inline-block';
-                return;
-            }
-            
-            // Iniciar verificação de atualizações
-            setTimeout(() => {
-                redirectToApp(); // Redirecionar diretamente para o app
-            }, 1000);
+            // Verificar atualizações após um breve atraso
+            setTimeout(checkForUpdates, 1500);
         });
     </script>
 </body>
