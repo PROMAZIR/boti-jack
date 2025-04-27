@@ -114,25 +114,26 @@
         }
         
         /* Animação de flores */
-        .flower-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        
         .flower {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0;
-            z-index: -1;
-        }
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    z-index: 5; /* Aumentar o z-index */
+}
+
+.flower-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1001; /* Garantir que esteja acima de outros elementos */
+}
         
         .flower1 {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50' width='24' height='24'%3E%3Cpath d='M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2M15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8M8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,8.7 7.7,8 8.5,8M12,11C13.1,11 14,11.9 14,13C14,14.1 13.1,15 12,15C10.9,15 10,14.1 10,13C10,11.9 10.9,11 12,11M19,12C19.5,12 20,12.5 20,13C20,13.5 19.5,14 19,14C18.5,14 18,13.5 18,13C18,12.5 18.5,12 19,12M5,12C5.5,12 6,12.5 6,13C6,13.5 5.5,14 5,14C4.5,14 4,13.5 4,13C4,12.5 4.5,12 5,12M12,16C13.1,16 14,16.9 14,18C14,19.1 13.1,20 12,20C10.9,20 10,19.1 10,18C10,16.9 10.9,16 12,16M15.5,13C16.3,13 17,13.7 17,14.5C17,15.3 16.3,16 15.5,16C14.7,16 14,15.3 14,14.5C14,13.7 14.7,13 15.5,13M8.5,13C9.3,13 10,13.7 10,14.5C10,15.3 9.3,16 8.5,16C7.7,16 7,15.3 7,14.5C7,13.7 7.7,13 8.5,13Z'/%3E%3C/svg%3E");
@@ -349,15 +350,19 @@
         
         <!-- Frame do aplicativo -->
         <div class="frame-container" id="frame-container">
-            <iframe 
-                id="app-frame"
-                src="https://script.google.com/macros/s/AKfycbwlrDPmfSWwUszTKT14L01675n2P1Oy3GvPQbI7Eesn9a5NReHYyhENvQYoIHxefc8/exec"
-                allow="autoplay; camera; microphone; fullscreen"
-                allowfullscreen
-                loading="eager"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
-            </iframe>
-        </div>
+    <iframe 
+        id="app-frame"
+        src="https://script.google.com/macros/s/AKfycbwlrDPmfSWwUszTKT14L01675n2P1Oy3GvPQbI7Eesn9a5NReHYyhENvQYoIHxefc8/exec"
+        allow="autoplay; camera; microphone; fullscreen"
+        allowfullscreen
+        loading="eager"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
+    </iframe>
+    <div id="iframe-error" style="display:none; text-align:center; padding:20px;">
+        <p>Houve um problema ao carregar o aplicativo.</p>
+        <button onclick="reloadIframe()" class="button">Tentar Novamente</button>
+    </div>
+</div>
          
         <!-- Botão de instalação -->
         <button id="install-button">Adicionar à tela inicial</button>
@@ -394,7 +399,17 @@
         
         // Definir a versão atual
         versionNumber.textContent = version;
-        
+        // Inicializar a tela de carregamento
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM carregado, inicializando...");
+    initLoadingScreen();
+    
+    // Iniciar o carregamento do aplicativo após um pequeno atraso
+    setTimeout(() => {
+        loadApp();
+    }, 2000); // Reduzir para 2 segundos
+});
+
         // Configurar saudação baseada no horário
         function setGreeting() {
             const hour = new Date().getHours();
@@ -418,7 +433,11 @@
                 userName.textContent = 'Seja bem-vindo(a)!';
             }
         }
-        
+        function reloadIframe() {
+    document.getElementById('iframe-error').style.display = 'none';
+    appFrame.src = appFrame.src;
+}
+
         // Criar animação floral
         function createFlowers() {
             const flowerTypes = ['flower1', 'flower2', 'flower3'];
@@ -579,34 +598,47 @@
         });
         
         // Função para carregar o aplicativo
-        function loadApp() {
-            // Verificar conexão com a internet
-            if (!navigator.onLine) {
-                showOfflineState();
-                return;
-            }
-            
-            // Mostrar o frame do aplicativo - IMPORTANTE: Isso deve acontecer antes de qualquer outra coisa
-            frameContainer.style.display = 'block';
-            
-            // Verificar se o iframe já está carregado
-            if (appFrame.complete || appFrame.readyState === 'complete') {
-                hideLoadingScreen();
-            } else {
-                // Configurar evento de carregamento do iframe
-                appFrame.onload = function() {
-                    console.log('Frame carregado com sucesso');
-                    hideLoadingScreen();
-                };
-                
-                // Configurar timeout para caso o iframe não carregue
-                setTimeout(function() {
-                    if (loadingScreen.style.display !== 'none') {
-                        console.log('Timeout do carregamento do frame - mostrando mesmo assim');
-                        hideLoadingScreen();
-                    }
-                }, 10000); // 10 segundos de timeout
-            }
+       function loadApp() {
+    // Verificar conexão com a internet
+    if (!navigator.onLine) {
+        showOfflineState();
+        return;
+    }
+    
+    console.log("Iniciando carregamento do app...");
+    
+    // Mostrar o frame do aplicativo
+    frameContainer.style.display = 'block';
+    
+    // Configurar evento de carregamento do iframe
+    appFrame.onload = function() {
+        console.log('Frame carregado com sucesso');
+        hideLoadingScreen();
+    };
+    
+    // Configurar timeout para caso o iframe não carregue
+    setTimeout(function() {
+        if (loadingScreen.style.display !== 'none') {
+            console.log('Timeout do carregamento do frame - mostrando mesmo assim');
+            hideLoadingScreen();
+        }
+    }, 15000); // Aumentar para 15 segundos
+    
+    // Configurar evento de erro do iframe
+    appFrame.onerror = function(e) {
+        console.error('Erro ao carregar o iframe:', e);
+        showOfflineState();
+    };
+    
+    // Tentar recarregar o iframe se demorar muito
+    setTimeout(function() {
+        if (loadingScreen.style.display !== 'none') {
+            console.log('Recarregando iframe...');
+            appFrame.src = appFrame.src;
+        }
+    }, 8000); // Tentar recarregar após 8 segundos
+}
+
             
             // Configurar evento de erro do iframe
             appFrame.onerror = function() {
