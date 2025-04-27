@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jak</title>
+    <title>Crediário Jak</title>
+    
     <!-- Primary Meta Tags -->
-    <meta name="title" content="CREDIARIO">
+    <meta name="title" content="Crediário Jak">
     <meta name="description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cred-boti.jack.starktech.net.br/">
-    <meta property="og:title" content="Parcelados-jack">
-    <meta property="og:description" content="💳 Compre agora, pague do seu jeito!Descubra um novo jeito de comprar com o nosso app!Aqui você encontra as melhores marcas e pode parcelar suas compras com facilidade, segurança e condições que cabem no seu bolso.✅ Várias lojas em um só lugar✅ Parcelamento flexível✅ Sem burocracia✅ Tudo 100% digitalBaixe agora e tenha o controle das suas compras na palma da mão!.">
+    <meta property="og:url" content="https://credi-boti.jack.starktech.net.br/">
+    <meta property="og:title" content="Crediário Jak">
+    <meta property="og:description" content="💳 Compre agora, pague do seu jeito! Descubra um novo jeito de comprar com o nosso app!">
     <meta property="og:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://cred-boti.jack.starktech.net.br/">
-    <meta name="twitter:title" content="CREDIARIO">
+    <meta name="twitter:url" content="https://credi-boti.jack.starktech.net.br/">
+    <meta name="twitter:title" content="Crediário Jak">
     <meta name="twitter:description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
     <meta name="twitter:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     
@@ -30,8 +29,23 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
     <meta name="theme-color" content="#ffffff">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="application-name" content="Crediário Jak">
+    <meta name="apple-mobile-web-app-title" content="Crediário Jak">
+    
+    <!-- Adicionar à tela inicial para Safari no iOS -->
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-2048-2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1668-2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1536-2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1125-2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1242-2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-828-1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1242-2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-750-1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="/icons/apple-splash-640-1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    
     
     <style>
         body, html {
@@ -87,22 +101,25 @@
             100% { transform: rotate(360deg); }
         }
         
-        .button {
+         /* Adicionar estilos para o botão de instalação */
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #4CAF50;
             color: white;
-            border: none;
             padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 5px;
-            cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
         }
         
-        .button:hover {
+        #install-button:hover {
             background-color: #45a049;
         }
         
@@ -236,6 +253,10 @@
     const updateNotification = document.getElementById('update-notification');
     const frameContainer = document.getElementById('frame-container');
     const appFrame = document.getElementById('app-frame');
+    const installButton = document.getElementById('install-button');
+    
+    // Variáveis para instalação PWA
+    let deferredPrompt;
     
     // Atualizar número da versão na interface
     versionNumber.textContent = APP_VERSION;
@@ -249,149 +270,49 @@
         state.classList.remove('hidden');
     }
     
-    // Função para verificar atualizações
-    function checkForUpdates() {
-        // Se estiver offline, mostrar estado offline
-        if (!navigator.onLine) {
-            showState(offlineState);
+    // Seu código existente
+    // ...
+    
+    // Adicionar lógica para instalação PWA
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevenir o prompt automático
+        e.preventDefault();
+        // Armazenar o evento para uso posterior
+        deferredPrompt = e;
+        // Mostrar o botão de instalação
+        installButton.style.display = 'block';
+        
+        // Registrar evento de instalação disponível
+        console.log('Instalação disponível');
+    });
+    
+    // Adicionar evento de clique ao botão de instalação
+    installButton.addEventListener('click', async () => {
+        if (!deferredPrompt) {
             return;
         }
         
-        // Verificar a versão do Apps Script
-        checkAppsScriptVersion()
-            .then(hasUpdate => {
-                if (hasUpdate) {
-                    showState(updateState);
-                } else {
-                    // Não há atualizações, carregar o app
-                    loadApp();
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao verificar versão:', error);
-                loadApp(); // Carregar o app mesmo se houver erro na verificação
-            });
-    }
-    
-    // Função para verificar a versão do Apps Script
-    async function checkAppsScriptVersion() {
-  // Usar JSONP para evitar problemas de CORS
-  const script = document.createElement('script');
-  const callbackName = 'handleVersionCheck_' + Math.random().toString(36).substr(2, 9);
-  
-  // Definir callback global
-  window[callbackName] = function(data) {
-    if (data && data.version) {
-      console.log('Versão do Apps Script:', data.version);
-      // Comparar com a versão atual e mostrar notificação se necessário
-      const currentVersion = '1.0.4'; // Versão atual da aplicação
-      if (data.version !== currentVersion) {
-        showUpdateNotification();
-      }
-    }
-    
-    // Limpar o callback e remover o script
-    delete window[callbackName];
-    document.body.removeChild(script);
-  };
-  
-  // Criar URL com callback JSONP
-  const url = 'https://script.google.com/macros/s/AKfycbwlrDPmfSWwUszTKT14L01675n2P1Oy3GvPQbI7Eesn9a5NReHYyhENvQYoIHxefc8/exec?checkVersion=true&callback=' + callbackName + '&t=' + Date.now();
-  
-  script.src = url;
-  document.body.appendChild(script);
-}
-
-    
-    // Função para limpar o cache e carregar o app
-    function clearCacheAndLoadApp() {
-        if ('caches' in window) {
-            caches.keys().then(cacheNames => {
-                return Promise.all(
-                    cacheNames.map(cacheName => {
-                        return caches.delete(cacheName);
-                    })
-                );
-            }).then(() => {
-                // Atualizar a versão armazenada
-                const serverVersion = localStorage.getItem('serverVersion');
-                if (serverVersion) {
-                    localStorage.setItem('appVersion', serverVersion);
-                }
-                
-                // Registrar que o usuário viu a notificação
-                localStorage.setItem('lastUpdatePrompt', new Date().getTime().toString());
-                
-                // Recarregar o iframe com um novo timestamp para evitar cache
-                reloadAppFrame();
-            }).catch(error => {
-                console.error('Erro ao limpar cache:', error);
-                reloadAppFrame();
-            });
-        } else {
-            reloadAppFrame();
-        }
-    }
-    
-    // Função para recarregar o iframe
-    function reloadAppFrame() {
-        const timestamp = Date.now();
-        appFrame.src = `${APP_URL}?t=${timestamp}`;
-        loadApp();
-    }
-    
-    // Função para carregar o aplicativo
-    function loadApp() {
-        // Mostrar o iframe
-        frameContainer.style.display = 'block';
+        // Mostrar o prompt de instalação
+        deferredPrompt.prompt();
         
-        // Esconder a tela de carregamento com uma transição suave
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
+        // Aguardar a escolha do usuário
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Resultado da instalação: ${outcome}`);
         
-        // Configurar verificação periódica de atualizações
-        setInterval(checkForUpdatesInBackground, VERSION_CHECK_INTERVAL);
-    }
+        // Limpar a referência
+        deferredPrompt = null;
+        
+        // Esconder o botão
+        installButton.style.display = 'none';
+    });
     
-    // Função para verificar atualizações em segundo plano
-    async function checkForUpdatesInBackground() {
-        const hasUpdate = await checkAppsScriptVersion();
-        if (hasUpdate) {
-            updateNotification.style.display = 'block';
-        }
-    }
-    
-    // Função para verificar atualizações quando o iframe estiver visível
-    function setupFrameMessageListener() {
-        // Escutar mensagens do iframe
-        window.addEventListener('message', function(event) {
-            // Verificar se a mensagem é do seu Apps Script
-            if (event.origin.includes('script.google.com')) {
-                // Verificar se a mensagem contém informações de versão
-                if (event.data && event.data.type === 'version') {
-                    const scriptVersion = event.data.version;
-                    console.log('Versão recebida do iframe:', scriptVersion);
-                    
-                    // Armazenar a versão do servidor
-                    localStorage.setItem('serverVersion', scriptVersion);
-                    
-                    // Verificar se a versão é diferente da atual
-                    const currentVersion = localStorage.getItem('appVersion') || APP_VERSION;
-                    if (scriptVersion !== currentVersion) {
-                        updateNotification.style.display = 'block';
-                    }
-                }
-            }
-        });
-    }
-    
-    // Eventos de botões
-    updateNowButton.addEventListener('click', clearCacheAndLoadApp);
-    updateLaterButton.addEventListener('click', loadApp);
-    retryButton.addEventListener('click', checkForUpdates);
-    updateNotification.addEventListener('click', clearCacheAndLoadApp);
+    // Detectar quando o app foi instalado
+    window.addEventListener('appinstalled', (evt) => {
+        // Esconder o botão de instalação
+        installButton.style.display = 'none';
+        // Registrar evento de instalação
+        console.log('Aplicativo instalado');
+    });
     
     // Inicializar ao carregar a página
     window.addEventListener('load', () => {
