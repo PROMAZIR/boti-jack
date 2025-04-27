@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cred-JACK</title>
+    <title>Crediário Jak</title>
     
     <!-- Primary Meta Tags -->
-    <meta name="title" content="Crediário JACK">
+    <meta name="title" content="Crediário Jak">
     <meta name="description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
     
     <!-- Open Graph / Facebook -->
@@ -46,9 +46,8 @@
     <link rel="apple-touch-startup-image" href="/icons/apple-splash-750-1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
     <link rel="apple-touch-startup-image" href="/icons/apple-splash-640-1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
     
-    
     <style>
-       body, html {
+        body, html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -63,7 +62,7 @@
             position: relative;
         }
         
-        /* Estilos da nova animação de carregamento */
+        /* Estilos para a animação avançada */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -86,23 +85,9 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             max-width: 80%;
         }
-        
-        #heart-path {
+                #heart-path {
             stroke-dasharray: 2000;
             stroke-dashoffset: 2000;
-            fill: rgba(76, 175, 80, 0.1);
-            animation: pulse 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% {
-                fill: rgba(76, 175, 80, 0.1);
-                transform: scale(0.95);
-            }
-            100% {
-                fill: rgba(76, 175, 80, 0.3);
-                transform: scale(1.05);
-            }
         }
         
         .loading-text {
@@ -117,7 +102,36 @@
             50% { opacity: 1; }
         }
         
-        /* Seus outros estilos existentes */
+        .particle {
+            transform-origin: center;
+            transform-box: fill-box;
+        }
+        
+        /* Estilos para os botões */
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+        
+        .button.secondary {
+            background-color: #f44336;
+        }
+        
+        .button.secondary:hover {
+            background-color: #d32f2f;
+        }
+        
         .logo {
             max-width: 150px;
             margin-bottom: 20px;
@@ -192,14 +206,6 @@
         #install-button:hover {
             background-color: #45a049;
         }
-        
-        .button.secondary {
-            background-color: #f44336;
-        }
-        
-        .button.secondary:hover {
-            background-color: #d32f2f;
-        }
     </style>
 </head>
 <body>
@@ -209,26 +215,69 @@
                 <img src="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png" alt="Logo" class="logo">
                 <h2>Crediário Jak</h2>
                 
-                 <!-- Nova animação SVG -->
+                <!-- Animação SVG avançada -->
                 <svg viewBox="-200 -300 400 600" width="120" height="120">
                     <path id="heart-path" 
-                          stroke-linecap="butt" 
-                          stroke-linejoin="miter" 
+                          stroke-linecap="round" 
+                          stroke-linejoin="round" 
                           fill-opacity="0" 
                           stroke-miterlimit="10" 
                           stroke="#4CAF50" 
                           stroke-opacity="1" 
                           stroke-width="10" 
                           d="M-5.400000095367432,-271.3340148925781 C-18.363000869750977,-259.6109924316406 -186.78799438476562,-98.23500061035156 -65.5260009765625,269.8380126953125 C-65.14399719238281,270.9989929199219 -64.05799865722656,271.7900085449219 -62.83700180053711,271.7929992675781 C-62.83700180053711,271.7929992675781 63.01900100708008,272.1969909667969 63.01900100708008,272.1969909667969 C64.24700164794922,272.20098876953125 65.34300231933594,271.40899658203125 65.72699737548828,270.24200439453125 C186.78799438476562,-97.28500366210938 15.64900016784668,-259.2799987792969 1.9859999418258667,-271.46600341796875 C1.4429999589920044,-271.95001220703125 0.7409999966621399,-272.20098876953125 0.014999999664723873,-272.177001953125 C0.014999999664723873,-272.177001953125 -3.5969998836517334,-272.0589904785156 -3.5969998836517334,-272.0589904785156 C-4.267000198364258,-272.0369873046875 -4.9019999504089355,-271.78399658203125 -5.400000095367432,-271.3340148925781z">
+                        <animate attributeName="stroke-dasharray" 
+                                 from="2000" 
+                                 to="2000" 
+                                 dur="0.1s" 
+                                 fill="freeze" />
                         <animate attributeName="stroke-dashoffset" 
                                  from="2000" 
                                  to="0" 
-                                 dur="2s" 
-                                 repeatCount="indefinite" />
+                                 dur="3s" 
+                                 repeatCount="1"
+                                 fill="freeze" />
+                        <animate attributeName="fill-opacity" 
+                                 from="0" 
+                                 to="0.2" 
+                                 dur="1s" 
+                                 begin="2.5s"
+                                 fill="freeze" />
+                        <animateTransform attributeName="transform"
+                                          type="scale"
+                                          from="1"
+                                          to="1.05"
+                                          dur="0.5s"
+                                          begin="3s"
+                                          repeatCount="indefinite"
+                                          additive="sum"
+                                          calcMode="spline"
+                                          keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+                                          values="1;1.05;1"
+                                          keyTimes="0;0.5;1" />
                     </path>
+                    
+                    <!-- Partículas que sobem do coração -->
+                    <g id="particles">
+                        <circle class="particle" cx="0" cy="0" r="3" fill="#4CAF50" opacity="0.7">
+                            <animate attributeName="cy" from="0" to="-150" dur="2s" begin="3s" repeatCount="indefinite" />
+                            <animate attributeName="cx" from="0" to="20" dur="2s" begin="3s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="0.7" to="0" dur="2s" begin="3s" repeatCount="indefinite" />
+                        </circle>
+                        <circle class="particle" cx="0" cy="0" r="2" fill="#4CAF50" opacity="0.5">
+                            <animate attributeName="cy" from="0" to="-120" dur="1.8s" begin="3.2s" repeatCount="indefinite" />
+                            <animate attributeName="cx" from="0" to="-15" dur="1.8s" begin="3.2s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="0.5" to="0" dur="1.8s" begin="3.2s" repeatCount="indefinite" />
+                        </circle>
+                        <circle class="particle" cx="0" cy="0" r="2.5" fill="#4CAF50" opacity="0.6">
+                            <animate attributeName="cy" from="0" to="-140" dur="2.2s" begin="3.4s" repeatCount="indefinite" />
+                            <animate attributeName="cx" from="0" to="10" dur="2.2s" begin="3.4s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" from="0.6" to="0" dur="2.2s" begin="3.4s" repeatCount="indefinite" />
+                        </circle>
+                    </g>
                 </svg>
                 
-                <div class="loading-text">Carregando Sua Compras...</div>
+                <div class="loading-text">Carregando aplicativo...</div>
                 
                 <div id="update-state" class="hidden">
                     <div class="update-available">
@@ -269,289 +318,206 @@
         <!-- Botão de instalação -->
         <button id="install-button">Adicionar à tela inicial</button>
     </div>
-
+    
     <script>
-    // Configurações do aplicativo
-    const APP_VERSION = "1.0.3";
-    const APP_URL = "https://script.google.com/macros/s/AKfycbwlrDPmfSWwUszTKT14L01675n2P1Oy3GvPQbI7Eesn9a5NReHYyhENvQYoIHxefc8/exec";
-    const VERSION_CHECK_INTERVAL = 3600000; // 1 hora em milissegundos
-    
-    // Elementos da interface
-    const loadingScreen = document.getElementById('loading-screen');
-    const loadingState = document.getElementById('loading-state');
-    const updateState = document.getElementById('update-state');
-    const offlineState = document.getElementById('offline-state');
-    const versionNumber = document.getElementById('version-number');
-    const updateNowButton = document.getElementById('update-now-button');
-    const updateLaterButton = document.getElementById('update-later-button');
-    const retryButton = document.getElementById('retry-button');
-    const updateNotification = document.getElementById('update-notification');
-    const frameContainer = document.getElementById('frame-container');
-    const appFrame = document.getElementById('app-frame');
-    const installButton = document.getElementById('install-button');
-    
-    // Variáveis para instalação PWA
-    let deferredPrompt;
-    
-    // Atualizar número da versão na interface
-    versionNumber.textContent = APP_VERSION;
-    
-    // Função para mostrar um estado específico
-    function showState(state) {
-        loadingState.classList.add('hidden');
-        updateState.classList.add('hidden');
-        offlineState.classList.add('hidden');
+        // Variáveis globais
+        let deferredPrompt;
+        const version = '1.0.3';
+        const appFrame = document.getElementById('app-frame');
+        const frameContainer = document.getElementById('frame-container');
+        const loadingScreen = document.getElementById('loading-screen');
+        const updateNotification = document.getElementById('update-notification');
+        const installButton = document.getElementById('install-button');
+        const updateNowButton = document.getElementById('update-now-button');
+        const updateLaterButton = document.getElementById('update-later-button');
+        const retryButton = document.getElementById('retry-button');
+        const versionNumber = document.getElementById('version-number');
+        const updateState = document.getElementById('update-state');
+        const offlineState = document.getElementById('offline-state');
+        const loadingState = document.querySelector('.loading-text');
         
-        state.classList.remove('hidden');
-    }
-        // Adicionar lógica para instalação PWA
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevenir o prompt automático
-        e.preventDefault();
-        // Armazenar o evento para uso posterior
-        deferredPrompt = e;
-        // Mostrar o botão de instalação
-        installButton.style.display = 'block';
+        // Definir a versão atual
+        versionNumber.textContent = version;
         
-        // Registrar evento de instalação disponível
-        console.log('Instalação disponível');
-    });
-    
-    // Adicionar evento de clique ao botão de instalação
-    installButton.addEventListener('click', async () => {
-        if (!deferredPrompt) {
-            return;
-        }
-        
-        // Mostrar o prompt de instalação
-        deferredPrompt.prompt();
-        
-        // Aguardar a escolha do usuário
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`Resultado da instalação: ${outcome}`);
-        
-        // Limpar a referência
-        deferredPrompt = null;
-        
-        // Esconder o botão
-        installButton.style.display = 'none';
-    });
-    
-    // Função para verificar atualizações
-    function checkForUpdates() {
-        // Se estiver offline, mostrar estado offline
-        if (!navigator.onLine) {
-            showState(offlineState);
-            return;
-        }
-        
-        // Verificar a versão do Apps Script
-        checkAppsScriptVersion()
-            .then(hasUpdate => {
-                if (hasUpdate) {
-                    showState(updateState);
-                } else {
-                    // Não há atualizações, carregar o app
-                    loadApp();
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao verificar versão:', error);
-                loadApp(); // Carregar o app mesmo se houver erro na verificação
-            });
-    }
-        // Detectar quando o app foi instalado
-    window.addEventListener('appinstalled', (evt) => {
-        // Esconder o botão de instalação
-        installButton.style.display = 'none';
-        // Registrar evento de instalação
-        console.log('Aplicativo instalado');
-    });
-    
-    // Função para verificar a versão do Apps Script
-    async function checkAppsScriptVersion() {
-  // Usar JSONP para evitar problemas de CORS
-  const script = document.createElement('script');
-  const callbackName = 'handleVersionCheck_' + Math.random().toString(36).substr(2, 9);
-  
-  // Definir callback global
-  window[callbackName] = function(data) {
-    if (data && data.version) {
-      console.log('Versão do Apps Script:', data.version);
-      // Comparar com a versão atual e mostrar notificação se necessário
-      const currentVersion = '1.0.4'; // Versão atual da aplicação
-      if (data.version !== currentVersion) {
-        showUpdateNotification();
-      }
-    }
-    
-    // Limpar o callback e remover o script
-    delete window[callbackName];
-    document.body.removeChild(script);
-  };
-  
-  // Criar URL com callback JSONP
-  const url = 'https://script.google.com/macros/s/AKfycbwlrDPmfSWwUszTKT14L01675n2P1Oy3GvPQbI7Eesn9a5NReHYyhENvQYoIHxefc8/exec?checkVersion=true&callback=' + callbackName + '&t=' + Date.now();
-  
-  script.src = url;
-  document.body.appendChild(script);
-}
-
-    
-    // Função para limpar o cache e carregar o app
-    function clearCacheAndLoadApp() {
-        if ('caches' in window) {
-            caches.keys().then(cacheNames => {
-                return Promise.all(
-                    cacheNames.map(cacheName => {
-                        return caches.delete(cacheName);
+        // Verificar se o service worker é suportado
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado com sucesso:', registration);
+                        
+                        // Verificar atualizações
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Nova versão disponível
+                                    showUpdateNotification();
+                                }
+                            });
+                        });
                     })
-                );
-            }).then(() => {
-                // Atualizar a versão armazenada
-                const serverVersion = localStorage.getItem('serverVersion');
-                if (serverVersion) {
-                    localStorage.setItem('appVersion', serverVersion);
-                }
-                
-                // Registrar que o usuário viu a notificação
-                localStorage.setItem('lastUpdatePrompt', new Date().getTime().toString());
-                
-                // Recarregar o iframe com um novo timestamp para evitar cache
-                reloadAppFrame();
-            }).catch(error => {
-                console.error('Erro ao limpar cache:', error);
-                reloadAppFrame();
+                    .catch(error => {
+                        console.error('Erro ao registrar o Service Worker:', error);
+                    });
+                    
+                // Verificar atualizações quando o controlador muda
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    // Recarregar a página para usar o novo service worker
+                    window.location.reload();
+                });
             });
-        } else {
-            reloadAppFrame();
         }
-    }
-    
-    // Função para recarregar o iframe
-    function reloadAppFrame() {
-        const timestamp = Date.now();
-        appFrame.src = `${APP_URL}?t=${timestamp}`;
-        loadApp();
-    }
-    
-    // Função para carregar o aplicativo
-    function loadApp() {
-        // Mostrar o iframe
-        frameContainer.style.display = 'block';
         
-        // Esconder a tela de carregamento com uma transição suave
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
+        // Evento para capturar o prompt de instalação
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevenir o prompt automático
+            e.preventDefault();
+            // Armazenar o evento para uso posterior
+            deferredPrompt = e;
+            // Mostrar o botão de instalação
+            installButton.style.display = 'block';
+        });
         
-        // Configurar verificação periódica de atualizações
-        setInterval(checkForUpdatesInBackground, VERSION_CHECK_INTERVAL);
-    }
-    
-    // Função para verificar atualizações em segundo plano
-    async function checkForUpdatesInBackground() {
-        const hasUpdate = await checkAppsScriptVersion();
-        if (hasUpdate) {
+        // Configurar o botão de instalação
+        installButton.addEventListener('click', () => {
+            // Esconder o botão
+            installButton.style.display = 'none';
+            // Mostrar o prompt
+            deferredPrompt.prompt();
+            // Esperar pela escolha do usuário
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação');
+                } else {
+                    console.log('Usuário recusou a instalação');
+                    // Mostrar o botão novamente após um tempo
+                    setTimeout(() => {
+                        installButton.style.display = 'block';
+                    }, 60000); // 1 minuto
+                }
+                // Limpar a referência
+                deferredPrompt = null;
+            });
+        });
+        
+        // Verificar se o app já está instalado
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('Aplicativo instalado');
+            // Esconder o botão de instalação
+            installButton.style.display = 'none';
+        });
+        
+        // Verificar se o app está sendo executado em modo standalone
+        if (window.matchMedia('(display-mode: standalone)').matches || 
+            window.navigator.standalone === true) {
+            console.log('Aplicativo em modo standalone');
+            // Esconder o botão de instalação
+            installButton.style.display = 'none';
+        }
+        
+        // Função para mostrar notificação de atualização
+        function showUpdateNotification() {
+            updateState.classList.remove('hidden');
+                        loadingState.classList.add('hidden');
             updateNotification.style.display = 'block';
         }
-    }
-    
-    // Função para verificar atualizações quando o iframe estiver visível
-    function setupFrameMessageListener() {
-        // Escutar mensagens do iframe
-        window.addEventListener('message', function(event) {
-            // Verificar se a mensagem é do seu Apps Script
-            if (event.origin.includes('script.google.com')) {
-                // Verificar se a mensagem contém informações de versão
-                if (event.data && event.data.type === 'version') {
-                    const scriptVersion = event.data.version;
-                    console.log('Versão recebida do iframe:', scriptVersion);
-                    
-                    // Armazenar a versão do servidor
-                    localStorage.setItem('serverVersion', scriptVersion);
-                    
-                    // Verificar se a versão é diferente da atual
-                    const currentVersion = localStorage.getItem('appVersion') || APP_VERSION;
-                    if (scriptVersion !== currentVersion) {
-                        updateNotification.style.display = 'block';
+        
+        // Função para atualizar o aplicativo
+        function updateApp() {
+            // Limpar o cache e recarregar
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    for (let registration of registrations) {
+                        registration.update();
                     }
-                }
+                });
             }
+            
+            // Recarregar a página
+            window.location.reload();
+        }
+        
+        // Configurar botões de atualização
+        updateNowButton.addEventListener('click', updateApp);
+        updateLaterButton.addEventListener('click', () => {
+            updateState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            // Continuar carregando o app
+            loadApp();
         });
-    }
-    
-    // Eventos de botões
-    updateNowButton.addEventListener('click', clearCacheAndLoadApp);
-    updateLaterButton.addEventListener('click', loadApp);
-    retryButton.addEventListener('click', checkForUpdates);
-    updateNotification.addEventListener('click', clearCacheAndLoadApp);
-    
-    // Inicializar ao carregar a página
-    window.addEventListener('load', () => {
-        // Registrar service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('Service Worker registrado com sucesso:', registration);
-            })
-            .catch(error => {
-                console.error('Erro ao registrar Service Worker:', error);
+        
+        // Configurar botão de notificação flutuante
+        updateNotification.addEventListener('click', updateApp);
+        
+        // Configurar botão de tentar novamente
+        retryButton.addEventListener('click', () => {
+            offlineState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            // Tentar carregar o app novamente
+            loadApp();
+        });
+        
+        // Função para carregar o aplicativo
+        function loadApp() {
+            // Verificar conexão com a internet
+            if (!navigator.onLine) {
+                showOfflineState();
+                return;
+            }
+            
+            // Mostrar o frame do aplicativo
+            frameContainer.style.display = 'block';
+            
+            // Configurar evento de carregamento do iframe
+            appFrame.addEventListener('load', () => {
+                // Esconder a tela de carregamento com uma transição suave
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 1000); // Aguardar 1 segundo após o carregamento para uma experiência mais suave
+            });
+            
+            // Configurar evento de erro do iframe
+            appFrame.addEventListener('error', () => {
+                showOfflineState();
             });
         }
         
-        // Configurar listener para mensagens do iframe
-        setupFrameMessageListener();
+        // Função para mostrar o estado offline
+        function showOfflineState() {
+            offlineState.classList.remove('hidden');
+            loadingState.classList.add('hidden');
+        }
         
-        // Verificar atualizações após um breve atraso
-        setTimeout(checkForUpdates, 1500);
-        
-        // Adicionar evento para detectar quando o iframe terminar de carregar
-        appFrame.addEventListener('load', function() {
-            // Esconder a tela de carregamento quando o iframe estiver pronto
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 500);
-        });
-        
-        // Adicionar eventos para detectar mudanças no estado de conexão
-        window.addEventListener('online', function() {
-            if (loadingScreen.style.display !== 'none') {
-                checkForUpdates();
+        // Eventos de conexão
+        window.addEventListener('online', () => {
+            if (offlineState.classList.contains('hidden') === false) {
+                offlineState.classList.add('hidden');
+                loadingState.classList.remove('hidden');
+                loadApp();
             }
         });
         
-        window.addEventListener('offline', function() {
+        window.addEventListener('offline', () => {
             if (loadingScreen.style.display !== 'none') {
-                showState(offlineState);
-            } else {
-                // Mostrar notificação de offline se o app já estiver carregado
-                const offlineNotification = document.createElement('div');
-                offlineNotification.style.position = 'fixed';
-                offlineNotification.style.top = '10px';
-                offlineNotification.style.left = '50%';
-                offlineNotification.style.transform = 'translateX(-50%)';
-                offlineNotification.style.backgroundColor = '#f44336';
-                offlineNotification.style.color = 'white';
-                offlineNotification.style.padding = '10px 20px';
-                offlineNotification.style.borderRadius = '5px';
-                offlineNotification.style.zIndex = '2000';
-                offlineNotification.textContent = 'Você está offline. Algumas funcionalidades podem não estar disponíveis.';
-                
-                document.body.appendChild(offlineNotification);
-                
-                setTimeout(() => {
-                    offlineNotification.style.opacity = '0';
-                    offlineNotification.style.transition = 'opacity 0.5s';
-                    setTimeout(() => {
-                        document.body.removeChild(offlineNotification);
-                    }, 500);
-                }, 5000);
+                showOfflineState();
             }
         });
-    });
-</script>
+        
+        // Iniciar o carregamento do aplicativo após um pequeno atraso
+        // para permitir que a animação seja exibida
+        setTimeout(() => {
+            loadApp();
+        }, 4000); // Aguardar 4 segundos para mostrar a animação completa
+    </script>
+</body>
+</html>
+
+
+
 </body>
 </html>
