@@ -9,7 +9,7 @@ const ASSETS = [
   '/favicon-16x16.png',
   '/favicon-32x32.png',
   '/favicon.ico',
-  '/site.webmanifest'
+  '/manifest.json'
 ];
 
 // Install event - cache assets
