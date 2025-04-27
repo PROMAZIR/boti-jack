@@ -1,98 +1,89 @@
-// Nome do cache
 const CACHE_NAME = 'crediario-jak-v1.0.3';
-
-// Arquivos para cache inicial
-const urlsToCache = [
+const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icons/apple-touch-icon.png',
-  '/icons/favicon-32x32.png',
-  '/icons/favicon-16x16.png',
-  '/icons/android-chrome-192x192.png',
-  '/icons/android-chrome-512x512.png'
+  '/apple-touch-icon.png',
+  '/android-chrome-192x192.png',
+  '/android-chrome-512x512.png',
+  '/favicon-16x16.png',
+  '/favicon-32x32.png',
+  '/favicon.ico',
+  '/site.webmanifest'
 ];
 
-// Instalação do service worker
+// Install event - cache assets
 self.addEventListener('install', event => {
-  console.log('[Service Worker] Instalando...');
-  
-  // Pré-cache de recursos importantes
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('[Service Worker] Cacheando arquivos');
-        return cache.addAll(urlsToCache);
+        console.log('Opened cache');
+        return cache.addAll(ASSETS);
       })
-      .catch(error => {
-        console.error('[Service Worker] Erro de cache:', error);
-      })
+      .then(() => self.skipWaiting())
   );
 });
 
-// Ativação do service worker
+// Activate event - clean up old caches
 self.addEventListener('activate', event => {
-  console.log('[Service Worker] Ativando...');
-  
-  // Limpar caches antigos
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Removendo cache antigo:', cacheName);
-            return caches.delete(cacheName);
-          }
+        cacheNames.filter(cacheName => {
+          return cacheName.startsWith('crediario-jak-') && cacheName !== CACHE_NAME;
+        }).map(cacheName => {
+          return caches.delete(cacheName);
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
-  
-  // Garantir que o service worker seja ativado imediatamente
-  return self.clients.claim();
 });
 
-// Interceptação de requisições
+// Fetch event - serve from cache or network
 self.addEventListener('fetch', event => {
-  // Ignorar requisições para o Google Apps Script
-  if (event.request.url.includes('script.google.com')) {
-    return;
-  }
-  
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - retornar resposta do cache
+        // Return cached response if found
         if (response) {
           return response;
         }
-        
-        // Clonar a requisição
+
+        // Clone the request
         const fetchRequest = event.request.clone();
-        
-        // Fazer a requisição à rede
-        return fetch(fetchRequest)
-          .then(response => {
-            // Verificar se a resposta é válida
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clonar a resposta
-            const responseToCache = response.clone();
-            
-            // Adicionar ao cache
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            
+
+        // Make network request and cache the response
+        return fetch(fetchRequest).then(response => {
+          // Check if valid response
+          if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
-          })
-          .catch(error => {
-            console.log('[Service Worker] Erro de fetch:', error);
-            // Você pode retornar uma página offline aqui
-          });
+          }
+
+          // Clone the response
+          const responseToCache = response.clone();
+
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              // Don't cache Google Apps Script URLs
+              if (!event.request.url.includes('script.google.com')) {
+                cache.put(event.request, responseToCache);
+              }
+            });
+
+          return response;
+        }).catch(() => {
+          // If network request fails and it's a document request, return the offline page
+          if (event.request.mode === 'navigate') {
+            return caches.match('/index.html');
+          }
+        });
       })
   );
+});
+
+// Handle messages from the main page
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
