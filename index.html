@@ -101,22 +101,25 @@
             100% { transform: rotate(360deg); }
         }
         
-        .button {
+        /* Adicionar estilos para o botão de instalação */
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #4CAF50;
             color: white;
-            border: none;
             padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 5px;
-            cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
         }
         
-        .button:hover {
+        #install-button:hover {
             background-color: #45a049;
         }
         
