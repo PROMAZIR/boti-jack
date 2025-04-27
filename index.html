@@ -274,34 +274,37 @@
     }
     
     // Função para verificar a versão do Apps Script
-    async function checkAppsScriptVersion() {
-        try {
-            // Fazer uma solicitação para o Apps Script com um parâmetro especial
-            const response = await fetch(`${APP_URL}?checkVersion=true&t=${Date.now()}`);
-            const html = await response.text();
-            
-            // Extrair a versão do HTML retornado
-            // Procurar por um padrão como: var appVersion = '1.0.4';
-            const versionMatch = html.match(/var\s+appVersion\s*=\s*['"]([^'"]+)['"]/);
-            
-            if (versionMatch && versionMatch[1]) {
-                const scriptVersion = versionMatch[1];
-                console.log('Versão do Apps Script:', scriptVersion);
-                
-                // Armazenar a versão do servidor
-                localStorage.setItem('serverVersion', scriptVersion);
-                
-                // Verificar se a versão é diferente da atual
-                const currentVersion = localStorage.getItem('appVersion') || APP_VERSION;
-                return scriptVersion !== currentVersion;
-            }
-            
-            return false;
-        } catch (error) {
-            console.error('Erro ao verificar versão do Apps Script:', error);
-            return false;
-        }
+    async function /**
+ * Função para verificar a versão do Apps Script
+ */
+function checkAppsScriptVersion() {
+  // Usar JSONP para evitar problemas de CORS
+  const script = document.createElement('script');
+  const callbackName = 'handleVersionCheck_' + Math.random().toString(36).substr(2, 9);
+  
+  // Definir callback global
+  window[callbackName] = function(data) {
+    if (data && data.version) {
+      console.log('Versão do Apps Script:', data.version);
+      // Comparar com a versão atual e mostrar notificação se necessário
+      const currentVersion = '1.0.4'; // Versão atual da aplicação
+      if (data.version !== currentVersion) {
+        showUpdateNotification();
+      }
     }
+    
+    // Limpar o callback e remover o script
+    delete window[callbackName];
+    document.body.removeChild(script);
+  };
+  
+  // Criar URL com callback JSONP
+  const url = 'https://script.google.com/macros/s/AKfycbxtiRvVhQ3ryHzSV7-YvaJMLLDkJBf4asI-rdlUsQNIk52wh5zEg1AxaNsrUIemgLBp/exec?checkVersion=true&callback=' + callbackName + '&t=' + Date.now();
+  
+  script.src = url;
+  document.body.appendChild(script);
+}
+
     
     // Função para limpar o cache e carregar o app
     function clearCacheAndLoadApp() {
