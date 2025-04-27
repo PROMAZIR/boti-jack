@@ -315,7 +315,7 @@
                 
                 <!-- Saudação personalizada -->
                 <div class="greeting" id="greeting">Olá, bom dia!</div>
-                <div class="user-name" id="user-name">Seja bem-vindo(a)!</div>
+                <div class="user-name" id="user-name"> jackeline Seja bem-vindo(a)!</div>
                 
                 <div class="loading-text">
                     Preparando tudo para você
@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', function() {
             installButton.style.display = 'none';
         });
         
-        // Verificar se o app está sendo executado em modo standalone
+       // Verificar se o app está sendo executado em modo standalone
         if (window.matchMedia('(display-mode: standalone)').matches || 
             window.navigator.standalone === true) {
             console.log('Aplicativo em modo standalone');
@@ -555,14 +555,14 @@ document.addEventListener('DOMContentLoaded', function() {
             installButton.style.display = 'none';
         }
         
-        // Função para mostrar notificação de atualização
+         // Função para mostrar notificação de atualização
         function showUpdateNotification() {
             updateState.classList.remove('hidden');
             loadingText.classList.add('hidden');
             updateNotification.style.display = 'block';
         }
         
-        // Função para atualizar o aplicativo
+       // Função para atualizar o aplicativo
         function updateApp() {
             // Limpar o cache e recarregar
             if ('serviceWorker' in navigator) {
@@ -597,48 +597,37 @@ document.addEventListener('DOMContentLoaded', function() {
             loadApp();
         });
         
-        // Função para carregar o aplicativo
-       function loadApp() {
-    // Verificar conexão com a internet
-    if (!navigator.onLine) {
-        showOfflineState();
-        return;
-    }
-    
-    console.log("Iniciando carregamento do app...");
-    
-    // Mostrar o frame do aplicativo
-    frameContainer.style.display = 'block';
-    
-    // Configurar evento de carregamento do iframe
-    appFrame.onload = function() {
-        console.log('Frame carregado com sucesso');
-        hideLoadingScreen();
-    };
-    
-    // Configurar timeout para caso o iframe não carregue
-    setTimeout(function() {
-        if (loadingScreen.style.display !== 'none') {
-            console.log('Timeout do carregamento do frame - mostrando mesmo assim');
-            hideLoadingScreen();
+        // Função para carregar o aplicativo - OTIMIZADA PARA CARREGAMENTO RÁPIDO
+        function loadApp() {
+            // Verificar conexão com a internet
+            if (!navigator.onLine) {
+                showOfflineState();
+                return;
+            }
+            
+            // Mostrar o frame do aplicativo imediatamente
+            frameContainer.style.display = 'block';
+            
+            // Configurar evento de carregamento do iframe
+            appFrame.onload = function() {
+                console.log('Frame carregado com sucesso');
+                hideLoadingScreen();
+            };
+            
+            // Configurar timeout reduzido para caso o iframe não carregue
+            setTimeout(function() {
+                if (loadingScreen.style.display !== 'none') {
+                    console.log('Timeout do carregamento do frame - mostrando mesmo assim');
+                    hideLoadingScreen();
+                }
+            }, 5000); // Reduzido para 5 segundos
+            
+            // Configurar evento de erro do iframe
+            appFrame.onerror = function() {
+                console.error('Erro ao carregar o iframe');
+                showOfflineState();
+            };
         }
-    }, 15000); // Aumentar para 15 segundos
-    
-    // Configurar evento de erro do iframe
-    appFrame.onerror = function(e) {
-        console.error('Erro ao carregar o iframe:', e);
-        showOfflineState();
-    };
-    
-    // Tentar recarregar o iframe se demorar muito
-    setTimeout(function() {
-        if (loadingScreen.style.display !== 'none') {
-            console.log('Recarregando iframe...');
-            appFrame.src = appFrame.src;
-        }
-    }, 8000); // Tentar recarregar após 8 segundos
-}
-
             
             // Configurar evento de erro do iframe
             appFrame.onerror = function() {
@@ -647,15 +636,13 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
         
-        // Função para esconder a tela de carregamento
+        // Função para esconder a tela de carregamento - OTIMIZADA PARA SER MAIS RÁPIDA
         function hideLoadingScreen() {
-            // Esconder a tela de carregamento com uma transição suave
+            // Esconder a tela de carregamento com uma transição mais rápida
+            loadingScreen.style.opacity = '0';
             setTimeout(() => {
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, 2000); // Aguardar 2 segundos após o carregamento para uma experiência mais suave
+                loadingScreen.style.display = 'none';
+            }, 300); // Reduzido para 300ms
             
             // Tentar obter o nome do usuário do iframe (se disponível)
             try {
@@ -691,14 +678,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 showOfflineState();
             }
         });
-    // Inicializar a tela de carregamento
+        
+        // Inicializar a tela de carregamento
         initLoadingScreen();
         
-        // Iniciar o carregamento do aplicativo após um pequeno atraso
-        // para permitir que a animação seja exibida
-        setTimeout(() => {
-            loadApp();
-        }, 3000); // Aguardar 3 segundos para mostrar a animação completa
+        // Iniciar o carregamento do aplicativo imediatamente
+        // Sem atraso para melhorar a velocidade
+        loadApp();
     </script>
 </body>
 </html>
