@@ -48,7 +48,7 @@
     
     
     <style>
-        body, html {
+       body, html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -63,6 +63,7 @@
             position: relative;
         }
         
+        /* Estilos da nova animação de carregamento */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -86,51 +87,37 @@
             max-width: 80%;
         }
         
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #09f;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        #heart-path {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            fill: rgba(76, 175, 80, 0.1);
+            animation: pulse 2s ease-in-out infinite alternate;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes pulse {
+            0% {
+                fill: rgba(76, 175, 80, 0.1);
+                transform: scale(0.95);
+            }
+            100% {
+                fill: rgba(76, 175, 80, 0.3);
+                transform: scale(1.05);
+            }
         }
         
-        /* Adicionar estilos para o botão de instalação */
-        #install-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: none;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
+        .loading-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #4CAF50;
+            animation: fadeInOut 2s ease-in-out infinite;
         }
         
-        #install-button:hover {
-            background-color: #45a049;
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
         }
         
-        .button.secondary {
-            background-color: #f44336;
-        }
-        
-        .button.secondary:hover {
-            background-color: #d32f2f;
-        }
-        
+        /* Seus outros estilos existentes */
         .logo {
             max-width: 150px;
             margin-bottom: 20px;
@@ -184,6 +171,35 @@
             height: 100%;
             border: none;
         }
+        
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        
+        #install-button:hover {
+            background-color: #45a049;
+        }
+        
+        .button.secondary {
+            background-color: #f44336;
+        }
+        
+        .button.secondary:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -193,10 +209,26 @@
                 <img src="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png" alt="Logo" class="logo">
                 <h2>Crediário Jak</h2>
                 
-                <div id="loading-state">
-                    <div class="spinner"></div>
-                    <p>Carregando aplicativo...</p>
-                </div>
+                 <!-- Nova animação SVG -->
+                <svg viewBox="-200 -300 400 600" width="120" height="120">
+                    <path id="heart-path" 
+                          stroke-linecap="butt" 
+                          stroke-linejoin="miter" 
+                          fill-opacity="0" 
+                          stroke-miterlimit="10" 
+                          stroke="#4CAF50" 
+                          stroke-opacity="1" 
+                          stroke-width="10" 
+                          d="M-5.400000095367432,-271.3340148925781 C-18.363000869750977,-259.6109924316406 -186.78799438476562,-98.23500061035156 -65.5260009765625,269.8380126953125 C-65.14399719238281,270.9989929199219 -64.05799865722656,271.7900085449219 -62.83700180053711,271.7929992675781 C-62.83700180053711,271.7929992675781 63.01900100708008,272.1969909667969 63.01900100708008,272.1969909667969 C64.24700164794922,272.20098876953125 65.34300231933594,271.40899658203125 65.72699737548828,270.24200439453125 C186.78799438476562,-97.28500366210938 15.64900016784668,-259.2799987792969 1.9859999418258667,-271.46600341796875 C1.4429999589920044,-271.95001220703125 0.7409999966621399,-272.20098876953125 0.014999999664723873,-272.177001953125 C0.014999999664723873,-272.177001953125 -3.5969998836517334,-272.0589904785156 -3.5969998836517334,-272.0589904785156 C-4.267000198364258,-272.0369873046875 -4.9019999504089355,-271.78399658203125 -5.400000095367432,-271.3340148925781z">
+                        <animate attributeName="stroke-dashoffset" 
+                                 from="2000" 
+                                 to="0" 
+                                 dur="2s" 
+                                 repeatCount="indefinite" />
+                    </path>
+                </svg>
+                
+                <div class="loading-text">Carregando aplicativo...</div>
                 
                 <div id="update-state" class="hidden">
                     <div class="update-available">
@@ -233,7 +265,8 @@
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
             </iframe>
         </div>
-         <!-- Botão de instalação -->
+         
+        <!-- Botão de instalação -->
         <button id="install-button">Adicionar à tela inicial</button>
     </div>
 
