@@ -1,72 +1,192 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>jack</title>
-
+    <title>Jak</title>
     <!-- Primary Meta Tags -->
-    <meta name="title" content="jack💄">
-    <meta name="description" content="VGerencie suas compras e parcelas de forma simples e eficiente">
-
+    <meta name="title" content="CREDIARIO">
+    <meta name="description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
+    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://credi-boti.jack.starktech.net.br">
-    <meta property="og:title" content="jack💄">
-    <meta property="og:description" content="Gerencie suas compras e parcelas de forma simples e eficiente">
+    <meta property="og:url" content="https://cred.boti-jack.starktech.net.br/">
+    <meta property="og:title" content="Parcelados-jak">
+    <meta property="og:description" content="💳 Compre agora, pague do seu jeito!Descubra um novo jeito de comprar com o nosso app!Aqui você encontra as melhores marcas e pode parcelar suas compras com facilidade, segurança e condições que cabem no seu bolso.✅ Várias lojas em um só lugar✅ Parcelamento flexível✅ Sem burocracia✅ Tudo 100% digitalBaixe agora e tenha o controle das suas compras na palma da mão!.">
     <meta property="og:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-
+    
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://credi-boti.jack.starktech.net.br">
-    <meta name="twitter:title" content="jack💄">
-    <meta name="twitter:description" content="Gerencie suas compras e parcelas de forma simples e eficiente">
-    <meta name="twitter:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.pngg">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-
+    <meta name="twitter:url" content="https://cred-boti.jack.starktech.net.br/">
+    <meta name="twitter:title" content="CREDIARIO">
+    <meta name="twitter:description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
+    <meta name="twitter:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <style>
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
         }
-
-        .frame-container {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        
+        .loading-container {
+            text-align: center;
         }
-
-        iframe {
-            width: 100%;
-            height: 100%;
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #09f;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .update-button {
+            background-color: #4CAF50;
+            color: white;
             border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="frame-container">
-    <iframe 
-        src="https://script.google.com/macros/s/AKfycbz3XMziut1bs8Urp6Gyr4y1mRCz78Q9_g_75eLprcCPh3vwua_v-h15MAwUSGF8DoCp/exec"
-        allow="autoplay"
-        allowfullscreen
-        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation">
-    </iframe>
-</div>
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Carregando aplicativo...</p>
+        <button id="update-button" class="update-button" style="display: none;">Atualizar Aplicativo</button>
+    </div>
+
+    <script>
+        // Configurações do aplicativo
+        const APP_VERSION = "1.0.3";
+        const APP_URL = "https://script.google.com/macros/s/AKfycbz3XMziut1bs8Urp6Gyr4y1mRCz78Q9_g_75eLprcCPh3vwua_v-h15MAwUSGF8DoCp/exec";
+        
+        // Função para verificar atualizações
+        function checkForUpdates() {
+            // Armazenar a última versão verificada
+            const lastVersion = localStorage.getItem('appVersion') || APP_VERSION;
+            
+            // Armazenar a última data de verificação
+            const lastCheck = localStorage.getItem('lastUpdateCheck');
+            const now = new Date().getTime();
+            
+            // Verificar apenas uma vez por dia
+            if (lastCheck && now - parseInt(lastCheck) < 86400000) {
+                redirectToApp();
+                return;
+            }
+            
+            // Fazer uma solicitação para verificar a versão (usando um proxy ou API própria)
+            fetch('/api/check-version', { 
+                method: 'GET',
+                cache: 'no-cache'
+            })
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('lastUpdateCheck', now.toString());
+                
+                if (data.version && data.version !== lastVersion) {
+                    // Nova versão disponível
+                    localStorage.setItem('appVersion', data.version);
+                    clearCacheAndRedirect();
+                } else {
+                    // Mesma versão, apenas redirecionar
+                    redirectToApp();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar atualizações:', error);
+                redirectToApp();
+            });
+        }
+        
+        // Função para limpar o cache e redirecionar
+        function clearCacheAndRedirect() {
+            if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                    return Promise.all(
+                        cacheNames.map(cacheName => {
+                            return caches.delete(cacheName);
+                        })
+                    );
+                }).then(() => {
+                    redirectToApp();
+                }).catch(error => {
+                    console.error('Erro ao limpar cache:', error);
+                    redirectToApp();
+                });
+            } else {
+                redirectToApp();
+            }
+        }
+        
+        // Função para redirecionar para o aplicativo
+        function redirectToApp() {
+            // Adicionar timestamp para evitar cache
+            window.location.href = APP_URL + '?t=' + new Date().getTime();
+        }
+        
+        // Mostrar botão de atualização manual
+        document.getElementById('update-button').addEventListener('click', function() {
+            clearCacheAndRedirect();
+        });
+        
+        // Verificar atualizações ao carregar a página
+        window.addEventListener('load', () => {
+            // Registrar service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registrado com sucesso:', registration);
+                })
+                .catch(error => {
+                    console.error('Erro ao registrar Service Worker:', error);
+                });
+            }
+            
+            // Verificar se está offline
+            if (!navigator.onLine) {
+                document.querySelector('.loading-container p').textContent = 'Você está offline. Verifique sua conexão.';
+                document.getElementById('update-button').style.display = 'inline-block';
+                return;
+            }
+            
+            // Iniciar verificação de atualizações
+            setTimeout(() => {
+                redirectToApp(); // Redirecionar diretamente para o app
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
