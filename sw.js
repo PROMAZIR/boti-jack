@@ -8,8 +8,7 @@ const ASSETS = [
   '/android-chrome-512x512.png',
   '/favicon-16x16.png',
   '/favicon-32x32.png',
-  '/favicon.ico',
-  '/manifest.json'
+  '/favicon.ico'
 ];
 
 // Install event - cache assets
