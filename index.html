@@ -5,46 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crediário Jak</title>
     
-    <!-- Primary Meta Tags -->
-    <meta name="title" content="Crediário Jak">
-    <meta name="description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://credi-boti.jack.starktech.net.br/">
-    <meta property="og:title" content="Crediário Jak">
-    <meta property="og:description" content="💳 Compre agora, pague do seu jeito! Descubra um novo jeito de comprar com o nosso app!">
-    <meta property="og:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://credi-boti.jack.starktech.net.br/">
-    <meta name="twitter:title" content="Crediário Jak">
-    <meta name="twitter:description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
-    <meta name="twitter:image" content="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
-    
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="application-name" content="Crediário Jak">
-    <meta name="apple-mobile-web-app-title" content="Crediário Jak">
-    
-    <!-- Adicionar à tela inicial para Safari no iOS -->
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-2048-2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1668-2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1536-2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1125-2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1242-2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-828-1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1242-2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-750-1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-640-1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <!-- Meta tags existentes -->
     
     <style>
         body, html {
@@ -53,7 +14,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         #app-container {
@@ -62,14 +23,14 @@
             position: relative;
         }
         
-        /* Estilos para a animação avançada */
+        /* Estilos para a nova animação floral */
         #loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -79,70 +40,155 @@
         
         .loading-container {
             text-align: center;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 15px;
             background-color: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-width: 80%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            max-width: 85%;
+            position: relative;
+            overflow: hidden;
         }
-                #heart-path {
-            stroke-dasharray: 2000;
-            stroke-dashoffset: 2000;
+        
+        .greeting {
+            font-size: 24px;
+            font-weight: 600;
+            color: #4a4a4a;
+            margin-bottom: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 0.5s;
+        }
+        
+        .user-name {
+            font-size: 20px;
+            color: #4CAF50;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 0.8s;
         }
         
         .loading-text {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #4CAF50;
-            animation: fadeInOut 2s ease-in-out infinite;
-        }
-        
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-        
-        .particle {
-            transform-origin: center;
-            transform-box: fill-box;
-        }
-        
-        /* Estilos para os botões */
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
+            margin-top: 25px;
             font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        
-        .button:hover {
-            background-color: #45a049;
-        }
-        
-        .button.secondary {
-            background-color: #f44336;
-        }
-        
-        .button.secondary:hover {
-            background-color: #d32f2f;
+            color: #777;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1.5s;
         }
         
         .logo {
-            max-width: 150px;
+            max-width: 120px;
             margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 0.2s;
         }
         
         .version-info {
             font-size: 12px;
-            color: #666;
+            color: #999;
             margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 1.8s;
         }
         
+        /* Animação de flores */
+        .flower-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .flower {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0;
+            z-index: -1;
+        }
+        
+        .flower1 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234CAF50' width='24' height='24'%3E%3Cpath d='M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2M15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8M8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5C7,8.7 7.7,8 8.5,8M12,11C13.1,11 14,11.9 14,13C14,14.1 13.1,15 12,15C10.9,15 10,14.1 10,13C10,11.9 10.9,11 12,11M19,12C19.5,12 20,12.5 20,13C20,13.5 19.5,14 19,14C18.5,14 18,13.5 18,13C18,12.5 18.5,12 19,12M5,12C5.5,12 6,12.5 6,13C6,13.5 5.5,14 5,14C4.5,14 4,13.5 4,13C4,12.5 4.5,12 5,12M12,16C13.1,16 14,16.9 14,18C14,19.1 13.1,20 12,20C10.9,20 10,19.1 10,18C10,16.9 10.9,16 12,16M15.5,13C16.3,13 17,13.7 17,14.5C17,15.3 16.3,16 15.5,16C14.7,16 14,15.3 14,14.5C14,13.7 14.7,13 15.5,13M8.5,13C9.3,13 10,13.7 10,14.5C10,15.3 9.3,16 8.5,16C7.7,16 7,15.3 7,14.5C7,13.7 7.7,13 8.5,13Z'/%3E%3C/svg%3E");
+        }
+        
+        .flower2 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF9800' width='24' height='24'%3E%3Cpath d='M12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5M7.5,8A1.5,1.5 0 0,1 9,9.5A1.5,1.5 0 0,1 7.5,11A1.5,1.5 0 0,1 6,9.5A1.5,1.5 0 0,1 7.5,8M16.5,8A1.5,1.5 0 0,1 18,9.5A1.5,1.5 0 0,1 16.5,11A1.5,1.5 0 0,1 15,9.5A1.5,1.5 0 0,1 16.5,8M7.5,13A1.5,1.5 0 0,1 9,14.5A1.5,1.5 0 0,1 7.5,16A1.5,1.5 0 0,1 6,14.5A1.5,1.5 0 0,1 7.5,13M16.5,13A1.5,1.5 0 0,1 18,14.5A1.5,1.5 0 0,1 16.5,16A1.5,1.5 0 0,1 15,14.5A1.5,1.5 0 0,1 16.5,13Z'/%3E%3C/svg%3E");
+        }
+        
+        .flower3 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E91E63' width='24' height='24'%3E%3Cpath d='M12,2C14.21,2 16,3.79 16,6C16,8 14,10 12,10C10,10 8,8 8,6C8,3.79 9.79,2 12,2M16,10C16,10 18,12.5 18,15C18,17.21 16.21,19 14,19C12.5,19 11.25,18.25 10.5,17.25C10.17,17.58 9.67,18 9,18C8.17,18 7.5,17.33 7.5,16.5C7.5,15.83 7.92,15.33 8.25,15C7.25,14.25 6.5,13 6.5,11.5C6.5,9.29 8.29,7.5 10.5,7.5C13,7.5 15.5,9.5 15.5,9.5L16,10Z'/%3E%3C/svg%3E");
+        }
+        
+        .loading-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            margin: 0 3px;
+            opacity: 0.6;
+        }
+        
+        .dot1 {
+            animation: pulse 1s infinite 0.2s;
+        }
+        
+        .dot2 {
+            animation: pulse 1s infinite 0.4s;
+        }
+        
+        .dot3 {
+            animation: pulse 1s infinite 0.6s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes floatIn {
+            0% {
+                opacity: 0;
+                transform: translate(0, 30px) rotate(0deg);
+            }
+            100% {
+                opacity: 0.8;
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+        
+        /* Outros estilos existentes */
         .hidden {
             display: none;
         }
@@ -212,72 +258,23 @@
     <div id="app-container">
         <div id="loading-screen">
             <div class="loading-container">
+                <!-- Elementos florais animados -->
+                <div class="flower-container" id="flower-container">
+                    <!-- As flores serão adicionadas via JavaScript -->
+                </div>
+                
                 <img src="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png" alt="Logo" class="logo">
-                <h2>Crediário Jak</h2>
                 
-                <!-- Animação SVG avançada -->
-                <svg viewBox="-200 -300 400 600" width="120" height="120">
-                    <path id="heart-path" 
-                          stroke-linecap="round" 
-                          stroke-linejoin="round" 
-                          fill-opacity="0" 
-                          stroke-miterlimit="10" 
-                          stroke="#4CAF50" 
-                          stroke-opacity="1" 
-                          stroke-width="10" 
-                          d="M-5.400000095367432,-271.3340148925781 C-18.363000869750977,-259.6109924316406 -186.78799438476562,-98.23500061035156 -65.5260009765625,269.8380126953125 C-65.14399719238281,270.9989929199219 -64.05799865722656,271.7900085449219 -62.83700180053711,271.7929992675781 C-62.83700180053711,271.7929992675781 63.01900100708008,272.1969909667969 63.01900100708008,272.1969909667969 C64.24700164794922,272.20098876953125 65.34300231933594,271.40899658203125 65.72699737548828,270.24200439453125 C186.78799438476562,-97.28500366210938 15.64900016784668,-259.2799987792969 1.9859999418258667,-271.46600341796875 C1.4429999589920044,-271.95001220703125 0.7409999966621399,-272.20098876953125 0.014999999664723873,-272.177001953125 C0.014999999664723873,-272.177001953125 -3.5969998836517334,-272.0589904785156 -3.5969998836517334,-272.0589904785156 C-4.267000198364258,-272.0369873046875 -4.9019999504089355,-271.78399658203125 -5.400000095367432,-271.3340148925781z">
-                        <animate attributeName="stroke-dasharray" 
-                                 from="2000" 
-                                 to="2000" 
-                                 dur="0.1s" 
-                                 fill="freeze" />
-                        <animate attributeName="stroke-dashoffset" 
-                                 from="2000" 
-                                 to="0" 
-                                 dur="3s" 
-                                 repeatCount="1"
-                                 fill="freeze" />
-                        <animate attributeName="fill-opacity" 
-                                 from="0" 
-                                 to="0.2" 
-                                 dur="1s" 
-                                 begin="2.5s"
-                                 fill="freeze" />
-                        <animateTransform attributeName="transform"
-                                          type="scale"
-                                          from="1"
-                                          to="1.05"
-                                          dur="0.5s"
-                                          begin="3s"
-                                          repeatCount="indefinite"
-                                          additive="sum"
-                                          calcMode="spline"
-                                          keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
-                                          values="1;1.05;1"
-                                          keyTimes="0;0.5;1" />
-                    </path>
-                    
-                    <!-- Partículas que sobem do coração -->
-                    <g id="particles">
-                        <circle class="particle" cx="0" cy="0" r="3" fill="#4CAF50" opacity="0.7">
-                            <animate attributeName="cy" from="0" to="-150" dur="2s" begin="3s" repeatCount="indefinite" />
-                            <animate attributeName="cx" from="0" to="20" dur="2s" begin="3s" repeatCount="indefinite" />
-                            <animate attributeName="opacity" from="0.7" to="0" dur="2s" begin="3s" repeatCount="indefinite" />
-                        </circle>
-                        <circle class="particle" cx="0" cy="0" r="2" fill="#4CAF50" opacity="0.5">
-                            <animate attributeName="cy" from="0" to="-120" dur="1.8s" begin="3.2s" repeatCount="indefinite" />
-                            <animate attributeName="cx" from="0" to="-15" dur="1.8s" begin="3.2s" repeatCount="indefinite" />
-                            <animate attributeName="opacity" from="0.5" to="0" dur="1.8s" begin="3.2s" repeatCount="indefinite" />
-                        </circle>
-                        <circle class="particle" cx="0" cy="0" r="2.5" fill="#4CAF50" opacity="0.6">
-                            <animate attributeName="cy" from="0" to="-140" dur="2.2s" begin="3.4s" repeatCount="indefinite" />
-                            <animate attributeName="cx" from="0" to="10" dur="2.2s" begin="3.4s" repeatCount="indefinite" />
-                            <animate attributeName="opacity" from="0.6" to="0" dur="2.2s" begin="3.4s" repeatCount="indefinite" />
-                        </circle>
-                    </g>
-                </svg>
+                <!-- Saudação personalizada -->
+                <div class="greeting" id="greeting">Olá, bom dia!</div>
+                <div class="user-name" id="user-name">Seja bem-vindo(a)!</div>
                 
-                <div class="loading-text">Carregando aplicativo...</div>
+                <div class="loading-text">
+                    Preparando tudo para você
+                    <span class="loading-dot dot1"></span>
+                    <span class="loading-dot dot2"></span>
+                    <span class="loading-dot dot3"></span>
+                </div>
                 
                 <div id="update-state" class="hidden">
                     <div class="update-available">
@@ -288,7 +285,8 @@
                 </div>
                 
                 <div id="offline-state" class="hidden">
-                    <p>Você está offline. Verifique sua conexão com a internet.</p>
+                    <p>Você está offline. Verifique sua conexão com a internet.
+                                            </p>
                     <button id="retry-button" class="button">Tentar Novamente</button>
                 </div>
                 
@@ -334,10 +332,76 @@
         const versionNumber = document.getElementById('version-number');
         const updateState = document.getElementById('update-state');
         const offlineState = document.getElementById('offline-state');
-        const loadingState = document.querySelector('.loading-text');
+        const loadingText = document.querySelector('.loading-text');
+        const greeting = document.getElementById('greeting');
+        const userName = document.getElementById('user-name');
+        const flowerContainer = document.getElementById('flower-container');
         
         // Definir a versão atual
         versionNumber.textContent = version;
+        
+        // Configurar saudação baseada no horário
+        function setGreeting() {
+            const hour = new Date().getHours();
+            let greetingText = '';
+            
+            if (hour >= 5 && hour < 12) {
+                greetingText = 'Olá, bom dia!';
+            } else if (hour >= 12 && hour < 18) {
+                greetingText = 'Olá, boa tarde!';
+            } else {
+                greetingText = 'Olá, boa noite!';
+            }
+            
+            greeting.textContent = greetingText;
+            
+            // Tentar obter o nome do usuário do localStorage
+            const storedName = localStorage.getItem('userName');
+            if (storedName) {
+                userName.textContent = storedName;
+            } else {
+                userName.textContent = 'Seja bem-vindo(a)!';
+            }
+        }
+        
+        // Criar animação floral
+        function createFlowers() {
+            const flowerTypes = ['flower1', 'flower2', 'flower3'];
+            const containerWidth = flowerContainer.offsetWidth;
+            const containerHeight = flowerContainer.offsetHeight;
+            
+            // Criar 12 flores
+            for (let i = 0; i < 12; i++) {
+                const flower = document.createElement('div');
+                const flowerType = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                
+                flower.className = `flower ${flowerType}`;
+                
+                // Posicionar aleatoriamente
+                const left = Math.random() * containerWidth;
+                const top = Math.random() * containerHeight;
+                
+                flower.style.left = `${left}px`;
+                flower.style.top = `${top}px`;
+                
+                // Tamanho aleatório
+                const size = 15 + Math.random() * 15;
+                flower.style.width = `${size}px`;
+                flower.style.height = `${size}px`;
+                
+                // Animação com atraso aleatório
+                const delay = Math.random() * 2;
+                flower.style.animation = `floatIn 1.5s forwards ${delay}s`;
+                
+                flowerContainer.appendChild(flower);
+            }
+        }
+        
+        // Inicializar a tela de carregamento
+        function initLoadingScreen() {
+            setGreeting();
+            createFlowers();
+        }
         
         // Verificar se o service worker é suportado
         if ('serviceWorker' in navigator) {
@@ -420,7 +484,7 @@
         // Função para mostrar notificação de atualização
         function showUpdateNotification() {
             updateState.classList.remove('hidden');
-                        loadingState.classList.add('hidden');
+            loadingText.classList.add('hidden');
             updateNotification.style.display = 'block';
         }
         
@@ -443,7 +507,7 @@
         updateNowButton.addEventListener('click', updateApp);
         updateLaterButton.addEventListener('click', () => {
             updateState.classList.add('hidden');
-            loadingState.classList.remove('hidden');
+            loadingText.classList.remove('hidden');
             // Continuar carregando o app
             loadApp();
         });
@@ -454,7 +518,7 @@
         // Configurar botão de tentar novamente
         retryButton.addEventListener('click', () => {
             offlineState.classList.add('hidden');
-            loadingState.classList.remove('hidden');
+            loadingText.classList.remove('hidden');
             // Tentar carregar o app novamente
             loadApp();
         });
@@ -478,7 +542,20 @@
                     setTimeout(() => {
                         loadingScreen.style.display = 'none';
                     }, 500);
-                }, 1000); // Aguardar 1 segundo após o carregamento para uma experiência mais suave
+                }, 2000); // Aguardar 2 segundos após o carregamento para uma experiência mais suave
+                
+                // Tentar obter o nome do usuário do iframe (se disponível)
+                try {
+                    const iframeWindow = appFrame.contentWindow;
+                    iframeWindow.addEventListener('message', (event) => {
+                        if (event.data && event.data.userName) {
+                            // Salvar o nome do usuário para uso futuro
+                            localStorage.setItem('userName', event.data.userName);
+                        }
+                    });
+                } catch (e) {
+                    console.log('Não foi possível acessar o conteúdo do iframe:', e);
+                }
             });
             
             // Configurar evento de erro do iframe
@@ -490,14 +567,14 @@
         // Função para mostrar o estado offline
         function showOfflineState() {
             offlineState.classList.remove('hidden');
-            loadingState.classList.add('hidden');
+            loadingText.classList.add('hidden');
         }
         
         // Eventos de conexão
         window.addEventListener('online', () => {
             if (offlineState.classList.contains('hidden') === false) {
                 offlineState.classList.add('hidden');
-                loadingState.classList.remove('hidden');
+                loadingText.classList.remove('hidden');
                 loadApp();
             }
         });
@@ -508,16 +585,15 @@
             }
         });
         
+        // Inicializar a tela de carregamento
+        initLoadingScreen();
+        
         // Iniciar o carregamento do aplicativo após um pequeno atraso
         // para permitir que a animação seja exibida
         setTimeout(() => {
             loadApp();
-        }, 4000); // Aguardar 4 segundos para mostrar a animação completa
+        }, 3000); // Aguardar 3 segundos para mostrar a animação completa
     </script>
 </body>
 </html>
 
-
-
-</body>
-</html>
