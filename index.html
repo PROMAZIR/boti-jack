@@ -1,11 +1,11 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Crediário Jak</title>
     
-    <!-- Primary Meta Tags -->
+    <!-- Meta tags existentes -->
     <meta name="title" content="Crediário Jak">
     <meta name="description" content="Organize suas finanças com facilidade e alcance de seus objetivos com controle e inteligência.">
     
@@ -34,18 +34,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="application-name" content="Crediário Jak">
     <meta name="apple-mobile-web-app-title" content="Crediário Jak">
-    
-    <!-- Adicionar à tela inicial para Safari no iOS -->
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-2048-2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1668-2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1536-2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1125-2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1242-2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-828-1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-1242-2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-750-1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    <link rel="apple-touch-startup-image" href="/icons/apple-splash-640-1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
-    
     
     <style>
         body, html {
@@ -233,6 +221,30 @@
             display: none;
         }
         
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+        
+        .button.secondary {
+            background-color: #f44336;
+        }
+        
+        .button.secondary:hover {
+            background-color: #d32f2f;
+        }
+        
         .update-available {
             background-color: #FFF3CD;
             color: #856404;
@@ -245,7 +257,7 @@
         #update-notification {
             position: fixed;
             bottom: 20px;
-            left: 50%;
+                       left: 50%;
             transform: translateX(-50%);
             background-color: #4CAF50;
             color: white;
@@ -325,8 +337,7 @@
                 </div>
                 
                 <div id="offline-state" class="hidden">
-                    <p>Você está offline. Verifique sua conexão com a internet.
-                                            </p>
+                    <p>Você está offline. Verifique sua conexão com a internet.</p>
                     <button id="retry-button" class="button">Tentar Novamente</button>
                 </div>
                 
@@ -571,37 +582,57 @@
                 return;
             }
             
-            // Mostrar o frame do aplicativo
+            // Mostrar o frame do aplicativo - IMPORTANTE: Isso deve acontecer antes de qualquer outra coisa
             frameContainer.style.display = 'block';
             
-            // Configurar evento de carregamento do iframe
-            appFrame.addEventListener('load', () => {
-                // Esconder a tela de carregamento com uma transição suave
-                setTimeout(() => {
-                    loadingScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 500);
-                }, 2000); // Aguardar 2 segundos após o carregamento para uma experiência mais suave
+            // Verificar se o iframe já está carregado
+            if (appFrame.complete || appFrame.readyState === 'complete') {
+                hideLoadingScreen();
+            } else {
+                // Configurar evento de carregamento do iframe
+                appFrame.onload = function() {
+                    console.log('Frame carregado com sucesso');
+                    hideLoadingScreen();
+                };
                 
-                // Tentar obter o nome do usuário do iframe (se disponível)
-                try {
-                    const iframeWindow = appFrame.contentWindow;
-                    iframeWindow.addEventListener('message', (event) => {
-                        if (event.data && event.data.userName) {
-                            // Salvar o nome do usuário para uso futuro
-                            localStorage.setItem('userName', event.data.userName);
-                        }
-                    });
-                } catch (e) {
-                    console.log('Não foi possível acessar o conteúdo do iframe:', e);
-                }
-            });
+                // Configurar timeout para caso o iframe não carregue
+                setTimeout(function() {
+                    if (loadingScreen.style.display !== 'none') {
+                        console.log('Timeout do carregamento do frame - mostrando mesmo assim');
+                        hideLoadingScreen();
+                    }
+                }, 10000); // 10 segundos de timeout
+            }
             
             // Configurar evento de erro do iframe
-            appFrame.addEventListener('error', () => {
+            appFrame.onerror = function() {
+                console.error('Erro ao carregar o iframe');
                 showOfflineState();
-            });
+            };
+        }
+        
+        // Função para esconder a tela de carregamento
+        function hideLoadingScreen() {
+            // Esconder a tela de carregamento com uma transição suave
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 2000); // Aguardar 2 segundos após o carregamento para uma experiência mais suave
+            
+            // Tentar obter o nome do usuário do iframe (se disponível)
+            try {
+                const iframeWindow = appFrame.contentWindow;
+                window.addEventListener('message', (event) => {
+                    if (event.data && event.data.userName) {
+                        // Salvar o nome do usuário para uso futuro
+                        localStorage.setItem('userName', event.data.userName);
+                    }
+                });
+            } catch (e) {
+                console.log('Não foi possível acessar o conteúdo do iframe:', e);
+            }
         }
         
         // Função para mostrar o estado offline
@@ -625,7 +656,7 @@
             }
         });
         
-        // Inicializar a tela de carregamento
+               // Inicializar a tela de carregamento
         initLoadingScreen();
         
         // Iniciar o carregamento do aplicativo após um pequeno atraso
@@ -636,4 +667,5 @@
     </script>
 </body>
 </html>
+
 
