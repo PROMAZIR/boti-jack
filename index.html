@@ -274,10 +274,7 @@
     }
     
     // Função para verificar a versão do Apps Script
-    async function /**
- * Função para verificar a versão do Apps Script
- */
-function checkAppsScriptVersion() {
+    async function checkAppsScriptVersion() {
   // Usar JSONP para evitar problemas de CORS
   const script = document.createElement('script');
   const callbackName = 'handleVersionCheck_' + Math.random().toString(36).substr(2, 9);
