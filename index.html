@@ -261,6 +261,7 @@
     opacity: 0;
     transition: opacity 0.5s ease, transform 0.5s ease;
     transform: scale(0.8);
+    backface-visibility: hidden;
 }
 
 /* Logo ativa */
@@ -269,66 +270,19 @@
     transform: scale(1);
 }
 
-/* Animação de rotação */
-@keyframes rotate {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.1) rotate(180deg); }
-    100% { transform: scale(1) rotate(360deg); }
+/* Animação de flip horizontal */
+@keyframes flipHorizontal {
+    0% { transform: scale(1) rotateY(0deg); }
+    50% { transform: scale(1.05) rotateY(180deg); }
+    100% { transform: scale(1) rotateY(360deg); }
 }
 
-/* Animação de piscar */
-@keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0.3; }
-    100% { opacity: 1; }
+/* Classe para aplicar a animação de flip horizontal */
+.flip-horizontal {
+    animation: flipHorizontal 3s infinite linear;
+    transform-style: preserve-3d;
 }
 
-/* Classes para aplicar as animações */
-.rotate {
-    animation: rotate 2s infinite;
-}
-
-.blink {
-    animation: blink 1.5s infinite;
-}
-
-/* Estilos para o loading spinner e outros elementos */
-.loading-spinner {
-    margin-top: 20px;
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 4px solid #3498db;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    text-align: center;
-}
-
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
     </style>
 </head>
 <body>
@@ -345,19 +299,18 @@
             </iframe>
         </div>
         
-     <!-- Tela de carregamento com cumprimentos (colocada por cima) -->
+<!-- Tela de carregamento com cumprimentos (colocada por cima) -->
 <div id="loading-screen">
     <div class="loading-container">
         <div class="logo-container">
             <img src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Logo 1" class="logo logo-1 active">
-            <img src="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png" alt="Logo 2" class="logo logo-2">
+            <img src="https://i.ibb.co/vx4BtbS/Sem-t-tulo-1.png" alt="Logo 2" class="logo logo-2">
         </div>
         <div class="greeting" id="greeting">Olá!</div>
         <div class="user-name" id="user-name">Bem-vindo(a)!</div>
         <div class="loading-spinner" id="loading-spinner"></div>
     </div>
 </div>
-
         
         <!-- Mensagem offline -->
         <div id="offline-message">
@@ -421,22 +374,24 @@ const emojis = {
 // Variável para armazenar o gênero selecionado
 let selectedGender = 'neutral';
         
-        document.addEventListener('DOMContentLoaded', function() {
+       document.addEventListener('DOMContentLoaded', function() {
     // Seleciona as logos
     const logo1 = document.querySelector('.logo-1');
     const logo2 = document.querySelector('.logo-2');
     
-    // Define qual efeito usar (pode alternar entre 'rotate' e 'blink')
-    const effect = 'rotate'; // ou 'blink'
-    
-    // Aplica o efeito escolhido
-    if (effect === 'rotate') {
-        logo1.classList.add('rotate');
-        logo2.classList.add('rotate');
-    } else if (effect === 'blink') {
-        logo1.classList.add('blink');
-        logo2.classList.add('blink');
+    // Aplica o efeito de flip horizontal apenas à logo ativa
+    function applyFlipEffect() {
+        if (logo1.classList.contains('active')) {
+            logo1.classList.add('flip-horizontal');
+            logo2.classList.remove('flip-horizontal');
+        } else {
+            logo2.classList.add('flip-horizontal');
+            logo1.classList.remove('flip-horizontal');
+        }
     }
+    
+    // Aplica o efeito inicialmente
+    applyFlipEffect();
     
     // Função para alternar entre as logos
     function toggleLogos() {
@@ -447,17 +402,15 @@ let selectedGender = 'neutral';
             logo2.classList.remove('active');
             logo1.classList.add('active');
         }
+        
+        // Aplica o efeito à nova logo ativa
+        applyFlipEffect();
     }
     
-    // Alterna as logos a cada 3 segundos
-    setInterval(toggleLogos, 3000);
-    
-    // Simulação de carregamento (opcional)
-    setTimeout(function() {
-        // Aqui você pode adicionar código para esconder a tela de carregamento
-        // document.getElementById('loading-screen').style.display = 'none';
-    }, 5000); // 5 segundos de exemplo
+    // Alterna as logos a cada 5 segundos (tempo maior para melhor visualização)
+    setInterval(toggleLogos, 5000);
 });
+
         
 // Função para aplicar o tema baseado no gênero
 function applyTheme(gender) {
