@@ -243,7 +243,7 @@
             font-size: 16px;
             width: 100%;
         }
-        /* Estilos para o container de logos */
+       /* Estilos para o container de logos */
 .logo-container {
     position: relative;
     width: 200px;
@@ -259,9 +259,8 @@
     width: 100%;
     height: auto;
     opacity: 0;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    transform: scale(0.8);
-    backface-visibility: hidden;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: scale(0.95);
 }
 
 /* Logo ativa */
@@ -270,18 +269,18 @@
     transform: scale(1);
 }
 
-/* Animação de flip horizontal */
-@keyframes flipHorizontal {
-    0% { transform: scale(1) rotateY(0deg); }
-    50% { transform: scale(1.05) rotateY(180deg); }
-    100% { transform: scale(1) rotateY(360deg); }
+/* Animação de pulsar suave */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
-/* Classe para aplicar a animação de flip horizontal */
-.flip-horizontal {
-    animation: flipHorizontal 3s infinite linear;
-    transform-style: preserve-3d;
+/* Classe para aplicar a animação de pulsar */
+.pulse {
+    animation: pulse 3s infinite ease-in-out;
 }
+
 
     </style>
 </head>
@@ -379,37 +378,26 @@ let selectedGender = 'neutral';
     const logo1 = document.querySelector('.logo-1');
     const logo2 = document.querySelector('.logo-2');
     
-    // Aplica o efeito de flip horizontal apenas à logo ativa
-    function applyFlipEffect() {
-        if (logo1.classList.contains('active')) {
-            logo1.classList.add('flip-horizontal');
-            logo2.classList.remove('flip-horizontal');
-        } else {
-            logo2.classList.add('flip-horizontal');
-            logo1.classList.remove('flip-horizontal');
-        }
-    }
-    
-    // Aplica o efeito inicialmente
-    applyFlipEffect();
+    // Inicializa: primeira logo ativa e com efeito de pulsar
+    logo1.classList.add('active', 'pulse');
     
     // Função para alternar entre as logos
     function toggleLogos() {
         if (logo1.classList.contains('active')) {
-            logo1.classList.remove('active');
-            logo2.classList.add('active');
+            // Transição para a segunda logo
+            logo1.classList.remove('active', 'pulse');
+            logo2.classList.add('active', 'pulse');
         } else {
-            logo2.classList.remove('active');
-            logo1.classList.add('active');
+            // Transição para a primeira logo
+            logo2.classList.remove('active', 'pulse');
+            logo1.classList.add('active', 'pulse');
         }
-        
-        // Aplica o efeito à nova logo ativa
-        applyFlipEffect();
     }
     
-    // Alterna as logos a cada 5 segundos (tempo maior para melhor visualização)
+    // Alterna as logos a cada 5 segundos
     setInterval(toggleLogos, 5000);
 });
+
 
         
 // Função para aplicar o tema baseado no gênero
