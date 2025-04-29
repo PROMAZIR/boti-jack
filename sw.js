@@ -1,88 +1,116 @@
-const CACHE_NAME = 'crediario-jak-v1.0.3';
-const ASSETS = [
+// Service Worker para PWA
+const CACHE_NAME = 'cred-jackeline-v1.1'; // Incrementar versão para forçar atualização
+const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/apple-touch-icon.png',
-  '/android-chrome-192x192.png',
-  '/android-chrome-512x512.png',
+  '/site.webmanifest',
   '/favicon-16x16.png',
   '/favicon-32x32.png',
-  '/favicon.ico'
+  '/apple-touch-icon.png'
 ];
 
-// Install event - cache assets
+// Instalação do Service Worker
 self.addEventListener('install', event => {
+  console.log('Service Worker instalando...');
+  
+  // Forçar ativação imediata sem esperar que abas antigas fechem
+  self.skipWaiting();
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(ASSETS);
+        console.log('Cache aberto');
+        return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting())
   );
 });
 
-// Activate event - clean up old caches
+// Ativação do Service Worker
 self.addEventListener('activate', event => {
+  console.log('Service Worker ativando...');
+  
+  // Tomar controle de todas as páginas imediatamente
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.filter(cacheName => {
-          return cacheName.startsWith('crediario-jak-') && cacheName !== CACHE_NAME;
-        }).map(cacheName => {
-          return caches.delete(cacheName);
-        })
-      );
-    }).then(() => self.clients.claim())
-  );
-});
-
-// Fetch event - serve from cache or network
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached response if found
-        if (response) {
-          return response;
-        }
-
-        // Clone the request
-        const fetchRequest = event.request.clone();
-
-        // Make network request and cache the response
-        return fetch(fetchRequest).then(response => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone the response
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              // Don't cache Google Apps Script URLs
-              if (!event.request.url.includes('script.google.com')) {
-                cache.put(event.request, responseToCache);
+    clients.claim()
+      .then(() => {
+        // Limpar caches antigos
+        return caches.keys().then(cacheNames => {
+          return Promise.all(
+            cacheNames.map(cacheName => {
+              if (cacheName !== CACHE_NAME) {
+                console.log('Removendo cache antigo:', cacheName);
+                return caches.delete(cacheName);
               }
-            });
-
-          return response;
-        }).catch(() => {
-          // If network request fails and it's a document request, return the offline page
-          if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
-          }
+            })
+          );
         });
       })
   );
 });
 
-// Handle messages from the main page
+// Interceptar requisições
+self.addEventListener('fetch', event => {
+  // Não interceptar requisições do Google Apps Script
+  if (event.request.url.includes('script.google.com')) {
+    return;
+  }
+  
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Cache hit - retornar resposta
+        if (response) {
+          return response;
+        }
+        
+        // Clonar a requisição
+        const fetchRequest = event.request.clone();
+        
+        return fetch(fetchRequest).then(
+          response => {
+            // Verificar se recebemos uma resposta válida
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            
+            // Clonar a resposta
+            const responseToCache = response.clone();
+            
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+              
+            return response;
+          }
+        );
+      })
+  );
+});
+
+// Escutar mensagens do cliente
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+  if (event.data === 'clearCache') {
+    console.log('Limpando todo o cache...');
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          return caches.delete(cacheName);
+        })
+      );
+    }).then(() => {
+      console.log('Cache limpo com sucesso');
+      // Notificar clientes que o cache foi limpo
+      self.clients.matchAll().then(clients => {
+        clients.forEach(client => client.postMessage('cacheCleared'));
+      });
+    });
+  } else if (event.data && event.data.type === 'clearCache' && event.data.url) {
+    console.log('Limpando cache para URL específica:', event.data.url);
+    caches.open(CACHE_NAME).then(cache => {
+      cache.delete(new Request(event.data.url)).then(success => {
+        console.log('URL removida do cache:', success);
+      });
+    });
   }
 });
