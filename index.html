@@ -238,45 +238,48 @@
             font-size: 16px;
             width: 100%;
         }
-       /* Estilos para o container de logos */
+      /* Estilos para o container de logos */
 .logo-container {
     position: relative;
     width: 100px;
     height: 100px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Estilos base para as logos */
 .logo {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
     height: auto;
     opacity: 0;
     transition: opacity 0.8s ease, transform 0.8s ease;
-    transform: scale(0.95);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
 }
 
 /* Logo ativa */
 .logo.active {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
 }
 
 /* Animação de pulsar suave */
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* Classe para aplicar a animação de pulsar */
 .pulse {
     animation: pulse 4s infinite ease-in-out;
 }
-
-
 
     </style>
 </head>
@@ -755,9 +758,7 @@ function createFloatingActionMenu() {
         menuButton.style.transform = 'rotate(0)';
     });
     
-    // Adicionar o botão ao menu
-    menu.appendChild(pwaUpdateButton);
-    
+     // Remover botões existentes para evitar duplicação
     const existingMenu = document.getElementById('floating-action-menu');
     if (existingMenu) {
         existingMenu.remove();
@@ -921,6 +922,31 @@ function createFloatingActionMenu() {
             menuButton.style.transform = 'rotate(0)';
         }
     });
+        // Fechar o menu ao clicar fora dele
+    document.addEventListener('click', (event) => {
+        if (!menu.contains(event.target) && event.target !== menuButton) {
+            menu.style.display = 'none';
+            menuButton.classList.remove('active');
+            menuButton.style.transform = 'rotate(0)';
+        }
+    });
+    
+    // Adicionar elementos ao DOM
+    document.body.appendChild(menuButton);
+    document.body.appendChild(menu);
+    
+    // Adicionar evento para verificar se o Service Worker foi atualizado
+    navigator.serviceWorker.addEventListener('message', event => {
+        if (event.data === 'cacheCleared') {
+            showToast('Cache limpo! Aplicativo atualizado.');
+            
+            // Recarregar a página após um pequeno atraso
+            setTimeout(() => {
+                window.location.reload(true);
+            }, 1000);
+        }
+    });
+}
     
     // Função para forçar a atualização do PWA
 function forcePWAUpdate() {
