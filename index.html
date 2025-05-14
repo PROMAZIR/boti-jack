@@ -289,7 +289,7 @@
         <div class="frame-container" id="frame-container">
             <iframe 
                 id="app-frame"
-                src="https://script.google.com/macros/s/AKfycbzA9o_lgj8j4Np5l-_gfGPgLR0bCmKnk0zsqC1zkOoXmh877ozbYKqoK4NmsUpbaAJG-Q/exec"
+                src="https://script.google.com/macros/s/AKfycbzoNLUpXISn7JxpaBtMXR2k5WGiEjQN054U6SX22mx6_TTe5VKZTpgcxh_1UmVt-Ijwcw/exec"
                 allow="autoplay; camera; microphone; fullscreen"
                 allowfullscreen
                 loading="eager"
@@ -720,24 +720,19 @@ nameModal.addEventListener('click', (e) => {
 
 // Função para criar o menu flutuante
 function createFloatingActionMenu() {
-    // Criar o botão de menu (três pontos)
+    // Criar o botão de menu (emoji de joinha)
     const menuButton = document.createElement('button');
     menuButton.className = 'admin-float-button';
-    menuButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="1"></circle>
-            <circle cx="12" cy="5" r="1"></circle>
-            <circle cx="12" cy="19" r="1"></circle>
-        </svg>
-    `;
+    menuButton.innerHTML = '👍'; // Emoji de joinha
     menuButton.style.cssText = `
         position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        background-color: #007bff;
+        background-color: rgba(0, 123, 255, 0.8);
         color: white;
         border: none;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -747,14 +742,16 @@ function createFloatingActionMenu() {
         justify-content: center;
         z-index: 1000;
         transition: all 0.3s ease;
+        font-size: 16px;
     `;
 
     // Criar o menu dropdown
     const menu = document.createElement('div');
     menu.style.cssText = `
         position: fixed;
-        top: 80px;
-        right: 20px;
+        bottom: 65px;
+        left: 50%;
+        transform: translateX(-50%);
         background-color: white;
         border-radius: 8px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -810,7 +807,6 @@ function createFloatingActionMenu() {
         // Fechar o menu
         menu.style.display = 'none';
         menuButton.classList.remove('active');
-        menuButton.style.transform = 'rotate(0)';
     });
     
     // Botão de atualização do Google Apps Script
@@ -849,7 +845,6 @@ function createFloatingActionMenu() {
         // Fechar o menu
         menu.style.display = 'none';
         menuButton.classList.remove('active');
-        menuButton.style.transform = 'rotate(0)';
     });
     
     // Adicionar botões ao menu
@@ -861,11 +856,11 @@ function createFloatingActionMenu() {
         if (menu.style.display === 'none' || menu.style.display === '') {
             menu.style.display = 'flex';
             menuButton.classList.add('active');
-            menuButton.style.transform = 'rotate(90deg)';
+            menuButton.style.backgroundColor = '#28a745'; // Muda para verde quando ativo
         } else {
             menu.style.display = 'none';
             menuButton.classList.remove('active');
-            menuButton.style.transform = 'rotate(0)';
+            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.8)'; // Volta para azul
         }
     });
     
@@ -874,7 +869,7 @@ function createFloatingActionMenu() {
         if (!menu.contains(event.target) && event.target !== menuButton) {
             menu.style.display = 'none';
             menuButton.classList.remove('active');
-            menuButton.style.transform = 'rotate(0)';
+            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.8)';
         }
     });
     
@@ -908,7 +903,7 @@ function forceGoogleAppsScriptUpdate() {
     }
     
     // URL base do seu Google Apps Script
-    const baseUrl = "https://script.google.com/macros/s/AKfycbzA9o_lgj8j4Np5l-_gfGPgLR0bCmKnk0zsqC1zkOoXmh877ozbYKqoK4NmsUpbaAJG-Q/exec";
+    const baseUrl = "https://script.google.com/macros/s/AKfycbzoNLUpXISn7JxpaBtMXR2k5WGiEjQN054U6SX22mx6_TTe5VKZTpgcxh_1UmVt-Ijwcw/exec";
     
     // Adicionar parâmetros para evitar cache
     const timestamp = new Date().getTime();
