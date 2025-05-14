@@ -1,5 +1,7 @@
 // Service Worker para PWA
-const CACHE_NAME = 'cred-jackeline-v1.1'; // Incrementar versão para forçar atualização
+const CACHE_NAME = 'credi-jackeline-cache-v1';
+
+// Arquivos para cache inicial
 const urlsToCache = [
   '/',
   '/index.html',
@@ -11,11 +13,6 @@ const urlsToCache = [
 
 // Instalação do Service Worker
 self.addEventListener('install', event => {
-  console.log('Service Worker instalando...');
-  
-  // Forçar ativação imediata sem esperar que abas antigas fechem
-  self.skipWaiting();
-  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -25,73 +22,66 @@ self.addEventListener('install', event => {
   );
 });
 
-// Ativação do Service Worker
+// Ativação e limpeza de caches antigos
 self.addEventListener('activate', event => {
-  console.log('Service Worker ativando...');
-  
-  // Tomar controle de todas as páginas imediatamente
   event.waitUntil(
-    clients.claim()
-      .then(() => {
-        // Limpar caches antigos
-        return caches.keys().then(cacheNames => {
-          return Promise.all(
-            cacheNames.map(cacheName => {
-              if (cacheName !== CACHE_NAME) {
-                console.log('Removendo cache antigo:', cacheName);
-                return caches.delete(cacheName);
-              }
-            })
-          );
-        });
-      })
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.filter(cacheName => {
+          return cacheName !== CACHE_NAME;
+        }).map(cacheName => {
+          return caches.delete(cacheName);
+        })
+      );
+    })
   );
 });
 
-// Interceptar requisições
+// Interceptação de requisições
 self.addEventListener('fetch', event => {
-  // Não interceptar requisições do Google Apps Script
+  // Não fazer cache de URLs do Google Apps Script
   if (event.request.url.includes('script.google.com')) {
-    return;
-  }
-  
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - retornar resposta
-        if (response) {
-          return response;
-        }
-        
-        // Clonar a requisição
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then(
-          response => {
-            // Verificar se recebemos uma resposta válida
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clonar a resposta
-            const responseToCache = response.clone();
-            
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-              
+    // Para URLs do GAS, sempre buscar da rede
+    event.respondWith(
+      fetch(event.request)
+        .catch(error => {
+          console.error('Falha ao buscar:', error);
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // Para outros recursos, usar estratégia de cache-first
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          if (response) {
             return response;
           }
-        );
-      })
-  );
+          return fetch(event.request)
+            .then(response => {
+              // Não armazenar se a resposta não for válida
+              if (!response || response.status !== 200 || response.type !== 'basic') {
+                return response;
+              }
+
+              // Clonar a resposta para armazenar no cache
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  cache.put(event.request, responseToCache);
+                });
+
+              return response;
+            });
+        })
+    );
+  }
 });
 
-// Escutar mensagens do cliente
+// Lidar com mensagens do cliente
 self.addEventListener('message', event => {
   if (event.data === 'clearCache') {
-    console.log('Limpando todo o cache...');
+    console.log('Limpando todo o cache');
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
@@ -99,17 +89,25 @@ self.addEventListener('message', event => {
         })
       );
     }).then(() => {
-      console.log('Cache limpo com sucesso');
-      // Notificar clientes que o cache foi limpo
       self.clients.matchAll().then(clients => {
         clients.forEach(client => client.postMessage('cacheCleared'));
       });
     });
-  } else if (event.data && event.data.type === 'clearCache' && event.data.url) {
+  } else if (event.data.type === 'clearCache' && event.data.url) {
     console.log('Limpando cache para URL específica:', event.data.url);
     caches.open(CACHE_NAME).then(cache => {
-      cache.delete(new Request(event.data.url)).then(success => {
-        console.log('URL removida do cache:', success);
+      // Limpar todas as entradas que contêm a URL base
+      caches.match(new Request(event.data.url)).then(response => {
+        if (response) {
+          cache.delete(new Request(event.data.url));
+        }
+      });
+      
+      // Também tentar limpar variações da URL com parâmetros
+      caches.keys().then(() => {
+        self.clients.matchAll().then(clients => {
+          clients.forEach(client => client.postMessage('cacheCleared'));
+        });
       });
     });
   }
