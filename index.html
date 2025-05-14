@@ -892,83 +892,177 @@ function createFloatingActionMenu() {
     }
 }
 
-function forceGoogleAppsScriptUpdate() {
-    const appFrame = document.getElementById('app-frame');
-    const loadingScreen = document.getElementById('loading-screen');
-    
-    // Mostrar tela de carregamento
-    if (loadingScreen) {
-        loadingScreen.style.display = 'flex';
-    }
-    
-    // URL base do seu Google Apps Script
-    const baseUrl = "https://script.google.com/macros/s/AKfycbzSDGuksTlu0tWJGThdTwW7nOXYtxx6uM4hYFJ0EDgAOCAH_f4gK8xMm6rpxCoHZCf-eg/exec";
-    
-    // Adicionar parâmetros para evitar cache de forma mais robusta
-    const timestamp = new Date().getTime();
-    const randomParam = Math.floor(Math.random() * 1000000);
-    const noCache = `nocache=${timestamp}-${randomParam}&forceRefresh=true`;
-    
-    // Construir a URL completa com parâmetros anti-cache
-    const fullUrl = baseUrl.includes('?') 
-        ? `${baseUrl}&${noCache}` 
-        : `${baseUrl}?${noCache}`;
-    
-    console.log("Atualizando iframe para:", fullUrl);
-    
-    // Limpar cache do navegador para esta URL específica
-    fetch(fullUrl, { 
-        method: 'GET',
-        cache: 'no-store',
-        headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
+function createFloatingActionMenu() {
+    // Create menu button (thumbs up emoji)
+    const menuButton = document.createElement('button');
+    menuButton.className = 'admin-float-button';
+    menuButton.innerHTML = '⚙️'; // Changed to gear emoji for better indication of settings
+    menuButton.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px; // Changed from center to right corner
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(0, 123, 255, 0.9);
+        color: white;
+        border: none;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        font-size: 20px;
+    `;
+
+    // Create dropdown menu
+    const menu = document.createElement('div');
+    menu.style.cssText = `
+        position: fixed;
+        bottom: 80px;
+        right: 20px; // Changed from center to right corner
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1000;
+        width: 200px;
+    `;
+
+    // Refresh iframe button
+    const refreshButton = document.createElement('button');
+    refreshButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 4v6h-6"></path>
+            <path d="M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+            <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
+        </svg>
+        <span>Atualizar App</span>
+    `;
+    refreshButton.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background-color: white;
+        color: #4a4a4a;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.2s;
+    `;
+    refreshButton.addEventListener('mouseover', () => {
+        refreshButton.style.backgroundColor = '#f5f5f5';
+    });
+    refreshButton.addEventListener('mouseout', () => {
+        refreshButton.style.backgroundColor = 'white';
+    });
+    refreshButton.addEventListener('click', () => {
+        // Clear service worker cache
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage('clearCache');
         }
-    }).then(() => {
-        console.log("Pré-fetch concluído para limpar cache");
-    }).catch(err => {
-        console.error("Erro no pré-fetch:", err);
+        
+        // Reload the iframe
+        refreshIframe();
+        
+        // Show toast
+        showToast('Atualizando aplicativo...');
+        
+        // Close the menu
+        menu.style.display = 'none';
+        menuButton.classList.remove('active');
     });
     
-    // Atualizar o iframe com a nova URL
-    if (appFrame) {
-        // Remover completamente o iframe existente
-        const frameContainer = document.getElementById('frame-container');
-        if (frameContainer) {
-            frameContainer.innerHTML = '';
-            
-            // Criar um novo iframe
-            const newFrame = document.createElement('iframe');
-            newFrame.id = 'app-frame';
-            newFrame.src = fullUrl;
-            newFrame.allow = "autoplay; camera; microphone; fullscreen";
-            newFrame.allowFullscreen = true;
-            newFrame.sandbox = "allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation";
-            
-            // Adicionar evento de carregamento
-            newFrame.onload = function() {
-                console.log("Novo iframe carregado com sucesso");
-                // Esconder tela de carregamento após um pequeno atraso
-                setTimeout(() => {
-                    if (loadingScreen) {
-                        loadingScreen.style.display = 'none';
-                    }
-                    showToast("Conteúdo atualizado com sucesso!");
-                }, 500);
-            };
-            
-            // Adicionar o novo iframe ao container
-            frameContainer.appendChild(newFrame);
+    // Google Apps Script update button
+    const gasUpdateButton = document.createElement('button');
+    gasUpdateButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2v6h-6"></path>
+            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+            <path d="M3 12a9 9 0 0 0 6 8.5l2-5.5"></path>
+        </svg>
+        <span>Atualizar Conteúdo</span>
+    `;
+    gasUpdateButton.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background-color: white;
+        color: #4a4a4a;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.2s;
+        border-top: 1px solid #f0f0f0;
+    `;
+    gasUpdateButton.addEventListener('mouseover', () => {
+        gasUpdateButton.style.backgroundColor = '#f5f5f5';
+    });
+    gasUpdateButton.addEventListener('mouseout', () => {
+        gasUpdateButton.style.backgroundColor = 'white';
+    });
+    gasUpdateButton.addEventListener('click', () => {
+        forceGoogleAppsScriptUpdate();
+        
+        // Close the menu
+        menu.style.display = 'none';
+        menuButton.classList.remove('active');
+    });
+    
+    // Add buttons to menu
+    menu.appendChild(refreshButton);
+    menu.appendChild(gasUpdateButton);
+    
+    // Add click event to main button
+    menuButton.addEventListener('click', () => {
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'flex';
+            menuButton.classList.add('active');
+            menuButton.style.backgroundColor = '#28a745'; // Change to green when active
+        } else {
+            menu.style.display = 'none';
+            menuButton.classList.remove('active');
+            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.9)'; // Back to blue
         }
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!menu.contains(event.target) && event.target !== menuButton) {
+            menu.style.display = 'none';
+            menuButton.classList.remove('active');
+            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.9)';
+        }
+    });
+    
+    // Add elements to DOM
+    document.body.appendChild(menuButton);
+    document.body.appendChild(menu);
+    
+    // Add event to check if Service Worker was updated
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data === 'cacheCleared') {
+                showToast('Cache limpo! Aplicativo atualizado.');
+                
+                // Reload the page after a short delay
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 1000);
+            }
+        });
     }
-    
-    // Mostrar toast de notificação
-    showToast("Atualizando para a versão mais recente...");
-    
-    // Salvar timestamp da atualização
-    localStorage.setItem('lastGASUpdate', timestamp.toString());
 }
+
 
 
         
