@@ -280,6 +280,61 @@
 .pulse {
     animation: pulse 4s infinite ease-in-out;
 }
+        /* Estilo para o botão de atualização no canto superior direito */
+        #refresh-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        #refresh-button svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.5s ease;
+        }
+        
+        #refresh-button:hover svg {
+            transform: rotate(180deg);
+        }
+        
+        #refresh-button.refreshing svg {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Estilo para o indicador de progresso */
+        .refresh-progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: #4e9af1;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: spin 1s linear infinite;
+        }
+        
+        #refresh-button.refreshing .refresh-progress {
+            opacity: 1;
+        }
 
     </style>
 </head>
