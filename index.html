@@ -717,42 +717,44 @@ nameModal.addEventListener('click', (e) => {
         nameModal.style.display = 'none';
     }
 });
-       function createFloatingActionMenu() {
-    // Create menu button (thumbs up emoji)
+
+// Função para criar o menu flutuante
+function createFloatingActionMenu() {
+    // Criar o botão de menu (emoji de joinha)
     const menuButton = document.createElement('button');
     menuButton.className = 'admin-float-button';
-    menuButton.innerHTML = '⚙️'; // Changed to gear emoji for better indication of settings
+    menuButton.innerHTML = '⚙️'; // Emoji de joinha
     menuButton.style.cssText = `
         position: fixed;
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        width: 50px;
-        height: 50px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        background-color: rgba(0, 123, 255, 0.9);
+        background-color: rgba(0, 123, 255, 0.8);
         color: white;
         border: none;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 1000;
         transition: all 0.3s ease;
-        font-size: 20px;
+        font-size: 16px;
     `;
 
-    // Create dropdown menu
+    // Criar o menu dropdown
     const menu = document.createElement('div');
     menu.style.cssText = `
         position: fixed;
-        bottom: 80px;
+        bottom: 65px;
         left: 50%;
         transform: translateX(-50%);
         background-color: white;
         border-radius: 8px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         display: none;
         flex-direction: column;
         overflow: hidden;
@@ -760,7 +762,7 @@ nameModal.addEventListener('click', (e) => {
         width: 200px;
     `;
 
-    // Refresh iframe button
+    // Botão de atualização do iframe
     const refreshButton = document.createElement('button');
     refreshButton.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -791,23 +793,23 @@ nameModal.addEventListener('click', (e) => {
         refreshButton.style.backgroundColor = 'white';
     });
     refreshButton.addEventListener('click', () => {
-        // Clear service worker cache
+        // Limpar o cache do service worker
         if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
             navigator.serviceWorker.controller.postMessage('clearCache');
         }
         
-        // Reload the iframe
+        // Recarregar o iframe
         refreshIframe();
         
-        // Show toast
+        // Mostrar toast
         showToast('Atualizando aplicativo...');
         
-        // Close the menu
+        // Fechar o menu
         menu.style.display = 'none';
         menuButton.classList.remove('active');
     });
     
-    // Google Apps Script update button
+    // Botão de atualização do Google Apps Script
     const gasUpdateButton = document.createElement('button');
     gasUpdateButton.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -840,48 +842,48 @@ nameModal.addEventListener('click', (e) => {
     gasUpdateButton.addEventListener('click', () => {
         forceGoogleAppsScriptUpdate();
         
-        // Close the menu
+        // Fechar o menu
         menu.style.display = 'none';
         menuButton.classList.remove('active');
     });
     
-    // Add buttons to menu
+    // Adicionar botões ao menu
     menu.appendChild(refreshButton);
     menu.appendChild(gasUpdateButton);
     
-    // Add click event to main button
+    // Adicionar evento de clique ao botão principal
     menuButton.addEventListener('click', () => {
         if (menu.style.display === 'none' || menu.style.display === '') {
             menu.style.display = 'flex';
             menuButton.classList.add('active');
-            menuButton.style.backgroundColor = '#28a745'; // Change to green when active
+            menuButton.style.backgroundColor = '#28a745'; // Muda para verde quando ativo
         } else {
             menu.style.display = 'none';
             menuButton.classList.remove('active');
-            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.9)'; // Back to blue
+            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.8)'; // Volta para azul
         }
     });
     
-    // Close menu when clicking outside
+    // Fechar o menu ao clicar fora dele
     document.addEventListener('click', (event) => {
         if (!menu.contains(event.target) && event.target !== menuButton) {
             menu.style.display = 'none';
             menuButton.classList.remove('active');
-            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.9)';
+            menuButton.style.backgroundColor = 'rgba(0, 123, 255, 0.8)';
         }
     });
     
-    // Add elements to DOM
+    // Adicionar elementos ao DOM
     document.body.appendChild(menuButton);
     document.body.appendChild(menu);
     
-    // Add event to check if Service Worker was updated
+    // Adicionar evento para verificar se o Service Worker foi atualizado
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.addEventListener('message', event => {
             if (event.data === 'cacheCleared') {
                 showToast('Cache limpo! Aplicativo atualizado.');
                 
-                // Reload the page after a short delay
+                // Recarregar a página após um pequeno atraso
                 setTimeout(() => {
                     window.location.reload(true);
                 }, 1000);
@@ -889,101 +891,33 @@ nameModal.addEventListener('click', (e) => {
         });
     }
 }
-        // Function to refresh the iframe
-function refreshIframe() {
-    const appFrame = document.getElementById('app-frame');
-    if (appFrame) {
-        // Reload the iframe
-        appFrame.src = appFrame.src;
-        console.log("Refreshing iframe");
-    }
-}
 
-// Function to show toast notifications
-function showToast(message) {
-    // Check if a toast container already exists
-    let toastContainer = document.getElementById('toast-container');
-    
-    // If not, create one
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toast-container';
-        toastContainer.style.cssText = `
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        `;
-        document.body.appendChild(toastContainer);
-    }
-    
-    // Create the toast element
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-        background-color: rgba(50, 50, 50, 0.9);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 4px;
-        margin-top: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        max-width: 80vw;
-        text-align: center;
-    `;
-    toast.textContent = message;
-    
-    // Add the toast to the container
-    toastContainer.appendChild(toast);
-    
-    // Trigger animation
-    setTimeout(() => {
-        toast.style.opacity = '1';
-    }, 10);
-    
-    // Remove the toast after 3 seconds
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => {
-            if (toastContainer.contains(toast)) {
-                toastContainer.removeChild(toast);
-            }
-        }, 300);
-    }, 3000);
-}
-
-
-
-
+// Função para forçar a atualização do iframe do Google Apps Script
 function forceGoogleAppsScriptUpdate() {
     const appFrame = document.getElementById('app-frame');
     const loadingScreen = document.getElementById('loading-screen');
     
-    // Show loading screen
+    // Mostrar tela de carregamento
     if (loadingScreen) {
         loadingScreen.style.display = 'flex';
     }
     
-    // Base URL of your Google Apps Script
-    const baseUrl = "https://script.google.com/macros/s/AKfycbxyGtPN1mjKH-bHlKcE25zoyf0kqGavv7176t-_GrxYrRvnXBaM7guWcu_JcVKEnF85/exec";
+    // URL base do seu Google Apps Script
+    const baseUrl = "https://script.google.com/macros/s/AKfycbyXoyqE8GIE59uy80DegAGg1F-XHolPeVOViVsQsYiOHS9CCfDhXg_vWFA0Z71NNW0d2A/exec";
     
-    // Add parameters to prevent caching
+    // Adicionar parâmetros para evitar cache
     const timestamp = new Date().getTime();
     const randomParam = Math.floor(Math.random() * 1000000);
     const noCache = `nocache=${timestamp}-${randomParam}`;
     
-    // Build the complete URL with anti-cache parameters
+    // Construir a URL completa com parâmetros anti-cache
     const fullUrl = baseUrl.includes('?') 
         ? `${baseUrl}&${noCache}` 
         : `${baseUrl}?${noCache}`;
     
-    console.log("Updating iframe to:", fullUrl);
+    console.log("Atualizando iframe para:", fullUrl);
     
-    // Clear Service Worker cache for this URL
+    // Limpar cache do Service Worker para esta URL
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage({
             type: 'clearCache',
@@ -991,14 +925,32 @@ function forceGoogleAppsScriptUpdate() {
         });
     }
     
-    // Update the iframe with the new URL
+    // Limpar cache do navegador para esta URL específica
+    if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+            return Promise.all(
+                cacheNames.map(function(cacheName) {
+                    return caches.open(cacheName).then(function(cache) {
+                        // Tentar excluir a URL específica de cada cache
+                        return cache.delete(baseUrl).then(function() {
+                            return cache.delete(fullUrl);
+                        });
+                    });
+                })
+            );
+        }).then(function() {
+            console.log('Cache limpo para a URL do GAS');
+        });
+    }
+    
+    // Atualizar o iframe com a nova URL
     if (appFrame) {
-        // First, remove the existing iframe
+        // Primeiro, remover o iframe existente
         const frameContainer = document.getElementById('frame-container');
         if (frameContainer) {
             frameContainer.innerHTML = '';
             
-            // Create a new iframe
+            // Criar um novo iframe
             const newFrame = document.createElement('iframe');
             newFrame.id = 'app-frame';
             newFrame.src = fullUrl;
@@ -1006,10 +958,10 @@ function forceGoogleAppsScriptUpdate() {
             newFrame.allowFullscreen = true;
             newFrame.sandbox = "allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation";
             
-            // Add load event
+            // Adicionar evento de carregamento
             newFrame.onload = function() {
-                console.log("New iframe loaded successfully");
-                // Hide loading screen after a short delay
+                console.log("Novo iframe carregado com sucesso");
+                // Esconder tela de carregamento após um pequeno atraso
                 setTimeout(() => {
                     if (loadingScreen) {
                         loadingScreen.style.display = 'none';
@@ -1017,17 +969,105 @@ function forceGoogleAppsScriptUpdate() {
                 }, 500);
             };
             
-            // Add the new iframe to the container
+            // Adicionar o novo iframe ao container
             frameContainer.appendChild(newFrame);
         }
     }
     
-    // Show notification toast
-    showToast("Updating to the latest version...");
+    // Mostrar toast de notificação
+    showToast("Atualizando para a versão mais recente...");
     
-    // Save update timestamp
+    // Salvar timestamp da atualização
     localStorage.setItem('lastGASUpdate', timestamp.toString());
 }
+
+
+// Função para mostrar toast de notificação
+function showToast(message) {
+    // Verificar se já existe um toast
+    let toast = document.getElementById('toast-notification');
+    if (toast) {
+        // Se já existe, apenas atualizar a mensagem e mostrar novamente
+        toast.textContent = message;
+        toast.style.opacity = '1';
+        toast.style.bottom = '80px';
+    } else {
+        // Criar um novo toast
+        toast = document.createElement('div');
+        toast.id = 'toast-notification';
+        toast.textContent = message;
+        
+        // Obter a cor do tema atual
+        const currentGender = localStorage.getItem('userGender') || 'neutral';
+        const themeColor = colors[currentGender];
+        
+        toast.style.cssText = `
+            position: fixed;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: ${themeColor || '#007bff'};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: all 0.3s ease;
+            opacity: 0;
+            font-size: 14px;
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Mostrar o toast com animação
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.bottom = '80px';
+        }, 10);
+    }
+    
+    // Esconder o toast após alguns segundos
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.bottom = '-50px';
+        
+        // Remover o elemento após a animação
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Função para recarregar o iframe
+function refreshIframe() {
+    const appFrame = document.getElementById('app-frame');
+    if (appFrame) {
+        const currentSrc = appFrame.src;
+        appFrame.src = currentSrc;
+    }
+}
+
+// Inicializar o menu flutuante quando o documento estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    createFloatingActionMenu();
+    
+    // Verificar se precisa atualizar ao carregar a página
+    const lastUpdate = parseInt(localStorage.getItem('lastGASUpdate') || '0');
+    const now = new Date().getTime();
+    const oneHour = 60 * 60 * 1000;
+    
+    // Se a última atualização foi há mais de uma hora, atualizar automaticamente
+    if (now - lastUpdate > oneHour) {
+        forceGoogleAppsScriptUpdate();
+    }
+});
+
+        
+    </script>
+</body>
+</html>
 
         
     </script>
