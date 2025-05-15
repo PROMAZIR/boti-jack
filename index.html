@@ -284,7 +284,20 @@
     </style>
 </head>
 <body>
+    </style>
+</head>
+<body>
     <div id="app-container">
+        <!-- Botão de atualização no canto superior direito -->
+        <button id="refresh-button" title="Atualizar aplicativo">
+            <div class="refresh-progress"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 4v6h-6"></path>
+                <path d="M1 20v-6h6"></path>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+                <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
+            </svg>
+        </button>
         <!-- Frame do aplicativo (colocado primeiro para pré-carregar) -->
         <div class="frame-container" id="frame-container">
             <iframe 
@@ -959,94 +972,124 @@ function showToast(message) {
 }
 
 
-// Função para forçar a atualização do iframe do Google Apps Script
-function forceGoogleAppsScriptUpdate() {
-    const appFrame = document.getElementById('app-frame');
-    const loadingScreen = document.getElementById('loading-screen');
-    
-    // Mostrar tela de carregamento
-    if (loadingScreen) {
-        loadingScreen.style.display = 'flex';
-    }
-    
-    // URL base do seu Google Apps Script
-    const baseUrl = "https://script.google.com/macros/s/AKfycbxyGtPN1mjKH-bHlKcE25zoyf0kqGavv7176t-_GrxYrRvnXBaM7guWcu_JcVKEnF85/exec";
-    
-    // Adicionar parâmetros para evitar cache
-    const timestamp = new Date().getTime();
-    const randomParam = Math.floor(Math.random() * 1000000);
-    const noCache = `nocache=${timestamp}-${randomParam}`;
-    
-    // Construir a URL completa com parâmetros anti-cache
-    const fullUrl = baseUrl.includes('?') 
-        ? `${baseUrl}&${noCache}` 
-        : `${baseUrl}?${noCache}`;
-    
-    console.log("Atualizando iframe para:", fullUrl);
-    
-    // Limpar cache do Service Worker para esta URL
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-            type: 'clearCache',
-            url: baseUrl
-        });
-    }
-    
-    // Limpar cache do navegador para esta URL específica
-    if ('caches' in window) {
-        caches.keys().then(function(cacheNames) {
-            return Promise.all(
-                cacheNames.map(function(cacheName) {
-                    return caches.open(cacheName).then(function(cache) {
-                        // Tentar excluir a URL específica de cada cache
-                        return cache.delete(baseUrl).then(function() {
-                            return cache.delete(fullUrl);
-                        });
-                    });
-                })
-            );
-        }).then(function() {
-            console.log('Cache limpo para a URL do GAS');
-        });
-    }
-    
-    // Atualizar o iframe com a nova URL
-    if (appFrame) {
-        // Primeiro, remover o iframe existente
-        const frameContainer = document.getElementById('frame-container');
-        if (frameContainer) {
-            frameContainer.innerHTML = '';
+// Adicionar código para o botão de atualização
+        document.addEventListener('DOMContentLoaded', function() {
+            const refreshButton = document.getElementById('refresh-button');
             
-            // Criar um novo iframe
-            const newFrame = document.createElement('iframe');
-            newFrame.id = 'app-frame';
-            newFrame.src = fullUrl;
-            newFrame.allow = "autoplay; camera; microphone; fullscreen";
-            newFrame.allowFullscreen = true;
-            newFrame.sandbox = "allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation";
-            
-            // Adicionar evento de carregamento
-            newFrame.onload = function() {
-                console.log("Novo iframe carregado com sucesso");
-                // Esconder tela de carregamento após um pequeno atraso
-                setTimeout(() => {
-                    if (loadingScreen) {
-                        loadingScreen.style.display = 'none';
+            if (refreshButton) {
+                // Aplicar a cor do tema ao botão
+                const currentGender = localStorage.getItem('userGender') || 'neutral';
+                const themeColor = colors[currentGender];
+                refreshButton.querySelector('svg').style.stroke = themeColor;
+                refreshButton.querySelector('.refresh-progress').style.borderTopColor = themeColor;
+                
+                // Adicionar evento de clique
+                refreshButton.addEventListener('click', function() {
+                    // Evitar múltiplos cliques durante a atualização
+                    if (refreshButton.classList.contains('refreshing')) {
+                        return;
                     }
-                }, 500);
-            };
+                    
+                    // Adicionar classe para mostrar animação
+                    refreshButton.classList.add('refreshing');
+                    
+                    // Mostrar toast de notificação
+                    showToast('Atualizando aplicativo...');
+                    
+                    // Limpar cache do service worker
+                    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                        navigator.serviceWorker.controller.postMessage('clearCache');
+                    }
+                    
+                    // Forçar atualização do iframe do Google Apps Script
+                    forceGoogleAppsScriptUpdate();
+                    
+                    // Remover classe de animação após a conclusão
+                    setTimeout(() => {
+                        refreshButton.classList.remove('refreshing');
+                    }, 3000);
+                });
+            }
+        });
+        
+        // Função aprimorada para forçar a atualização do iframe
+        function forceGoogleAppsScriptUpdate() {
+            const appFrame = document.getElementById('app-frame');
+            const loadingScreen = document.getElementById('loading-screen');
             
-            // Adicionar o novo iframe ao container
-            frameContainer.appendChild(newFrame);
+            // Mostrar tela de carregamento
+            if (loadingScreen) {
+                loadingScreen.style.display = 'flex';
+            }
+            
+            // URL base do Google Apps Script
+            const baseUrl = "https://script.google.com/macros/s/AKfycbxyGtPN1mjKH-bHlKcE25zoyf0kqGavv7176t-_GrxYrRvnXBaM7guWcu_JcVKEnF85/exec";
+            
+            // Adicionar parâmetros para evitar cache
+            const timestamp = new Date().getTime();
+            const randomParam = Math.floor(Math.random() * 1000000);
+            const noCache = `nocache=${timestamp}-${randomParam}`;
+            
+            // Construir a URL completa com parâmetros anti-cache
+            const fullUrl = baseUrl.includes('?') 
+                ? `${baseUrl}&${noCache}` 
+                : `${baseUrl}?${noCache}`;
+            
+            console.log("Atualizando iframe para:", fullUrl);
+            
+            // Limpar cache do Service Worker para esta URL
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'clearCache',
+                    url: baseUrl
+                });
+            }
+            
+            // Limpar cache do navegador para esta URL específica
+            if ('caches' in window) {
+                caches.keys().then(function(cacheNames) {
+                    return Promise.all(
+                        cacheNames.map(function(cacheName) {
+                            return caches.open(cacheName).then(function(cache) {
+                                return Promise.all([
+                                    cache.delete(baseUrl),
+                                    cache.delete(fullUrl)
+                                ]);
+                            });
+                        })
+                    );
+                }).then(function() {
+                    console.log('Cache limpo para a URL do GAS');
+                });
+            }
+            
+            // Atualizar o iframe com a nova URL
+            if (appFrame) {
+                // Criar um evento para detectar quando o iframe terminar de carregar
+                const frameLoadHandler = function() {
+                    console.log("Iframe atualizado com sucesso");
+                    
+                    // Esconder tela de carregamento após um pequeno atraso
+                    setTimeout(() => {
+                        if (loadingScreen) {
+                            loadingScreen.style.display = 'none';
+                        }
+                    }, 300);
+                    
+                    // Remover o listener após o uso
+                    appFrame.removeEventListener('load', frameLoadHandler);
+                };
+                
+                // Adicionar o listener antes de mudar o src
+                appFrame.addEventListener('load', frameLoadHandler);
+                
+                // Atualizar o src do iframe
+                appFrame.src = fullUrl;
+            }
+            
+            // Salvar timestamp da atualização
+            localStorage.setItem('lastGASUpdate', timestamp.toString());
         }
-    }
-    
-    // Mostrar toast de notificação
-    showToast("Atualizando para a versão mais recente...");
-    
-    // Salvar timestamp da atualização
-    localStorage.setItem('lastGASUpdate', timestamp.toString());
-}
 
 
 // Função para mostrar toast de notificação
