@@ -889,6 +889,73 @@ nameModal.addEventListener('click', (e) => {
         });
     }
 }
+        // Function to refresh the iframe
+function refreshIframe() {
+    const appFrame = document.getElementById('app-frame');
+    if (appFrame) {
+        // Reload the iframe
+        appFrame.src = appFrame.src;
+        console.log("Refreshing iframe");
+    }
+}
+
+// Function to show toast notifications
+function showToast(message) {
+    // Check if a toast container already exists
+    let toastContainer = document.getElementById('toast-container');
+    
+    // If not, create one
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        `;
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Create the toast element
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        background-color: rgba(50, 50, 50, 0.9);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 4px;
+        margin-top: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        max-width: 80vw;
+        text-align: center;
+    `;
+    toast.textContent = message;
+    
+    // Add the toast to the container
+    toastContainer.appendChild(toast);
+    
+    // Trigger animation
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 10);
+    
+    // Remove the toast after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            if (toastContainer.contains(toast)) {
+                toastContainer.removeChild(toast);
+            }
+        }, 300);
+    }, 3000);
+}
+
 
 
 
