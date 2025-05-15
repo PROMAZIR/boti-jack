@@ -1,21 +1,30 @@
-// Service Worker for cache management
-const CACHE_NAME = 'app-cache-v1';
+// Nome do cache
+const CACHE_NAME = 'cred-jackeline-v1.0.2';
 
-// Install event - cache basic assets
+// Arquivos para cache inicial
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/favicon.ico',
+  '/favicon-16x16.png',
+  '/favicon-32x32.png',
+  '/apple-touch-icon.png',
+  '/site.webmanifest'
+];
+
+// Instalação do Service Worker
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        return cache.addAll([
-          '/',
-          '/index.html',
-          // Add other static assets here
-        ]);
+        console.log('Cache aberto');
+        return cache.addAll(urlsToCache);
       })
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activate event - clean up old caches
+// Ativação e limpeza de caches antigos
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -23,71 +32,84 @@ self.addEventListener('activate', event => {
         cacheNames.filter(cacheName => {
           return cacheName !== CACHE_NAME;
         }).map(cacheName => {
+          console.log('Removendo cache antigo:', cacheName);
           return caches.delete(cacheName);
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
-// Fetch event - serve from cache or network
+// Estratégia de cache: Network First com fallback para cache
 self.addEventListener('fetch', event => {
+  // Ignorar requisições para o Google Apps Script
+  if (event.request.url.includes('script.google.com')) {
+    return;
+  }
+  
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Return cached response if found
-        if (response) {
+        // Verificar se a resposta é válida
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
         
-        // Otherwise fetch from network
-        return fetch(event.request).then(
-          response => {
-            // Don't cache if not a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clone the response
-            const responseToCache = response.clone();
-            
-            // Add to cache
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            
-            return response;
-          }
-        );
+        // Clonar a resposta para o cache
+        const responseToCache = response.clone();
+        
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+          
+        return response;
+      })
+      .catch(() => {
+        // Se falhar, tentar buscar do cache
+        return caches.match(event.request);
       })
   );
 });
 
-// Listen for messages from the main script
-self.addEventListener('message', event => {
-  if (event.data === 'clearCache') {
-    // Clear all caches
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          return caches.delete(cacheName);
-        })
-      );
-    }).then(() => {
-      // Notify the main script that cache was cleared
-      self.clients.matchAll().then(clients => {
-        clients.forEach(client => {
-          client.postMessage('cacheCleared');
-        });
-      });
-    });
-  } else if (event.data.type === 'clearCache' && event.data.url) {
-    // Clear specific URL from cache
-    caches.open(CACHE_NAME).then(cache => {
-      cache.delete(event.data.url).then(() => {
-        console.log('Specific URL cache cleared:', event.data.url);
-      });
-    });
+// Evento de sincronização em segundo plano
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-data') {
+    event.waitUntil(syncData());
   }
+});
+
+// Função para sincronizar dados
+function syncData() {
+  // Implementação da sincronização de dados
+  console.log('Sincronizando dados em segundo plano');
+  return Promise.resolve();
+}
+
+// Evento de push notification
+self.addEventListener('push', event => {
+  const data = event.data.json();
+  
+  const options = {
+    body: data.body,
+    icon: '/apple-touch-icon.png',
+    badge: '/favicon-32x32.png',
+    vibrate: [100, 50, 100],
+    data: {
+      url: data.url || '/'
+    }
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Evento de clique na notificação
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  
+  event.waitUntil(
+    clients.openWindow(event.notification.data.url)
+  );
 });
