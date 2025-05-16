@@ -422,6 +422,9 @@
     </div>
     
     <script>
+        // Adicione uma variável de versão no topo do seu script
+const APP_VERSION = '1.0.1'; // Incremente este valor quando fizer alterações no seu GAS
+
         // Elementos principais
         const loadingScreen = document.getElementById('loading-screen');
         const appFrame = document.getElementById('app-frame');
@@ -805,19 +808,67 @@
         // Verificar conexão inicial
         checkConnection();
         
+        // Adicione esta função para limpar o cache do navegador para o domínio específico
+function clearCacheForDomain(domain) {
+    if ('caches' in window) {
+        caches.keys().then(function(names) {
+            for (let name of names) {
+                caches.delete(name).then(function() {
+                    console.log('Cache deletado: ' + name);
+                });
+            }
+        });
+    }
+}
+        
         // Função para forçar a atualização do Google Apps Script
         function forceGoogleAppsScriptUpdate() {
-            // Adicionar timestamp para evitar cache
-            const timestamp = new Date().getTime();
-            const currentSrc = appFrame.src;
-            const baseUrl = currentSrc.split('?')[0];
-            
-            // Recarregar o iframe com novo timestamp
-            appFrame.src = `${baseUrl}?t=${timestamp}`;
-            
-            // Mostrar a tela de carregamento novamente
-            loadingScreen.style.display = 'flex';
+    // Mostrar a tela de carregamento primeiro
+    loadingScreen.style.display = 'flex';
+    
+    // Adicionar timestamp para evitar cache
+    const timestamp = new Date().getTime();
+    const currentSrc = appFrame.src;
+    const baseUrl = currentSrc.split('?')[0];
+    
+    // Remover o iframe atual
+    const frameContainer = document.getElementById('frame-container');
+    frameContainer.innerHTML = '';
+    
+    // Criar um novo iframe com a URL atualizada
+    const newFrame = document.createElement('iframe');
+    newFrame.id = 'app-frame';
+    newFrame.src = `${baseUrl}?t=${timestamp}&nocache=true`;
+    newFrame.allow = "autoplay; camera; microphone; fullscreen";
+    newFrame.allowFullscreen = true;
+    newFrame.loading = "eager";
+    newFrame.sandbox = "allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation";
+    
+    // Adicionar evento de carregamento ao novo iframe
+    newFrame.onload = function() {
+        console.log('Novo frame carregado com sucesso');
+        setTimeout(hideLoadingScreen, 100);
+    };
+    
+    // Adicionar evento de erro ao novo iframe
+    newFrame.onerror = function() {
+        console.error('Erro ao carregar o novo iframe');
+        if (navigator.onLine) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        } else {
+            showOfflineMessage();
         }
+    };
+    
+    // Adicionar o novo iframe ao container
+    frameContainer.appendChild(newFrame);
+    
+    // Atualizar a referência global ao iframe
+    appFrame = newFrame;
+}
+
         
         // Função para mostrar toast de notificação
         function showToast(message, duration = 3000) {
