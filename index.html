@@ -382,8 +382,8 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            top: 0
-                        left: 0;
+            top: 0;
+            left: 0; /* Correção: estava faltando ponto e vírgula */
             background-color: white;
             z-index: 900;
         }
@@ -393,6 +393,7 @@
             height: 100%;
             border: none;
             background-color: white;
+            display: block; /* Garantir que seja exibido */
         }
         
         /* Estilos para o botão de instalação */
@@ -699,6 +700,21 @@
                 padding: 35px 20px;
             }
         }
+        /* Adicionar estilo para iframe carregando */
+        .iframe-loading {
+            background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                        linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            animation: move 2s linear infinite;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+            100% { background-position: 20px 20px, 20px 30px, 30px 10px, 10px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -721,7 +737,7 @@
             
             <div id="banner-content">
                 <img id="banner-logo" src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Logo">
-                <div id="banner-title">CRED-Fernanda</div>
+                <div id="banner-title">Jackeline</div>
                 <div id="banner-subtitle">Sistema de Gestão Financeira</div>
                 <div id="banner-description">
                     Organize suas finanças com elegância e praticidade. 
@@ -743,16 +759,35 @@
         </button>
         
         <!-- Frame do aplicativo (colocado primeiro para pré-carregar) -->
-        <div class="frame-container" id="frame-container">
-            <iframe
-                id="app-frame"
-                src="https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec?usp=sharing"
-                allow="autoplay; camera; microphone; fullscreen"
-                allowfullscreen
-                loading="eager"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
-            </iframe>
+        <!-- Frame do aplicativo com correções -->
+    <div class="frame-container" id="frame-container">
+        <iframe
+            id="app-frame"
+            src=""
+            allow="autoplay; camera; microphone; fullscreen; geolocation; payment"
+            allowfullscreen
+            loading="eager"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads allow-top-navigation allow-top-navigation-by-user-activation"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        
+        <!-- Indicador de carregamento do iframe -->
+        <div id="iframe-loading-indicator" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+        ">
+            <div class="loading-spinner"></div>
+            <p>Carregando aplicativo...</p>
         </div>
+    </div>
         
         <!-- Tela de carregamento com cumprimentos (colocada por cima) -->
         <div id="loading-screen">
@@ -825,6 +860,170 @@
             offlineMessage: document.getElementById('offline-message'),
             toastNotification: document.getElementById('toast-notification')
         };
+        // Modificar inicialização
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Verificar status online
+            updateOnlineStatus();
+            
+            // Verificar conectividade
+            const hasConnection = await verifyConnectivityAndLoad();
+            if (!hasConnection) return;
+            
+            // Carregar dados do usuário
+            const hasUserData = loadUserData();
+            
+            if (!hasUserData) {
+                showNameModal();
+            } else {
+                showBanner();
+            }
+            
+            console.log('Aplicativo inicializado');
+        });
+        // URLs para testar (em ordem de prioridade)
+        const iframeUrls = [
+            'https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec',
+            'https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec?usp=sharing'
+        ];
+        
+        let currentUrlIndex = 0;
+        
+        // Função para carregar iframe com fallback
+        function loadIframe() {
+            const iframe = elements.appFrame;
+            const loadingIndicator = document.getElementById('iframe-loading-indicator');
+            
+            if (currentUrlIndex >= iframeUrls.length) {
+                showToast('Não foi possível carregar o aplicativo. Verifique sua conexão.', 5000);
+                loadingIndicator.innerHTML = `
+                    <p>❌ Erro ao carregar</p>
+                    <button onclick="retryLoadIframe()" style="
+                        background: #ff69b4;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        margin-top: 10px;
+                    ">Tentar Novamente</button>
+                `;
+                return;
+            }
+            
+             const url = iframeUrls[currentUrlIndex];
+            console.log(`Tentando carregar: ${url}`);
+            
+            // Mostrar indicador de carregamento
+            loadingIndicator.style.display = 'block';
+            iframe.classList.add('iframe-loading');
+            
+            // Timeout para detectar falha de carregamento
+            const loadTimeout = setTimeout(() => {
+                console.log(`Timeout para URL: ${url}`);
+                currentUrlIndex++;
+                loadIframe();
+            }, 15000); // 15 segundos timeout
+            
+            // Event listeners para o iframe
+            iframe.onload = function() {
+                clearTimeout(loadTimeout);
+                console.log(`Iframe carregado com sucesso: ${url}`);
+                loadingIndicator.style.display = 'none';
+                iframe.classList.remove('iframe-loading');
+                showToast('Aplicativo carregado com sucesso! ✅');
+            };
+            
+            iframe.onerror = function() {
+                clearTimeout(loadTimeout);
+                console.log(`Erro ao carregar: ${url}`);
+                currentUrlIndex++;
+                loadIframe();
+            };
+            
+            // Definir a URL do iframe
+            iframe.src = url;
+        }
+        
+        // Função para tentar novamente
+        function retryLoadIframe() {
+            currentUrlIndex = 0;
+            loadIframe();
+        }
+        
+        // Modificar a função accessSystem
+        function accessSystem() {
+            hideBanner();
+            showLoadingScreen();
+            
+            // Iniciar carregamento do iframe
+            setTimeout(() => {
+                loadIframe();
+            }, 1000);
+            
+            // Simular carregamento da tela
+            setTimeout(() => {
+                hideLoadingScreen();
+                showApp();
+            }, 3000);
+        }
+        
+        // Função para verificar se o iframe está realmente carregado
+        function checkIframeContent() {
+            const iframe = elements.appFrame;
+            try {
+                // Tentar acessar o conteúdo do iframe
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (iframeDoc && iframeDoc.readyState === 'complete') {
+                    return true;
+                }
+            } catch (e) {
+                // Cross-origin, mas isso é normal para Google Apps Script
+                console.log('Cross-origin iframe detectado (normal para Google Apps Script)');
+                return true; // Assumir que carregou se não conseguir acessar
+            }
+            return false;
+        }
+        
+        // Modificar a função refreshApp
+        function refreshApp() {
+            const button = elements.refreshButton;
+            button.classList.add('refreshing');
+            
+            showToast('Atualizando aplicativo... 🔄');
+            
+            // Reset do índice de URL
+            currentUrlIndex = 0;
+            
+            // Recarregar iframe
+            const iframe = elements.appFrame;
+            iframe.src = '';
+            
+            setTimeout(() => {
+                loadIframe();
+                button.classList.remove('refreshing');
+            }, 1000);
+        }
+        
+        // Função para detectar problemas de rede
+        function checkNetworkStatus() {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = 'https://www.google.com/favicon.ico?' + Date.now();
+            });
+        }
+        
+        // Verificar conectividade antes de carregar
+        async function verifyConnectivityAndLoad() {
+            const isOnline = await checkNetworkStatus();
+            if (!isOnline) {
+                showToast('Sem conexão com a internet. Verifique sua rede.', 5000);
+                elements.offlineMessage.style.display = 'block';
+                return false;
+            }
+            return true;
+        }
         
         // Função para alternar logos
         function switchLogos() {
