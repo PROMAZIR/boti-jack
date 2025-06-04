@@ -1,21 +1,71 @@
 {
-  "name": "JACKELINE - Gerenciador de Crédito",
-  "short_name": "JACKELINE",
-  "description": "Gerencie suas compras e parcelas de forma simples e eficiente",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ff69b4",
-  "icons": [
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+    "name": "CRED-Fernanda - Sistema de Gestão Financeira",
+    "short_name": "Jackeline",
+    "description": "Sistema elegante de gestão financeira com foco na experiência feminina. Organize suas finanças com praticidade e sofisticação.",
+    "version": "1.0.0",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "theme_color": "#e91e63",
+    "background_color": "#ffffff",
+    "lang": "pt-BR",
+    "scope": "/",
+    "categories": ["finance", "productivity", "lifestyle"],
+    "icons": [
+        {
+            "src": "https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "platform": "wide",
+            "label": "Tela principal da Jackeline"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Acessar Sistema",
+            "short_name": "Sistema",
+            "description": "Acesso direto ao sistema de gestão",
+            "url": "/?shortcut=sistema",
+            "icons": [
+                {
+                    "src": "https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "Atualizar",
+            "short_name": "Refresh",
+            "description": "Atualizar aplicativo",
+            "url": "/?shortcut=refresh",
+            "icons": [
+                {
+                    "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "edge_side_panel": {
+        "preferred_width": 400
     },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+    "launch_handler": {
+        "client_mode": "navigate-existing"
     }
-  ]
 }
