@@ -1,5 +1,5 @@
 // Service Worker para CRED-Fernanda PWA
-const CACHE_NAME = 'cred-fernanda-v1.0.0';
+const CACHE_NAME = 'Jackeline-v1.0.0';
 const urlsToCache = [
     '/',
     '/index.html',
