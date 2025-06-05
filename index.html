@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -18,10 +18,9 @@
     <meta name="twitter:title" content="Jackeline 👩">
     <meta name="twitter:description" content="Gerencie suas compras e parcelas de forma simples e elegante">
     <meta name="twitter:image" content="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Favicon inline para evitar erros 404 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👩</text></svg>">
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
@@ -295,7 +294,7 @@
             display: none;
         }
         
-        iframe {
+        #app-frame {
             width: 100%;
             height: 100%;
             border: none;
@@ -374,14 +373,8 @@
             box-sizing: border-box;
         }
         
-        #user-name-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        #user-name-input:focus {
+                #user-name-input:focus {
             outline: none;
-            border-color: #
-
             border-color: #ff69b4;
             box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
         }
@@ -469,6 +462,23 @@
 </head>
 <body>
     <div id="app-container">
+        <!-- Frame do aplicativo (colocado primeiro para pré-carregar) -->
+        <div class="frame-container" id="frame-container">
+            <iframe
+                id="app-frame"
+                src="https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec"
+                allow="autoplay; camera; microphone; fullscreen"
+                allowfullscreen
+                loading="eager"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
+            </iframe>
+            <div class="iframe-error" id="iframe-error">
+                <h3>Ops! Algo deu errado 😔</h3>
+                <p>Não foi possível carregar o aplicativo. Verifique sua conexão com a internet.</p>
+                <button class="retry-button" onclick="retryLoad()">Tentar Novamente</button>
+            </div>
+        </div>
+        
         <!-- Banner Principal -->
         <div id="vertical-banner">
             <div class="decorative-elements">
@@ -505,16 +515,6 @@
                 <p style="color: #e1bee7; margin-top: 20px;">Preparando tudo para você...</p>
             </div>
         </div>
-        
-        <!-- Container do Iframe -->
-        <div class="frame-container" id="frame-container">
-            <iframe id="main-iframe" src="" title="Jackeline App"></iframe>
-            <div class="iframe-error" id="iframe-error">
-                <h3>Ops! Algo deu errado 😔</h3>
-                <p>Não foi possível carregar o aplicativo. Verifique sua conexão com a internet.</p>
-                <button class="retry-button" onclick="retryLoad()">Tentar Novamente</button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -529,7 +529,23 @@
                 userName = savedName;
                 document.getElementById('display-name').textContent = userName;
             }
+            
+            // Pré-carregar o iframe em background
+            preloadIframe();
         });
+        
+        function preloadIframe() {
+            const iframe = document.getElementById('app-frame');
+            
+            iframe.onload = function() {
+                iframeLoaded = true;
+                console.log('Iframe pré-carregado com sucesso');
+            };
+            
+            iframe.onerror = function() {
+                console.log('Erro ao pré-carregar iframe');
+            };
+        }
         
         function startApp() {
             const savedName = localStorage.getItem('jackeline_user_name');
@@ -574,19 +590,20 @@
                 document.getElementById('loading-screen').style.display = 'flex';
                 document.getElementById('loading-screen').classList.add('fade-in');
                 
-                // Carregar iframe
-                loadIframe();
+                // Se o iframe já foi carregado, mostrar imediatamente
+                if (iframeLoaded) {
+                    setTimeout(() => {
+                        showMainApp();
+                    }, 2000);
+                } else {
+                    // Aguardar carregamento ou timeout
+                    waitForIframeLoad();
+                }
             }, 500);
         }
         
-        function loadIframe() {
-            const iframe = document.getElementById('main-iframe');
-            const frameContainer = document.getElementById('frame-container');
-            const loadingScreen = document.getElementById('loading-screen');
-            const errorDiv = document.getElementById('iframe-error');
-            
-            // URL do seu bot
-            const botUrl = 'https://cdn.botframework.com/botframework-webchat/latest/webchat.html?s=YOUR_SECRET_KEY';
+        function waitForIframeLoad() {
+            const iframe = document.getElementById('app-frame');
             
             // Timeout para detectar falha no carregamento
             loadTimeout = setTimeout(() => {
@@ -595,26 +612,31 @@
                 }
             }, 15000); // 15 segundos
             
-            // Event listeners do iframe
-            iframe.onload = function() {
-                iframeLoaded = true;
-                clearTimeout(loadTimeout);
+            // Se ainda não carregou, aguardar
+            if (!iframeLoaded) {
+                iframe.onload = function() {
+                    iframeLoaded = true;
+                    clearTimeout(loadTimeout);
+                    
+                    setTimeout(() => {
+                        showMainApp();
+                    }, 2000);
+                };
                 
-                // Aguardar um pouco mais para garantir que carregou completamente
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    frameContainer.style.display = 'block';
-                    frameContainer.classList.add('fade-in');
-                }, 2000);
-            };
+                iframe.onerror = function() {
+                    clearTimeout(loadTimeout);
+                    showError();
+                };
+            }
+        }
+        
+        function showMainApp() {
+            const loadingScreen = document.getElementById('loading-screen');
+            const frameContainer = document.getElementById('frame-container');
             
-            iframe.onerror = function() {
-                clearTimeout(loadTimeout);
-                showError();
-            };
-            
-            // Carregar o iframe
-            iframe.src = botUrl;
+            loadingScreen.style.display = 'none';
+            frameContainer.style.display = 'block';
+            frameContainer.classList.add('fade-in');
         }
         
         function showError() {
@@ -632,8 +654,11 @@
             clearTimeout(loadTimeout);
             
             // Recarregar iframe
+            const iframe = document.getElementById('app-frame');
+            iframe.src = iframe.src; // Força reload
+            
             setTimeout(() => {
-                loadIframe();
+                waitForIframeLoad();
             }, 1000);
         }
         
@@ -673,6 +698,21 @@
                 clearTimeout(loadTimeout);
             }
         });
+        
+        // Monitorar mudanças no iframe para detectar redirecionamentos
+        setInterval(function() {
+            const iframe = document.getElementById('app-frame');
+            try {
+                // Verificar se o iframe ainda está acessível
+                if (iframe.contentWindow) {
+                    // Iframe está funcionando
+                }
+            } catch (e) {
+                // Possível problema de CORS ou redirecionamento
+                console.log('Iframe pode ter sido redirecionado');
+            }
+        }, 5000);
     </script>
 </body>
 </html>
+
