@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Jackeline</title>
+    <!-- Meta tags com emoji para identificação de gênero -->
     <meta name="title" content="Jackeline">
-    <meta name="description" content="Gerencie suas compras e parcelas de forma simples e elegante">
+    <meta name="description" content="Gerencie suas compras e parcelas de forma simples e eficiente">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://credi-boti.jack.starktech.net.br/">
+    <meta property="og:url" content="https://credi-boti.fb.starktech.net.br">
     <meta property="og:title" content="Jackeline">
-    <meta property="og:description" content="Gerencie suas compras e parcelas de forma simples e elegante">
+    <meta property="og:description" content="Gerencie suas compras e parcelas de forma simples e eficiente">
     <meta property="og:image" content="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://credi-boti.jack.starktech.net.br/">
+    <meta name="twitter:url" content="https://credi-boti.fb.starktech.net.br">
     <meta name="twitter:title" content="Jackeline">
-    <meta name="twitter:description" content="Gerencie suas compras e parcelas de forma simples e elegante">
+    <meta name="twitter:description" content="Gerencie suas compras e parcelas de forma simples e eficiente">
     <meta name="twitter:image" content="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png">
-    
-    <!-- Favicon inline para evitar erros 404 -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👩</text></svg>">
-    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
         
         body, html {
             margin: 0;
@@ -31,7 +32,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0a0a0a;
         }
         
@@ -41,18 +42,23 @@
             position: relative;
         }
         
+        /* Banner vertical feminino que ocupa toda a tela */
         #vertical-banner {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #2d1b69 0%, #8e24aa 30%, #e91e63 70%, #ff6b9d 100%);
-            background-image:
-                radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 105, 180, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(186, 85, 211, 0.2) 0%, transparent 50%);
-            z-index: 999;
+            background: linear-gradient(135deg, #6b2d5c 0%, #8e3a6e 50%, #b84a8f 100%);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                url('https://res.cloudinary.com/beleza-na-web/image/upload/f_auto,fl_progressive,q_50/v1/banner/2025_05_22_15_59_47_3/ee7e3a2b-e999-4499-8036-a58ec6783942-diadoamor-kitscombos-cards-25c08-750x1136-00.png');
+            background-size: cover, cover, contain;
+            background-position: center, center, center;
+            background-repeat: no-repeat, no-repeat, no-repeat;
+            background-blend-mode: overlay;
+            z-index: 9999; /* Aumentado para ficar acima de tudo */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -60,9 +66,79 @@
             color: white;
             text-align: center;
             overflow: hidden;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        /* Estilo para o botão de começar */
+        .start-button {
+            background: linear-gradient(45deg, #d81b60, #f06292);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(216, 27, 96, 0.5);
+            transition: all 0.3s ease;
+            z-index: 10000;
             position: relative;
+            margin-top: 20px;
+        }
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(216, 27, 96, 0.7);
+        }
+
+        /* Ajuste o estilo do container do conteúdo do banner */
+        #banner-content-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6b2d5c 0%, #8e3a6e 50%, #b84a8f 100%);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            background-size: cover;
+            background-position: center;
+            z-index: 9998;
+            display: none; /* Inicialmente escondido */
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Ajuste o estilo do conteúdo do banner */
+        #banner-content {
+            max-width: 90%;
+            width: 500px;
+            padding: 40px 30px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(20px);
+            transition: transform 0.5s ease;
+            text-align: center; /* Centralizar todo o texto */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centralizar elementos horizontalmente */
+            justify-content: center; /* Centralizar elementos verticalmente */
+        }
+
+        #banner-content-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #banner-content-container.active #banner-content {
+            transform: translateY(0);
         }
         
+        /* Efeito de partículas animadas */
         #vertical-banner::before {
             content: '';
             position: absolute;
@@ -70,23 +146,109 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image:
-                radial-gradient(3px 3px at 25px 35px, rgba(255,192,203,0.6), transparent),
-                radial-gradient(2px 2px at 45px 75px, rgba(255,105,180,0.4), transparent),
-                radial-gradient(4px 4px at 95px 45px, rgba(255,182,193,0.5), transparent),
-                radial-gradient(2px 2px at 135px 85px, rgba(255,20,147,0.3), transparent);
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.3), transparent);
             background-repeat: repeat;
-            background-size: 180px 120px;
-            animation: floatingPetals 12s linear infinite;
+            background-size: 150px 100px;
+            animation: sparkle 8s linear infinite;
             pointer-events: none;
         }
         
-        @keyframes floatingPetals {
-            0% { transform: translateY(0px) rotate(0deg); }
-            100% { transform: translateY(-120px) rotate(360deg); }
+        @keyframes sparkle {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
         }
         
-        .decorative-elements {
+        #banner-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        #banner-title {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffffff, #f8bbd0, #f06292);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        #banner-subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+            font-weight: 300;
+            line-height: 1.4;
+        }
+        
+        #banner-description {
+            font-size: 14px;
+            margin-bottom: 40px;
+            color: #b0b0b0;
+            font-weight: 300;
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #banner-button {
+            background: linear-gradient(45deg, #c2185b, #e91e63, #f06292);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #banner-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        #banner-button:hover::before {
+            left: 100%;
+        }
+        
+        #banner-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(233, 30, 99, 0.6);
+            background: linear-gradient(45deg, #ad1457, #c2185b, #e91e63);
+        }
+        
+        #banner-button:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Indicadores visuais femininos */
+        .tech-elements {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -94,150 +256,51 @@
             overflow: hidden;
         }
         
-        .floating-shape {
+        .tech-line {
             position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(45deg, rgba(255,105,180,0.3), rgba(255,182,193,0.2));
-            animation: floatShape 8s ease-in-out infinite;
+            background: linear-gradient(90deg, transparent, rgba(244, 143, 177, 0.5), transparent);
+            height: 1px;
+            width: 100%;
+            animation: techScan 4s linear infinite;
         }
         
-        .floating-shape:nth-child(1) {
-            width: 60px;
-            height: 60px;
-            top: 10%;
-            left: 15%;
-            animation-delay: 0s;
+        .tech-line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .tech-line:nth-child(2) { top: 60%; animation-delay: 2s; }
+        .tech-line:nth-child(3) { top: 80%; animation-delay: 1s; }
+        
+        @keyframes techScan {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
         }
         
-        .floating-shape:nth-child(2) {
-            width: 40px;
-            height: 40px;
-            top: 20%;
-            right: 20%;
-            animation-delay: 2s;
+        /* Ícones decorativos */
+        .icon-decoration {
+            position: absolute;
+            color: rgba(244, 143, 177, 0.3);
+            font-size: 24px;
+            animation: iconFloat 6s ease-in-out infinite;
         }
         
-        .floating-shape:nth-child(3) {
-            width: 80px;
-            height: 80px;
-            bottom: 25%;
-            left: 10%;
-            animation-delay: 4s;
+        .icon-decoration:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+        .icon-decoration:nth-child(2) { top: 25%; right: 15%; animation-delay: 2s; }
+        .icon-decoration:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 4s; }
+        .icon-decoration:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 1s; }
+        
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
         }
         
-        .floating-shape:nth-child(4) {
-            width: 50px;
-            height: 50px;
-            bottom: 15%;
-            right: 15%;
-            animation-delay: 6s;
-        }
-        
-        @keyframes floatShape {
-            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
-            50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; }
-        }
-        
-        #banner-content {
-            padding: 50px 25px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 25px;
-            max-width: 90%;
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 105, 180, 0.3);
-            box-shadow: 0 25px 50px rgba(233, 30, 99, 0.4);
-            animation: slideInUp 1.2s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        #banner-logo {
-            width: 130px;
-            height: auto;
-            margin-bottom: 35px;
-            filter: drop-shadow(0 6px 12px rgba(233, 30, 99, 0.4));
-            animation: logoFloat 4s ease-in-out infinite;
-        }
-        
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-        }
-        
-        #banner-title {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ffffff, #ff69b4, #ff1493, #da70d6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 3px 6px rgba(233, 30, 99, 0.4);
-            letter-spacing: 1.5px;
-            position: relative;
-        }
-        
-        #banner-subtitle {
-            font-size: 20px;
-            margin-bottom: 25px;
-            color: #f8bbd9;
-            font-weight: 500;
-            line-height: 1.5;
-        }
-        
-        #banner-description {
-            font-size: 15px;
-            margin-bottom: 40px;
-            color: #e1bee7;
-            font-weight: 400;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-        }
-        
-        #banner-button {
-            background: linear-gradient(45deg, #e91e63, #ff69b4, #ff1493, #da70d6);
-            color: white;
-            border: none;
-            padding: 18px 45px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #banner-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.7);
-            background: linear-gradient(45deg, #d81b60, #e91e63, #ff69b4, #da70d6);
-        }
-        
+        /* Tela de carregamento com cumprimentos */
         #loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #2d1b69 0%, #8e24aa 50%, #e91e63 100%);
-            display: none;
+            background: linear-gradient(135deg, #6b2d5c 0%, #8e3a6e 50%, #b84a8f 100%);
+            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -245,37 +308,37 @@
         
         .loading-container {
             text-align: center;
-            padding: 45px;
-            border-radius: 25px;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 105, 180, 0.3);
-            box-shadow: 0 25px 50px rgba(233, 30, 99, 0.4);
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             max-width: 85%;
         }
         
         .greeting {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         .user-name {
-            font-size: 24px;
-            margin-bottom: 35px;
-            font-weight: 600;
-            color: #ff69b4;
+            font-size: 22px;
+                        margin-bottom: 30px;
+            font-weight: 500;
+            color: #f48fb1;
         }
         
         .loading-spinner {
             border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid #ff69b4;
+            border-top: 4px solid #f48fb1;
             border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 25px auto;
+            margin: 20px auto;
         }
         
         @keyframes spin {
@@ -283,6 +346,7 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* Estilos para o iframe */
         .frame-container {
             width: 100%;
             height: 100%;
@@ -291,32 +355,54 @@
             left: 0;
             background-color: white;
             z-index: 900;
-            display: none;
         }
         
-        #app-frame {
+        iframe {
             width: 100%;
             height: 100%;
             border: none;
             background-color: white;
         }
         
-        .iframe-error {
-            position: absolute;
+        /* Estilos para o botão de instalação */
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #c2185b, #e91e63);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            z-index: 1000;
+            display: none;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* Estado offline */
+        #offline-message {
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            text-align: center;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             color: white;
             padding: 30px;
             border-radius: 15px;
-            max-width: 80%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 2000;
             display: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .retry-button {
-            background: linear-gradient(45deg, #e91e63, #ff69b4);
+            background: linear-gradient(45deg, #c2185b, #e91e63);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -328,6 +414,7 @@
             box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
         }
         
+        /* Modal para nome do usuário */
         #name-modal {
             position: fixed;
             top: 0;
@@ -336,382 +423,556 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
-            display: none;
+            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 2000;
+            display: none;
         }
         
         .modal-content {
-            background: linear-gradient(135deg, #2d1b69 0%, #8e24aa 100%);
-            padding: 45px;
-            border-radius: 25px;
-            box-shadow: 0 25px 50px rgba(233, 30, 99, 0.4);
+            background: linear-gradient(135deg, #6b2d5c 0%, #8e3a6e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             text-align: center;
             max-width: 85%;
             width: 350px;
-            border: 2px solid rgba(255, 105, 180, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .modal-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             color: #ffffff;
         }
         
         #user-name-input {
             width: 100%;
-            padding: 16px;
-            margin-bottom: 25px;
-            border: 2px solid rgba(255, 105, 180, 0.3);
-            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             font-size: 16px;
+            box-sizing: border-box;
             background: rgba(255, 255, 255, 0.1);
             color: white;
             backdrop-filter: blur(10px);
-            box-sizing: border-box;
         }
         
-                #user-name-input:focus {
+        #user-name-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        #user-name-input:focus {
             outline: none;
-            border-color: #ff69b4;
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+            border-color: #f48fb1;
+            box-shadow: 0 0 15px rgba(244, 143, 177, 0.3);
         }
         
-        .modal-button {
-            background: linear-gradient(45deg, #e91e63, #ff69b4);
-            color: white;
-            border: none;
-            padding: 16px 35px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
+        /* Seleção de gênero */
+        .gender-selection {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            gap: 10px;
+        }
+        
+        .gender-option {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-weight: 500;
         }
         
-        .modal-button:hover {
+        .gender-option.selected {
+            border-color: #f48fb1;
+            background: rgba(244, 143, 177, 0.2);
+            box-shadow: 0 0 15px rgba(244, 143, 177, 0.3);
+        }
+        
+        .gender-option:first-child.selected {
+            border-color: #64b5f6;
+            background: rgba(100, 181, 246, 0.2);
+        }
+        
+        .gender-option:last-child.selected {
+            border-color: #f48fb1;
+            background: rgba(244, 143, 177, 0.2);
+        }
+        
+        #save-name-button {
+            background: linear-gradient(45deg, #c2185b, #e91e63);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        #save-name-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(233, 30, 99, 0.6);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
         }
         
-        .modal-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        /* Estilos para o container de logos */
+        .logo-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        /* Responsividade */
+        /* Estilos base para as logos */
+        .logo {
+            position: absolute;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+        
+        /* Logo ativa */
+        .logo.active {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        /* Animação de pulsar suave */
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        /* Classe para aplicar a animação de pulsar */
+        .pulse {
+            animation: pulse 4s infinite ease-in-out;
+        }
+        
+        /* Estilo para o botão de atualização */
+        #refresh-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        #refresh-button svg {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.5s ease;
+            stroke: #f48fb1;
+        }
+        
+        #refresh-button:hover {
+            background: rgba(244, 143, 177, 0.2);
+            transform: scale(1.1);
+        }
+        
+        #refresh-button:hover svg {
+            transform: rotate(180deg);
+        }
+        
+        #refresh-button.refreshing svg {
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Estilo para o indicador de progresso */
+        .refresh-progress {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: #f48fb1;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: spin 1s linear infinite;
+        }
+        
+        #refresh-button.refreshing .refresh-progress {
+            opacity: 1;
+        }
+        
+        /* Toast notification */
+        #toast-notification {
+            position: fixed;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            transition: all 0.3s ease;
+            opacity: 0;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsividade para telas menores */
         @media (max-width: 480px) {
-            #banner-title {
-                font-size: 28px;
+                        #banner {
+                padding: 15px;
             }
             
-            #banner-subtitle {
-                font-size: 18px;
+            h1 {
+                font-size: 24px;
             }
             
-            #banner-description {
-                font-size: 14px;
-            }
-            
-            #banner-button {
-                padding: 15px 35px;
+            .welcome-message {
                 font-size: 16px;
             }
             
             .modal-content {
-                padding: 35px 25px;
-                width: 90%;
+                padding: 30px 20px;
             }
             
             .modal-title {
                 font-size: 20px;
             }
-        }
-        
-        /* Animação de entrada suave */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .slide-out {
-            animation: slideOut 0.5s ease-out forwards;
-        }
-        
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
+            
+            #refresh-button {
+                width: 40px;
+                height: 40px;
+                top: 15px;
+                right: 15px;
             }
-            to {
-                opacity: 0;
-                transform: translateY(-50px);
+            
+            #refresh-button svg {
+                width: 20px;
+                height: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="app-container">
-        <!-- Frame do aplicativo (colocado primeiro para pré-carregar) -->
-        <div class="frame-container" id="frame-container">
-            <iframe
-                id="app-frame"
-                src="https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec"
-                allow="autoplay; camera; microphone; fullscreen"
-                allowfullscreen
-                loading="eager"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
-            </iframe>
-            <div class="iframe-error" id="iframe-error">
-                <h3>Ops! Algo deu errado 😔</h3>
-                <p>Não foi possível carregar o aplicativo. Verifique sua conexão com a internet.</p>
-                <button class="retry-button" onclick="retryLoad()">Tentar Novamente</button>
-            </div>
+    <div id="banner">
+        <div class="logo-container">
+            <img src="logo-female.png" alt="Logo" class="logo female-logo active pulse">
+            <img src="logo-male.png" alt="Logo" class="logo male-logo">
         </div>
-        
-        <!-- Banner Principal -->
-        <div id="vertical-banner">
-            <div class="decorative-elements">
-                <div class="floating-shape"></div>
-                <div class="floating-shape"></div>
-                <div class="floating-shape"></div>
-                <div class="floating-shape"></div>
+        <h1>Minha Assistente Virtual</h1>
+        <p class="welcome-message">Olá <span id="user-name-display">querida</span>, como posso ajudar hoje?</p>
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <div class="frame-container">
+        <iframe id="chat-iframe" src="about:blank"></iframe>
+    </div>
+    
+    <button id="install-button">Instalar App</button>
+    
+    <div id="offline-message">
+        <h2>Você está offline</h2>
+        <p>Não foi possível conectar à internet. Verifique sua conexão e tente novamente.</p>
+        <button class="retry-button" onclick="window.location.reload()">Tentar Novamente</button>
+    </div>
+    
+    <div id="name-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Como você gostaria de ser chamada?</h2>
+            <div class="gender-selection">
+                <div class="gender-option" data-gender="male">Masculino</div>
+                <div class="gender-option selected" data-gender="female">Feminino</div>
             </div>
-            
-            <div id="banner-content">
-                <img id="banner-logo" src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Jackeline Logo">
-                <h1 id="banner-title">Jackeline 👩</h1>
-                <p id="banner-subtitle">Sua Assistente Pessoal</p>
-                <p id="banner-description">Gerencie suas compras e parcelas de forma simples e elegante</p>
-                <button id="banner-button" onclick="startApp()">Começar Agora</button>
-            </div>
-        </div>
-        
-        <!-- Modal para Nome do Usuário -->
-        <div id="name-modal">
-            <div class="modal-content">
-                <h2 class="modal-title">👋 Olá! Como posso te chamar?</h2>
-                <input type="text" id="user-name-input" placeholder="Digite seu nome..." maxlength="30">
-                <button class="modal-button" onclick="saveName()">Continuar</button>
-            </div>
-        </div>
-        
-        <!-- Tela de Carregamento -->
-        <div id="loading-screen">
-            <div class="loading-container">
-                <div class="greeting">Bem-vinda</div>
-                <div class="user-name" id="display-name"></div>
-                <div class="loading-spinner"></div>
-                <p style="color: #e1bee7; margin-top: 20px;">Preparando tudo para você...</p>
-            </div>
+            <input type="text" id="user-name-input" placeholder="Digite seu nome..." maxlength="20">
+            <button id="save-name-button">Continuar</button>
         </div>
     </div>
-
+    
+    <button id="refresh-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+        </svg>
+        <div class="refresh-progress"></div>
+    </button>
+    
+    <div id="toast-notification"></div>
+    
     <script>
+        // Variáveis globais
+        let deferredPrompt;
         let userName = '';
-        let iframeLoaded = false;
-        let loadTimeout;
+        let userGender = 'female'; // Padrão feminino
+        const chatUrl = 'https://chat.claudeai.ai/';
+        let isRefreshing = false;
         
-        // Verificar se já existe nome salvo
-        window.addEventListener('load', function() {
-            const savedName = localStorage.getItem('jackeline_user_name');
-            if (savedName) {
-                userName = savedName;
-                document.getElementById('display-name').textContent = userName;
-            }
-            
-            // Pré-carregar o iframe em background
-            preloadIframe();
-        });
+        // Elementos DOM
+        const banner = document.getElementById('banner');
+        const chatIframe = document.getElementById('chat-iframe');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+        const installButton = document.getElementById('install-button');
+        const offlineMessage = document.getElementById('offline-message');
+        const nameModal = document.getElementById('name-modal');
+        const userNameInput = document.getElementById('user-name-input');
+        const saveNameButton = document.getElementById('save-name-button');
+        const userNameDisplay = document.getElementById('user-name-display');
+        const refreshButton = document.getElementById('refresh-button');
+        const genderOptions = document.querySelectorAll('.gender-option');
+        const femaleLogo = document.querySelector('.female-logo');
+        const maleLogo = document.querySelector('.male-logo');
+        const toastNotification = document.getElementById('toast-notification');
         
-        function preloadIframe() {
-            const iframe = document.getElementById('app-frame');
+        // Função para mostrar toast notification
+        function showToast(message, duration = 3000) {
+            toastNotification.textContent = message;
+            toastNotification.style.bottom = '30px';
+            toastNotification.style.opacity = '1';
             
-            iframe.onload = function() {
-                iframeLoaded = true;
-                console.log('Iframe pré-carregado com sucesso');
-            };
-            
-            iframe.onerror = function() {
-                console.log('Erro ao pré-carregar iframe');
-            };
+            setTimeout(() => {
+                toastNotification.style.bottom = '-60px';
+                toastNotification.style.opacity = '0';
+            }, duration);
         }
         
-        function startApp() {
-            const savedName = localStorage.getItem('jackeline_user_name');
+        // Função para verificar se é a primeira visita
+        function checkFirstVisit() {
+            const hasVisited = localStorage.getItem('hasVisited');
+            const savedName = localStorage.getItem('userName');
+            const savedGender = localStorage.getItem('userGender');
             
-            if (!savedName) {
-                // Mostrar modal para capturar nome
-                document.getElementById('name-modal').style.display = 'flex';
-                document.getElementById('user-name-input').focus();
+            if (savedGender) {
+                userGender = savedGender;
+                updateGenderUI(userGender);
+            }
+            
+            if (!hasVisited || !savedName) {
+                // Primeira visita ou nome não definido
+                nameModal.style.display = 'flex';
+                localStorage.setItem('hasVisited', 'true');
             } else {
-                // Usar nome salvo e iniciar app
+                // Visita recorrente
                 userName = savedName;
-                document.getElementById('display-name').textContent = userName;
-                loadMainApp();
+                updateWelcomeMessage();
+                loadChat();
             }
         }
         
-        function saveName() {
-            const nameInput = document.getElementById('user-name-input');
-            const inputName = nameInput.value.trim();
+        // Atualizar interface com base no gênero
+        function updateGenderUI(gender) {
+            if (gender === 'male') {
+                document.querySelector('.modal-title').textContent = 'Como você gostaria de ser chamado?';
+                femaleLogo.classList.remove('active', 'pulse');
+                maleLogo.classList.add('active', 'pulse');
+                document.querySelector('h1').textContent = 'Meu Assistente Virtual';
+                document.querySelector('.welcome-message').innerHTML = 'Olá <span id="user-name-display">querido</span>, como posso ajudar hoje?';
+                userNameDisplay = document.getElementById('user-name-display');
+            } else {
+                document.querySelector('.modal-title').textContent = 'Como você gostaria de ser chamada?';
+                maleLogo.classList.remove('active', 'pulse');
+                femaleLogo.classList.add('active', 'pulse');
+                document.querySelector('h1').textContent = 'Minha Assistente Virtual';
+                document.querySelector('.welcome-message').innerHTML = 'Olá <span id="user-name-display">querida</span>, como posso ajudar hoje?';
+                userNameDisplay = document.getElementById('user-name-display');
+            }
             
-            if (inputName.length < 2) {
-                nameInput.style.borderColor = '#ff4444';
-                nameInput.placeholder = 'Por favor, digite um nome válido';
+            // Atualizar seleção de botões
+            genderOptions.forEach(option => {
+                if (option.dataset.gender === gender) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+        }
+        
+        // Atualizar mensagem de boas-vindas
+        function updateWelcomeMessage() {
+            if (userName) {
+                userNameDisplay.textContent = userName;
+            } else {
+                userNameDisplay.textContent = userGender === 'male' ? 'querido' : 'querida';
+            }
+        }
+        
+        // Carregar o chat
+        function loadChat() {
+            loadingSpinner.style.display = 'block';
+            
+            // Verificar conexão com a internet
+            if (!navigator.onLine) {
+                showOfflineMessage();
                 return;
             }
             
-            userName = inputName;
-            localStorage.setItem('jackeline_user_name', userName);
-            document.getElementById('display-name').textContent = userName;
+            // Carregar o iframe com o chat
+            chatIframe.src = chatUrl;
             
-            // Fechar modal e iniciar app
-            document.getElementById('name-modal').style.display = 'none';
-            loadMainApp();
-        }
-        
-        function loadMainApp() {
-            // Ocultar banner e mostrar loading
-            document.getElementById('vertical-banner').classList.add('slide-out');
+            // Ocultar o banner quando o iframe estiver carregado
+            chatIframe.onload = function() {
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                    loadingSpinner.style.display = 'none';
+                }, 1000);
+            };
             
+            // Timeout para caso o carregamento demore muito
             setTimeout(() => {
-                document.getElementById('vertical-banner').style.display = 'none';
-                document.getElementById('loading-screen').style.display = 'flex';
-                document.getElementById('loading-screen').classList.add('fade-in');
-                
-                // Se o iframe já foi carregado, mostrar imediatamente
-                if (iframeLoaded) {
-                    setTimeout(() => {
-                        showMainApp();
-                    }, 2000);
-                } else {
-                    // Aguardar carregamento ou timeout
-                    waitForIframeLoad();
+                if (banner.style.display !== 'none') {
+                    // Se ainda estiver carregando após 15 segundos
+                    if (!navigator.onLine) {
+                        showOfflineMessage();
+                    } else {
+                        loadingSpinner.style.display = 'none';
+                        showToast('O carregamento está demorando mais que o esperado. Verifique sua conexão.', 5000);
+                    }
                 }
-            }, 500);
+            }, 15000);
         }
         
-        function waitForIframeLoad() {
-            const iframe = document.getElementById('app-frame');
+        // Mostrar mensagem offline
+        function showOfflineMessage() {
+            loadingSpinner.style.display = 'none';
+            offlineMessage.style.display = 'block';
+        }
+        
+        // Evento para salvar o nome do usuário
+        saveNameButton.addEventListener('click', () => {
+            userName = userNameInput.value.trim();
             
-            // Timeout para detectar falha no carregamento
-            loadTimeout = setTimeout(() => {
-                if (!iframeLoaded) {
-                    showError();
-                }
-            }, 15000); // 15 segundos
-            
-            // Se ainda não carregou, aguardar
-            if (!iframeLoaded) {
-                iframe.onload = function() {
-                    iframeLoaded = true;
-                    clearTimeout(loadTimeout);
-                    
-                    setTimeout(() => {
-                        showMainApp();
-                    }, 2000);
-                };
-                
-                iframe.onerror = function() {
-                    clearTimeout(loadTimeout);
-                    showError();
-                };
+            if (userName) {
+                localStorage.setItem('userName', userName);
+                localStorage.setItem('userGender', userGender);
+                nameModal.style.display = 'none';
+                updateWelcomeMessage();
+                loadChat();
+            } else {
+                userNameInput.classList.add('shake');
+                setTimeout(() => userNameInput.classList.remove('shake'), 500);
+                showToast('Por favor, digite seu nome para continuar');
             }
-        }
+        });
         
-        function showMainApp() {
-            const loadingScreen = document.getElementById('loading-screen');
-            const frameContainer = document.getElementById('frame-container');
-            
-            loadingScreen.style.display = 'none';
-            frameContainer.style.display = 'block';
-            frameContainer.classList.add('fade-in');
-        }
-        
-        function showError() {
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('frame-container').style.display = 'block';
-            document.getElementById('iframe-error').style.display = 'block';
-        }
-        
-        function retryLoad() {
-            document.getElementById('iframe-error').style.display = 'none';
-            document.getElementById('frame-container').style.display = 'none';
-            document.getElementById('loading-screen').style.display = 'flex';
-            
-            iframeLoaded = false;
-            clearTimeout(loadTimeout);
-            
-            // Recarregar iframe
-            const iframe = document.getElementById('app-frame');
-            iframe.src = iframe.src; // Força reload
-            
-            setTimeout(() => {
-                waitForIframeLoad();
-            }, 1000);
-        }
-        
-        // Event listener para Enter no input do nome
-        document.getElementById('user-name-input').addEventListener('keypress', function(e) {
+        // Permitir pressionar Enter para salvar o nome
+        userNameInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                saveName();
+                saveNameButton.click();
             }
         });
         
-        // Prevenir zoom no mobile
-        document.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
+        // Eventos para seleção de gênero
+        genderOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                userGender = option.dataset.gender;
+                genderOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                updateGenderUI(userGender);
+            });
         });
         
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(e) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                e.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-        
-        // Detectar se o iframe perdeu conexão
-        window.addEventListener('online', function() {
-            if (document.getElementById('iframe-error').style.display === 'block') {
-                retryLoad();
-            }
+        // Evento para o botão de atualização
+        refreshButton.addEventListener('click', () => {
+            if (isRefreshing) return;
+            
+            isRefreshing = true;
+            refreshButton.classList.add('refreshing');
+            
+            // Mostrar o banner novamente
+            banner.style.display = 'flex';
+            loadingSpinner.style.display = 'block';
+            
+            // Recarregar o iframe
+            chatIframe.src = 'about:blank';
+            setTimeout(() => {
+                loadChat();
+                
+                // Resetar o estado do botão após um tempo
+                setTimeout(() => {
+                    isRefreshing = false;
+                    refreshButton.classList.remove('refreshing');
+                }, 1000);
+            }, 500);
         });
         
-        // Limpar timeout quando a página for fechada
-        window.addEventListener('beforeunload', function() {
-            if (loadTimeout) {
-                clearTimeout(loadTimeout);
+        // Verificar status de conexão
+        window.addEventListener('online', () => {
+            offlineMessage.style.display = 'none';
+            if (banner.style.display !== 'none') {
+                loadChat();
             }
+            showToast('Conexão restabelecida');
         });
         
-        // Monitorar mudanças no iframe para detectar redirecionamentos
-        setInterval(function() {
-            const iframe = document.getElementById('app-frame');
-            try {
-                // Verificar se o iframe ainda está acessível
-                if (iframe.contentWindow) {
-                    // Iframe está funcionando
-                }
-            } catch (e) {
-                // Possível problema de CORS ou redirecionamento
-                console.log('Iframe pode ter sido redirecionado');
+        window.addEventListener('offline', () => {
+            showOfflineMessage();
+        });
+        
+        // Evento para instalação do PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'block';
+        });
+        
+        installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                showToast('Obrigado por instalar nosso app!');
             }
-        }, 5000);
+            
+            deferredPrompt = null;
+            installButton.style.display = 'none';
+        });
+        
+        // Ocultar botão de instalação quando o app já estiver instalado
+        window.addEventListener('appinstalled', () => {
+            installButton.style.display = 'none';
+            deferredPrompt = null;
+            showToast('App instalado com sucesso!');
+        });
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            checkFirstVisit();
+            
+            // Verificar se já está instalado como PWA
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                installButton.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
