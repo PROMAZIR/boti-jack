@@ -695,12 +695,13 @@
         <div id="banner-content-container">
             <div id="banner-content">
                 <img id="banner-logo" src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Logo">
-                <div id="banner-title">Jackeline</div>
-                <div id="banner-subtitle">Sua assistente virtual inteligente</div>
+                <div id="banner-title">CRED-StarkTech</div>
+                <div id="banner-subtitle">Sistema de Gestão Financeira</div>
                 <div id="banner-description">
-                    Converse, faça perguntas e obtenha ajuda para suas tarefas diárias com uma assistente virtual amigável e eficiente.
+                    Controle total das suas finanças com tecnologia avançada. 
+            Gerencie compras, parcelas e orçamentos de forma profissional.
                 </div>
-                <button id="banner-button">💬 Conversar agora</button>
+                <button id="banner-button">🚀 Acessar Sistema</button>
             </div>
         </div>
 
@@ -719,7 +720,7 @@
         <div class="frame-container" id="frame-container">
             <iframe
                 id="app-frame"
-                src="https://claude.ai/chat"
+                src="https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec?usp=sharing"
                 allow="autoplay; camera; microphone; fullscreen"
                 allowfullscreen
                 loading="eager"
@@ -771,15 +772,17 @@
 
     <!-- Service Worker e Scripts -->
     <script>
-        // Variáveis globais
+        // Variáveis para controle
         let deferredPrompt;
-        let userName = '';
-        let userGender = '';
-        let isAppReady = false;
+        let userName = localStorage.getItem('userName') || '';
+        let userGender = localStorage.getItem('userGender') || 'male';
         let isFrameLoaded = false;
-        let isFirstVisit = true;
-        let isRefreshing = false;
-        let currentLogoIndex = 0;
+        let isFirstVisit = !localStorage.getItem('userName');
+        let isOffline = !navigator.onLine;
+        let loadingTimeout;
+        let logoInterval;
+        let currentLogo = 1;
+        let totalLogos = 2;
         const logos = document.querySelectorAll('.logo');
         const greetings = [
             "Olá! Estou preparando tudo para você...",
