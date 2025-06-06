@@ -715,19 +715,6 @@
                 <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
             </svg>
         </button>
-        
-        <!-- Frame do aplicativo (colocado primeiro para pré-carregar) -->
-        <div class="frame-container" id="frame-container">
-            <iframe
-                id="app-frame"
-                src="https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec?usp=sharing"
-                allow="autoplay; camera; microphone; fullscreen"
-                allowfullscreen
-                loading="eager"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-downloads allow-top-navigation">
-            </iframe>
-        </div>
-        
         <!-- Tela de carregamento com cumprimentos (colocada por cima) -->
         <div id="loading-screen">
             <div class="loading-container">
@@ -772,7 +759,7 @@
 
     <!-- Service Worker e Scripts -->
     <script>
-        // Variáveis para controle
+         // Variáveis para controle
         let deferredPrompt;
         let userName = localStorage.getItem('userName') || '';
         let userGender = localStorage.getItem('userGender') || 'male';
@@ -781,8 +768,9 @@
         let isOffline = !navigator.onLine;
         let loadingTimeout;
         let logoInterval;
-        let currentLogo = 1;
-        let totalLogos = 2;
+        let currentLogoIndex = 0;
+        let isRefreshing = false;
+        let isAppReady = false;
         const logos = document.querySelectorAll('.logo');
         const greetings = [
             "Olá! Estou preparando tudo para você...",
@@ -818,7 +806,7 @@
                     .catch(error => {
                         console.error('Erro ao registrar o Service Worker:', error);
                     });
-                    
+                
                 // Verificar atualizações quando o usuário volta para a aplicação
                 document.addEventListener('visibilitychange', () => {
                     if (document.visibilityState === 'visible') {
@@ -832,7 +820,7 @@
             });
         }
         
-        // Verificar conexão com a internet
+         // Verificar conexão com a internet
         function checkOnlineStatus() {
             const offlineMessage = document.getElementById('offline-message');
             
@@ -920,7 +908,7 @@
             document.getElementById('name-modal').style.display = 'none';
         }
         
-        // Iniciar o aplicativo
+         // Iniciar o aplicativo
         function initApp() {
             // Verificar se é a primeira visita
             checkFirstVisit();
@@ -1040,11 +1028,14 @@
             });
         }
         
-        // Inicializar o iframe
+         // Inicializar o iframe
         function initializeFrame() {
             const frame = document.getElementById('app-frame');
             const frameContainer = document.getElementById('frame-container');
             const loadingScreen = document.getElementById('loading-screen');
+            
+            // Corrigir a URL do iframe - remova o parâmetro usp=sharing que pode causar problemas
+            frame.src = "https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec";
             
             // Mostrar o frame
             frameContainer.style.display = 'block';
@@ -1063,6 +1054,14 @@
                     }, 500);
                 }, 1500);
             });
+            
+            // Adicionar um timeout para caso o iframe não carregue
+            loadingTimeout = setTimeout(() => {
+                if (!isFrameLoaded) {
+                    showToast("Problemas ao carregar o aplicativo. Tentando novamente...");
+                    frame.src = frame.src; // Recarregar o iframe
+                }
+            }, 15000); // 15 segundos
         }
         
         // Configurar o botão de instalação
