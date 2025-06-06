@@ -752,6 +752,10 @@
         
         <!-- Toast notification -->
         <div id="toast-notification">Aplicativo atualizado com sucesso!</div>
+        <!-- Adicione este elemento após o toast-notification e antes do botão de instalação -->
+        <div id="frame-container" class="frame-container" style="display: nome;">
+            <iframe id="app-frame" src="about:blank" title="Aplicativo"></iframe>
+        </div>
         
         <!-- Botão de instalação -->
         <button id="install-button">Instalar aplicativo</button>
@@ -909,73 +913,71 @@
         }
         
          // Iniciar o aplicativo
-        function initApp() {
-            // Verificar se é a primeira visita
-            checkFirstVisit();
-            
-            // Verificar conexão com a internet
-            checkOnlineStatus();
-            window.addEventListener('online', checkOnlineStatus);
-            window.addEventListener('offline', checkOnlineStatus);
-            
-            // Configurar o botão de retry
-            document.getElementById('retry-button').addEventListener('click', () => {
-                document.getElementById('offline-message').style.display = 'none';
-                document.getElementById('loading-screen').style.display = 'flex';
-                checkOnlineStatus();
-                
-                if (navigator.onLine) {
-                    initializeFrame();
-                }
-            });
-            
-            // Iniciar rotação de logos
-            setInterval(rotateLogo, 5000);
-            
-            // Iniciar rotação de mensagens
-            rotateGreetings();
-            
-            // Esconder o frame inicialmente
-            document.getElementById('frame-container').style.display = 'none';
-            
-            // Mostrar o banner vertical inicialmente
-            document.getElementById('vertical-banner').style.display = 'flex';
-            
-            // Esconder o conteúdo do banner inicialmente
-            document.getElementById('banner-content-container').style.display = 'none';
-            
-            // Configurar o botão de início
-            document.getElementById('start-button').addEventListener('click', () => {
-                document.getElementById('vertical-banner').style.display = 'none';
-                document.getElementById('banner-content-container').style.display = 'flex';
-            });
-            
-            // Configurar o botão do banner
-            document.getElementById('banner-button').addEventListener('click', () => {
-                document.getElementById('banner-content-container').style.display = 'none';
-                document.getElementById('loading-screen').style.display = 'flex';
-                
-                // Se for a primeira visita, mostrar o modal para nome
-                if (isFirstVisit) {
-                    showNameModal();
-                } else {
-                    initializeFrame();
-                }
-            });
-            
-            // Configurar o botão de atualização
-            document.getElementById('refresh-button').addEventListener('click', () => {
-                if (!isRefreshing) {
-                    refreshApp();
-                }
-            });
-            
-            // Configurar o modal de nome
-            setupNameModal();
-            
-            // Configurar o evento de instalação
-            setupInstallButton();
+function initApp() {
+    // Verificar se é a primeira visita
+    checkFirstVisit();
+    
+    // Verificar conexão com a internet
+    checkOnlineStatus();
+    window.addEventListener('online', checkOnlineStatus);
+    window.addEventListener('offline', checkOnlineStatus);
+    
+    // Configurar o botão de retry
+    document.getElementById('retry-button').addEventListener('click', () => {
+        document.getElementById('offline-message').style.display = 'none';
+        document.getElementById('loading-screen').style.display = 'flex';
+        checkOnlineStatus();
+        
+        if (navigator.onLine) {
+            initializeFrame();
         }
+    });
+    
+    // Iniciar rotação de logos
+    setInterval(rotateLogo, 5000);
+    
+    // Iniciar rotação de mensagens
+    rotateGreetings();
+    
+    // Mostrar o banner vertical inicialmente
+    document.getElementById('vertical-banner').style.display = 'flex';
+    
+    // Esconder o conteúdo do banner inicialmente
+    document.getElementById('banner-content-container').style.display = 'none';
+    
+    // Configurar o botão de início
+    document.getElementById('start-button').addEventListener('click', () => {
+        document.getElementById('vertical-banner').style.display = 'none';
+        document.getElementById('banner-content-container').style.display = 'flex';
+    });
+    
+    // Configurar o botão do banner
+    document.getElementById('banner-button').addEventListener('click', () => {
+        document.getElementById('banner-content-container').style.display = 'none';
+        document.getElementById('loading-screen').style.display = 'flex';
+        
+        // Se for a primeira visita, mostrar o modal para nome
+        if (isFirstVisit) {
+            showNameModal();
+        } else {
+            initializeFrame();
+        }
+    });
+    
+    // Configurar o botão de atualização
+    document.getElementById('refresh-button').addEventListener('click', () => {
+        if (!isRefreshing) {
+            refreshApp();
+        }
+    });
+    
+    // Configurar o modal de nome
+    setupNameModal();
+    
+    // Configurar o evento de instalação
+    setupInstallButton();
+}
+
         
         // Configurar o modal de nome
         function setupNameModal() {
@@ -1106,33 +1108,52 @@
         }
         
         // Atualizar o aplicativo
-        function refreshApp() {
-            if (isRefreshing) return;
-            
-            isRefreshing = true;
-            const refreshButton = document.getElementById('refresh-button');
-            refreshButton.classList.add('refreshing');
-            
-            // Atualizar o service worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistration().then(registration => {
-                    if (registration) {
-                        registration.update().then(() => {
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1000);
-                        });
-                    } else {
-                        window.location.reload();
-                    }
+function refreshApp() {
+    if (isRefreshing) return;
+    
+    isRefreshing = true;
+    const refreshButton = document.getElementById('refresh-button');
+    refreshButton.classList.add('refreshing');
+    
+    // Mostrar toast de atualização
+    showToast("Atualizando aplicativo...");
+    
+    // Atualizar o service worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration().then(registration => {
+            if (registration) {
+                registration.update().then(() => {
+                    setTimeout(() => {
+                        showToast("Aplicativo atualizado com sucesso!");
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }, 1000);
+                }).catch(error => {
+                    console.error('Erro ao atualizar:', error);
+                    isRefreshing = false;
+                    refreshButton.classList.remove('refreshing');
+                    showToast("Erro ao atualizar. Tente novamente.");
                 });
             } else {
-                window.location.reload();
+                // Se não houver service worker, apenas recarregue a página
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             }
-        }
-        
-        // Iniciar o aplicativo quando a página estiver carregada
-        window.addEventListener('load', initApp);
+        }).catch(error => {
+            console.error('Erro ao obter registro:', error);
+            isRefreshing = false;
+            refreshButton.classList.remove('refreshing');
+            showToast("Erro ao atualizar. Tente novamente.");
+        });
+    } else {
+        // Se service worker não for suportado, apenas recarregue a página
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    }
+}
     </script>
 </body>
 </html>
