@@ -753,9 +753,9 @@
         <!-- Toast notification -->
         <div id="toast-notification">Aplicativo atualizado com sucesso!</div>
         <!-- Adicione este elemento após o toast-notification e antes do botão de instalação -->
-        <div id="frame-container" class="frame-container" style="display: nome;">
-            <iframe id="app-frame" src="about:blank" title="Aplicativo"></iframe>
-        </div>
+        <div id="frame-container" class="frame-container" style="display: none;">
+    <iframe id="app-frame" src="about:blank" title="Aplicativo"></iframe>
+</div>
         
         <!-- Botão de instalação -->
         <button id="install-button">Instalar aplicativo</button>
@@ -1030,17 +1030,16 @@ function initApp() {
             });
         }
         
-         // Inicializar o iframe
-        function initializeFrame() {
-            const frame = document.getElementById('app-frame');
-            const frameContainer = document.getElementById('frame-container');
-            const loadingScreen = document.getElementById('loading-screen');
-            
-            // Corrigir a URL do iframe - remova o parâmetro usp=sharing que pode causar problemas
-            frame.src = "https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec";
-            
-            // Mostrar o frame
-            frameContainer.style.display = 'block';
+         function initializeFrame() {
+    const frame = document.getElementById('app-frame');
+    const frameContainer = document.getElementById('frame-container');
+    const loadingScreen = document.getElementById('loading-screen');
+    
+    // Corrigir a URL do iframe
+    frame.src = "https://script.google.com/macros/s/AKfycbzjq6-xlR4R_zT3we7z7_Mzt8M52ShXfP5y5w1uqVL6cHCiwwBxHtHdB47ZrXOHk0L4aA/exec";
+    
+    // Mostrar o frame
+    frameContainer.style.display = 'block';
             
             // Verificar quando o frame estiver carregado
             frame.addEventListener('load', () => {
