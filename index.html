@@ -676,18 +676,62 @@
     <button id="start-button" class="start-button">Começar</button>
 </div>
 
-<!-- Adicione este novo div para o conteúdo que aparecerá após clicar em "Começar" -->
+<!-- Modifique a seção do banner-content-container -->
 <div id="banner-content-container">
-    <div id="banner-content">
-        <img id="banner-logo" src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Logo">
-        <div id="banner-title">CRED-StarkTech</div>
-        <div id="banner-subtitle">Sistema de Gestão Financeira</div>
-        <div id="banner-description">
-            Controle total das suas finanças com tecnologia avançada. 
-            Gerencie compras, parcelas e orçamentos de forma profissional.
+    <div id="banner-carousel">
+        <!-- Banner 1 -->
+        <div class="banner-slide active" data-banner="1">
+            <div id="banner-content">
+                <img id="banner-logo" src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Logo">
+                <div id="banner-title">CRED-StarkTech</div>
+                <div id="banner-subtitle">Sistema de Gestão Financeira</div>
+                <div id="banner-description">
+                    Controle total das suas finanças com tecnologia avançada. 
+                    Gerencie compras, parcelas e orçamentos de forma profissional.
+                </div>
+                <button id="banner-button">🚀 Acessar Sistema</button>
+            </div>
         </div>
-        <button id="banner-button">🚀 Acessar Sistema</button>
+
+        <!-- Banner 2 -->
+        <div class="banner-slide" data-banner="2">
+            <div class="banner-content">
+                <img class="banner-logo" src="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png" alt="Logo 2">
+                <div class="banner-title">Promoção Especial</div>
+                <div class="banner-subtitle">Desconto de 50% no primeiro mês</div>
+                <div class="banner-description">
+                    Aproveite nossa oferta limitada e comece a usar nosso sistema 
+                    com desconto especial para novos usuários.
+                </div>
+                <button class="banner-button">💰 Aproveitar Oferta</button>
+            </div>
+        </div>
+
+        <!-- Banner 3 -->
+        <div class="banner-slide" data-banner="3">
+            <div class="banner-content">
+                <img class="banner-logo" src="https://i.ibb.co/kj8jVkq/Logotipo-Faustino-Representa-es-e-Vendas-Moderno-Preto-Branco-2.png" alt="Logo 3">
+                <div class="banner-title">Suporte 24/7</div>
+                <div class="banner-subtitle">Atendimento sempre disponível</div>
+                <div class="banner-description">
+                    Nossa equipe está sempre pronta para ajudar você. 
+                    Suporte técnico disponível 24 horas por dia, 7 dias por semana.
+                </div>
+                <button class="banner-button">📞 Falar Conosco</button>
+            </div>
+        </div>
     </div>
+
+    <!-- Indicadores do carrossel -->
+    <div class="carousel-indicators">
+        <span class="indicator active" data-slide="0"></span>
+        <span class="indicator" data-slide="1"></span>
+        <span class="indicator" data-slide="2"></span>
+    </div>
+
+    <!-- Setas de navegação -->
+    <button class="carousel-nav prev" id="prevBtn">‹</button>
+    <button class="carousel-nav next" id="nextBtn">›</button>
 </div>
         <!-- Botão de atualização -->
         <button id="refresh-button" title="Atualizar aplicativo">
