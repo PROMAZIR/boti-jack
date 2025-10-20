@@ -20,1075 +20,284 @@
     <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     
-    <!-- Preconnect para otimizar carregamento -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://script.google.com">
     <link rel="dns-prefetch" href="https://script.google.com">
     
-    <!-- Anti-Cache Meta Tags -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
     <style>
-        /* Reset e Base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        body, html {
+        html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #ffffff;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
+            overscroll-behavior: none;
         }
 
         :root {
-            --vh: 1vh;
-            --vw: 1vw;
-            --safe-area-inset-top: env(safe-area-inset-top);
-            --safe-area-inset-right: env(safe-area-inset-right);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom);
-            --safe-area-inset-left: env(safe-area-inset-left);
-            --primary-color: #059669;
+            --primary: #059669;
             --primary-dark: #047857;
-            --secondary-color: #f97316;
-            --secondary-dark: #ea580c;
         }
 
-        /* === SPLASH SCREEN === */
         .splash-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: calc(var(--vh, 1vh) * 100);
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
             color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+            transition: opacity 0.3s;
         }
 
         .splash-screen.fade-out {
             opacity: 0;
-            transform: scale(0.95);
             pointer-events: none;
         }
 
-        .logo-container {
-            position: relative;
-            animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes logoEntrance {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
         .logo-wrapper {
-            width: clamp(80px, 20vw, 120px);
-            height: clamp(80px, 20vw, 120px);
+            width: 120px;
+            height: 120px;
             background: rgba(255, 255, 255, 0.15);
-            border-radius: clamp(16px, 4vw, 24px);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 
-                0 15px 40px rgba(0, 0, 0, 0.3),
-                0 4px 15px rgba(255, 255, 255, 0.1) inset;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: logoFloat 0.6s ease-out;
         }
 
-        .logo-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
-            animation: logoShine 2s ease-in-out infinite;
-        }
-
-        @keyframes logoShine {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes logoFloat {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .logo-emoji {
-            font-size: clamp(2.5rem, 10vw, 4rem);
-            z-index: 1;
-            position: relative;
+            font-size: 4rem;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
-            animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), cartPulse 2s ease-in-out infinite 1s;
-        }
-
-        @keyframes cartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         .app-title {
-            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-top: clamp(16px, 4vw, 24px);
-            background: linear-gradient(45deg, #ffffff, #d1fae5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            letter-spacing: -0.5px;
+            margin-top: 24px;
+            animation: fadeIn 0.4s ease-out 0.3s forwards;
             opacity: 0;
-            animation: titleFadeIn 0.4s ease-out 0.3s forwards;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .app-subtitle {
-            font-size: clamp(0.85rem, 2.5vw, 1rem);
-            font-weight: 400;
+            font-size: 1rem;
             margin-top: 8px;
-            color: rgba(255, 255, 255, 0.85);
             opacity: 0;
-            animation: titleFadeIn 0.4s ease-out 0.5s forwards;
+            animation: fadeIn 0.4s ease-out 0.5s forwards;
         }
 
-        @keyframes titleFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .loading-progress {
-            position: absolute;
-            bottom: clamp(50px, 12vh, 80px);
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            animation: progressFadeIn 0.3s ease-out 0.6s forwards;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        @keyframes progressFadeIn {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(15px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        .loading-text {
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
         .loading-dots {
             display: flex;
             gap: 6px;
-            align-items: center;
+            margin-top: 40px;
         }
 
         .dot {
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.7);
+            width: 8px;
+            height: 8px;
+            background: white;
             border-radius: 50%;
-            animation: dotPulse 1s infinite ease-in-out;
+            animation: dotBounce 1s infinite ease-in-out;
         }
 
         .dot:nth-child(1) { animation-delay: -0.2s; }
         .dot:nth-child(2) { animation-delay: -0.1s; }
-        .dot:nth-child(3) { animation-delay: 0s; }
 
-        @keyframes dotPulse {
-            0%, 80%, 100% { 
-                transform: scale(1);
-                opacity: 0.5;
-            }
-            40% { 
-                transform: scale(1.2);
-                opacity: 1;
-            }
+        @keyframes dotBounce {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1.2); opacity: 1; }
         }
 
-        /* === APP CONTAINER === */
         .app-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100vw;
-            height: 100vh;
-            height: calc(var(--vh, 1vh) * 100);
+            inset: 0;
             background: #f8fafc;
-            overflow: hidden;
-            z-index: 1;
-            padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
             opacity: 0;
-            transform: scale(1.02);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s;
         }
 
         .app-container.show {
             opacity: 1;
-            transform: scale(1);
-        }
-
-        .iframe-container {
-            position: absolute;
-            top: var(--safe-area-inset-top, 0);
-            left: var(--safe-area-inset-left, 0);
-            right: var(--safe-area-inset-right, 0);
-            bottom: var(--safe-area-inset-bottom, 0);
-            width: calc(100% - var(--safe-area-inset-left, 0) - var(--safe-area-inset-right, 0));
-            height: calc(100% - var(--safe-area-inset-top, 0) - var(--safe-area-inset-bottom, 0));
-            background: #f8fafc;
-            overflow: hidden;
         }
 
         #mainIframe {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
             border: none;
-            background: #f8fafc;
             display: block;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.2s ease;
         }
 
-        #mainIframe.loaded {
-            opacity: 1;
-        }
-
-        .iframe-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: opacity 0.2s ease;
-        }
-
-        .iframe-loading.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e5e7eb;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text-iframe {
-            margin-top: 16px;
-            color: #6b7280;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* === ERROR SCREEN === */
-        .error-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: clamp(20px, 5vw, 40px);
-            text-align: center;
-            z-index: 1000;
-        }
-
-        .error-screen.show {
-            display: flex;
-        }
-
-        .error-icon {
-            font-size: clamp(3rem, 10vw, 4rem);
-            margin-bottom: clamp(16px, 4vw, 24px);
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-        }
-
-        .error-title {
-            font-size: clamp(1.2rem, 4vw, 1.5rem);
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #374151;
-        }
-
-        .error-message {
-            font-size: clamp(0.9rem, 3vw, 1rem);
-            color: #6b7280;
-            margin-bottom: clamp(24px, 6vw, 32px);
-            line-height: 1.6;
-            max-width: 400px;
-        }
-
-        .error-actions {
-            display: flex;
-            gap: clamp(12px, 3vw, 16px);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: clamp(10px, 2.5vw, 12px) clamp(20px, 5vw, 24px);
-            border-radius: clamp(8px, 2vw, 10px);
-            cursor: pointer;
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            font-weight: 600;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-            min-width: clamp(110px, 28vw, 150px);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn.secondary {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
-        }
-
-        .btn.secondary:hover {
-            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
-        }
-
-        .btn.danger {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-        }
-
-        .btn.danger:hover {
-            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
-        }
-
-        /* Toast */
         .toast {
             position: fixed;
-            bottom: -80px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(17, 24, 39, 0.95);
             color: white;
-            padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px);
-            border-radius: clamp(8px, 2vw, 12px);
+            padding: 12px 24px;
+            border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 2000;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10000;
             opacity: 0;
-            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            max-width: 90%;
-            text-align: center;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
         .toast.show {
-            bottom: clamp(20px, 5vw, 30px);
             opacity: 1;
         }
 
-        .toast.success { 
-            background: rgba(5, 150, 105, 0.95);
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-        
-        .toast.error { 
-            background: rgba(239, 68, 68, 0.95);
-            border-color: rgba(248, 113, 113, 0.3);
-        }
-        
-        .toast.warning { 
-            background: rgba(245, 158, 11, 0.95);
-            border-color: rgba(251, 191, 36, 0.3);
-        }
+        .toast.success { background: rgba(5, 150, 105, 0.95); }
+        .toast.error { background: rgba(239, 68, 68, 0.95); }
+        .toast.warning { background: rgba(245, 158, 11, 0.95); }
 
-        @media (max-width: 480px) {
-            .error-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 220px;
-            }
-        }
-
-        body {
-            overscroll-behavior: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-focus-ring-color: transparent;
-            outline: none;
+        @media (max-width: 768px) {
+            .logo-wrapper { width: 100px; height: 100px; }
+            .logo-emoji { font-size: 3rem; }
+            .app-title { font-size: 1.5rem; }
+            .app-subtitle { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div class="splash-screen" id="splashScreen">
-        <div class="logo-container">
-            <div class="logo-wrapper">
-                <div class="logo-emoji">🛒</div>
-            </div>
-            <h1 class="app-title">Mercado Delivery</h1>
-            <p class="app-subtitle">Compras rápidas e fáceis</p>
+    <div class="splash-screen" id="splash">
+        <div class="logo-wrapper">
+            <div class="logo-emoji">🛒</div>
         </div>
-
-        <div class="loading-progress">
-            <div class="loading-text" id="progressText">Carregando...</div>
-            <div class="loading-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
+        <h1 class="app-title">Mercado Delivery</h1>
+        <p class="app-subtitle">Compras rápidas e fáceis</p>
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
     </div>
 
-    <!-- Main App Container -->
-    <div class="app-container" id="appContainer">
-        <div class="iframe-container">
-            <div class="iframe-loading" id="iframeLoading">
-                <div class="spinner"></div>
-                <div class="loading-text-iframe">Carregando mercado...</div>
-            </div>
-            
-            <iframe 
-                id="mainIframe" 
-                src=""
-                title="Mercado Delivery"
-                loading="eager"
-                allow="geolocation; microphone; camera; midi; encrypted-media; autoplay; clipboard-read; clipboard-write"
-                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-downloads"
-            ></iframe>
-        </div>
+    <div class="app-container" id="app">
+        <iframe 
+            id="mainIframe"
+            title="Mercado Delivery"
+            allow="geolocation; camera; microphone"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-downloads"
+        ></iframe>
     </div>
 
-    <!-- Error Screen -->
-    <div class="error-screen" id="errorScreen">
-        <div class="error-icon">🚫</div>
-        <h2 class="error-title">Erro de Conexão</h2>
-        <p class="error-message" id="errorMessage">
-            Não foi possível carregar o mercado. Verifique sua conexão e tente novamente.
-        </p>
-        <div class="error-actions">
-            <button class="btn" onclick="reloadApp()">
-                <span>🔄</span> Tentar Novamente
-            </button>
-            <button class="btn secondary" onclick="openDirectly()">
-                <span>🌐</span> Abrir Direto
-            </button>
-            <button class="btn danger" onclick="forceHardReload()">
-                <span>⚡</span> Reload Forçado
-            </button>
-        </div>
-    </div>
-
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // === CONFIGURAÇÃO PRINCIPAL ===
         const MERCADO_URL = 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec';
         
-        const CONFIG = {
-            maxRetries: 2,
-            loadTimeout: 8000,
-            splashDuration: 800,
-            toastDuration: 2500
-        };
+        const splash = document.getElementById('splash');
+        const app = document.getElementById('app');
+        const iframe = document.getElementById('mainIframe');
+        const toast = document.getElementById('toast');
 
-        let loadStartTime = Date.now();
-        let connectionRetries = 0;
-        let loadTimeout;
-
-        function generateCacheBuster() {
-            const timestamp = Date.now();
-            const random = Math.random().toString(36).substring(2, 8);
-            return `_t=${timestamp}&_r=${random}&_v=${Math.floor(timestamp / 10000)}`;
+        function showToast(msg, type = 'info') {
+            toast.textContent = msg;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        function buildNoCacheUrl() {
-            if (!MERCADO_URL || MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI') {
-                console.error('❌ URL do mercado não configurada!');
-                showError('Configure a URL do mercado-delivery no código');
-                return null;
-            }
-            
-            const cleanUrl = MERCADO_URL.split('?')[0];
-            const separator = cleanUrl.includes('?') ? '&' : '?';
-            return cleanUrl + separator + generateCacheBuster();
+        function cacheBust(url) {
+            const separator = url.includes('?') ? '&' : '?';
+            return `${url}${separator}_t=${Date.now()}&_r=${Math.random().toString(36).substr(2, 8)}`;
         }
 
-        async function clearAllCaches() {
-            try {
-                if ('caches' in window) {
-                    const cacheNames = await caches.keys();
-                    await Promise.all(cacheNames.map(name => caches.delete(name)));
-                }
-                if ('localStorage' in window) localStorage.clear();
-                if ('sessionStorage' in window) sessionStorage.clear();
-                
-                showToast('Cache limpo com sucesso! 🧹', 'success');
-                return true;
-            } catch (error) {
-                console.error('Erro ao limpar cache:', error);
-                showToast('Erro ao limpar cache', 'error');
-                return false;
-            }
-        }
-
-        function loadIframe() {
-            const iframe = document.getElementById('mainIframe');
-            const iframeLoading = document.getElementById('iframeLoading');
+        function loadApp() {
+            console.log('🛒 Carregando mercado...');
             
-            loadStartTime = Date.now();
-            
-            if (loadTimeout) clearTimeout(loadTimeout);
-            
-            loadTimeout = setTimeout(handleLoadTimeout, CONFIG.loadTimeout);
-            
-            const noCacheUrl = buildNoCacheUrl();
-            
-            if (!noCacheUrl) {
-                showError('URL do mercado não configurada. Verifique o código.');
-                return;
-            }
-            
-            console.log('🛒 Carregando mercado:', noCacheUrl);
-            
-            iframe.onload = handleIframeLoad;
-            iframe.onerror = handleIframeError;
-            
-            iframe.src = noCacheUrl;
-            
-            document.getElementById('progressText').textContent = 'Conectando ao mercado...';
-        }
-
-        function handleIframeLoad() {
-            clearTimeout(loadTimeout);
-            const loadTime = Date.now() - loadStartTime;
-            
-            console.log(`✅ Mercado carregado em ${loadTime}ms`);
-            
-            const iframe = document.getElementById('mainIframe');
-            const iframeLoading = document.getElementById('iframeLoading');
-            
-            iframe.classList.add('loaded');
-            iframeLoading.classList.add('hide');
-            
-            setTimeout(showMainApp, 100);
-            showToast('Mercado carregado! 🛒', 'success');
-            
-            connectionRetries = 0;
-        }
-
-        function handleIframeError() {
-            clearTimeout(loadTimeout);
-            console.error('❌ Erro ao carregar iframe do mercado');
-            
-            connectionRetries++;
-            
-            if (connectionRetries <= CONFIG.maxRetries) {
-                showToast(`Tentativa ${connectionRetries}/${CONFIG.maxRetries}...`, 'warning');
-                setTimeout(reloadApp, 1000);
-            } else {
-                showError('Erro ao conectar com o mercado. Verifique sua conexão.');
-            }
-        }
-
-        function handleLoadTimeout() {
-            console.error('⏱️ Timeout ao carregar mercado');
-            
-            connectionRetries++;
-            
-            if (connectionRetries <= CONFIG.maxRetries) {
-                showToast('Carregamento lento... Tentando novamente', 'warning');
-                setTimeout(async () => {
-                    await clearAllCaches();
-                    reloadApp();
-                }, 500);
-            } else {
-                showError('Tempo esgotado. Verifique sua conexão de internet.');
-            }
-        }
-
-        function showMainApp() {
-            const splashScreen = document.getElementById('splashScreen');
-            const appContainer = document.getElementById('appContainer');
-            
-            splashScreen.classList.add('fade-out');
-            appContainer.classList.add('show');
-            
-            setTimeout(() => {
-                splashScreen.style.display = 'none';
-            }, 300);
-        }
-
-        function showError(message = 'Erro desconhecido') {
-            const errorScreen = document.getElementById('errorScreen');
-            const errorMessage = document.getElementById('errorMessage');
-            const appContainer = document.getElementById('appContainer');
-            const splashScreen = document.getElementById('splashScreen');
-            
-            errorMessage.textContent = message;
-            splashScreen.style.display = 'none';
-            appContainer.classList.remove('show');
-            errorScreen.classList.add('show');
-        }
-
-        function hideError() {
-            document.getElementById('errorScreen').classList.remove('show');
-        }
-
-        function reloadApp() {
-            console.log('🔄 Recarregando aplicativo...');
-            
-            showToast('Recarregando mercado...', 'warning');
-            
-            hideError();
-            
-            const iframe = document.getElementById('mainIframe');
-            const iframeLoading = document.getElementById('iframeLoading');
-            
-            iframe.src = 'about:blank';
-            iframe.classList.remove('loaded');
-            iframeLoading.classList.remove('hide');
-            
-            const splashScreen = document.getElementById('splashScreen');
-            splashScreen.style.display = 'flex';
-            splashScreen.classList.remove('fade-out');
-            
-            setTimeout(loadIframe, 100);
-        }
-
-        function openDirectly() {
-            const url = buildNoCacheUrl();
-            if (url) {
-                showToast('Abrindo em nova aba... 🌐', 'warning');
-                window.open(url, '_blank');
-            }
-        }
-
-        function forceHardReload() {
-            showToast('Limpando cache e recarregando... ⚡', 'warning');
-            clearAllCaches().then(() => {
+            iframe.onload = () => {
+                console.log('✅ Mercado carregado!');
                 setTimeout(() => {
-                    window.location.reload(true);
+                    splash.classList.add('fade-out');
+                    app.classList.add('show');
+                    setTimeout(() => splash.style.display = 'none', 300);
                 }, 500);
-            });
-        }
-
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type}`;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, CONFIG.toastDuration);
-        }
-
-        function preloadResources() {
-            if (!MERCADO_URL || MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI') {
-                return;
-            }
-
-            try {
-                const url = new URL(MERCADO_URL);
-                const domain = url.origin;
-
-                const dnsPrefetch = document.createElement('link');
-                dnsPrefetch.rel = 'dns-prefetch';
-                dnsPrefetch.href = domain;
-                document.head.appendChild(dnsPrefetch);
-
-                const preconnect = document.createElement('link');
-                preconnect.rel = 'preconnect';
-                preconnect.href = domain;
-                document.head.appendChild(preconnect);
-
-                console.log('🚀 Preload configurado para:', domain);
-            } catch (error) {
-                console.error('Erro ao configurar preload:', error);
-            }
-        }
-
-        window.addEventListener('online', () => {
-            showToast('Conexão restaurada! ✅', 'success');
-            if (document.getElementById('errorScreen').classList.contains('show')) {
-                setTimeout(reloadApp, 500);
-            }
-        });
-
-        window.addEventListener('offline', () => {
-            showToast('Sem conexão com a internet 📡', 'error');
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
-                e.preventDefault();
-                reloadApp();
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('🛒 Inicializando Mercado Delivery PWA...');
-            
-            if (!MERCADO_URL || MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI') {
-                console.error('❌ URL do mercado não configurada!');
-                setTimeout(() => {
-                    showError('Configure a URL do mercado-delivery no arquivo index.html (linha com MERCADO_URL)');
-                }, CONFIG.splashDuration);
-                return;
-            }
-            
-            preloadResources();
-            
-            setTimeout(() => {
-                document.getElementById('progressText').textContent = 'Conectando ao mercado...';
-                loadIframe();
-            }, CONFIG.splashDuration);
-        });
-
-        window.addEventListener('load', () => {
-            console.log(`
-🛒 MERCADO DELIVERY PWA CARREGADO
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📱 Versão: 1.0.0
-⚙️  Splash: ${CONFIG.splashDuration}ms
-⏱️  Timeout: ${CONFIG.loadTimeout}ms
-🔄 Max retries: ${CONFIG.maxRetries}
-🌐 URL: ${MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI' ? '❌ NÃO CONFIGURADA' : '✅ Configurada'}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🛠️  Debug disponível via console:
-   - window.debugApp.reload()
-   - window.debugApp.open()
-   - window.debugApp.clearCache()
-   - window.debugApp.hardReload()
-   - window.debugApp.getUrl()
-            `);
-    </script>
-</body>
-</html>
-            
-            window.debugApp = {
-                reload: reloadApp,
-                open: openDirectly,
-                clearCache: clearAllCaches,
-                hardReload: forceHardReload,
-                getUrl: buildNoCacheUrl,
-                info: () => console.log({
-                    url: MERCADO_URL,
-                    retries: connectionRetries,
-                    config: CONFIG
-                })
             };
-        });
 
-        window.addEventListener('error', (event) => {
-            console.error('🔴 Global Error:', event.error);
-        });
+            iframe.onerror = () => {
+                console.error('❌ Erro ao carregar');
+                showToast('Erro ao carregar mercado', 'error');
+            };
 
-        window.addEventListener('unhandledrejection', (event) => {
-            console.error('🔴 Promise Rejection:', event.reason);
-        });
+            iframe.src = cacheBust(MERCADO_URL);
+        }
 
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ SW registrado:', reg.scope))
+                .catch(err => console.log('❌ SW erro:', err));
+        }
+
+        // PWA Install
         let deferredPrompt;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
+        window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             deferredPrompt = e;
-            console.log('💡 PWA pode ser instalado');
             showToast('Adicione à tela inicial! 📱', 'success');
         });
 
         window.addEventListener('appinstalled', () => {
-            console.log('✅ PWA instalado com sucesso');
             showToast('App instalado! 🎉', 'success');
             deferredPrompt = null;
         });
 
-        // === REGISTRO DO SERVICE WORKER ===
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                registerServiceWorker();
-            });
-        }
+        // Online/Offline
+        window.addEventListener('online', () => showToast('Online! ✅', 'success'));
+        window.addEventListener('offline', () => showToast('Offline 📡', 'warning'));
 
-        async function registerServiceWorker() {
-            try {
-                console.log('🔧 Registrando Service Worker...');
-                
-                const registration = await navigator.serviceWorker.register('/sw.js', {
-                    scope: '/',
-                    updateViaCache: 'none'
-                });
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(loadApp, 800);
+        });
 
-                console.log('✅ Service Worker registrado:', registration.scope);
-
-                setInterval(() => {
-                    registration.update();
-                }, 60 * 60 * 1000);
-
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    console.log('🆕 Nova versão do Service Worker encontrada');
-
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            console.log('✨ Nova versão disponível!');
-                            showUpdateNotification();
-                        }
-                    });
-                });
-
-                navigator.serviceWorker.addEventListener('message', event => {
-                    if (event.data && event.data.type === 'CACHE_CLEARED') {
-                        console.log('✅ Cache limpo pelo Service Worker');
-                    }
-                    
-                    if (event.data && event.data.type === 'VERSION') {
-                        console.log('📦 Versão do SW:', event.data.version);
-                        console.log('📦 Cache Name:', event.data.cacheName);
-                    }
-                });
-
-                if (registration.active) {
-                    registration.active.postMessage({ type: 'GET_VERSION' });
-                }
-
-            } catch (error) {
-                console.error('❌ Erro ao registrar Service Worker:', error);
-            }
-        }
-
-        function showUpdateNotification() {
-            const updateBanner = document.createElement('div');
-            updateBanner.style.cssText = `
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                color: white;
-                padding: 16px 24px;
-                border-radius: 12px;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-                z-index: 10000;
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                max-width: 90%;
-                animation: slideDown 0.3s ease-out;
-            `;
-
-            updateBanner.innerHTML = `
-                <div style="flex: 1;">
-                    <div style="font-weight: 600; margin-bottom: 4px;">Nova versão disponível! 🎉</div>
-                    <div style="font-size: 0.85rem; opacity: 0.9;">Atualize para obter as últimas melhorias</div>
-                </div>
-                <button id="updateBtn" style="
-                    background: white;
-                    color: #059669;
-                    border: none;
-                    padding: 8px 16px;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 0.9rem;
-                ">
-                    Atualizar
-                </button>
-                <button id="dismissBtn" style="
-                    background: transparent;
-                    color: white;
-                    border: 1px solid rgba(255,255,255,0.3);
-                    padding: 8px 16px;
-                    border-radius: 8px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    font-size: 0.9rem;
-                ">
-                    Depois
-                </button>
-            `;
-
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideDown {
-                    from {
-                        opacity: 0;
-                        transform: translateX(-50%) translateY(-20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateX(-50%) translateY(0);
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-
-            document.body.appendChild(updateBanner);
-
-            document.getElementById('updateBtn').addEventListener('click', () => {
-                showToast('Atualizando aplicativo... ⚡', 'warning');
-                
-                if (navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
-                }
-                
-                setTimeout(() => {
-                    window.location.reload();
-                }, 500);
-            });
-
-            document.getElementById('dismissBtn').addEventListener('click', () => {
-                updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
-                setTimeout(() => updateBanner.remove(), 300);
-            });
-
-            setTimeout(() => {
-                if (updateBanner.parentElement) {
-                    updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
-                    setTimeout(() => updateBanner.remove(), 300);
-                }
-            }, 10000);
-        }
-
-        window.clearServiceWorkerCache = async function() {
-            if (navigator.serviceWorker.controller) {
-                navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
-                showToast('Limpando cache... 🗑️', 'warning');
-                
-                return new Promise((resolve) => {
-                    const listener = (event) => {
-                        if (event.data && event.data.type === 'CACHE_CLEARED') {
-                            navigator.serviceWorker.removeEventListener('message', listener);
-                            showToast('Cache limpo com sucesso! ✅', 'success');
-                            resolve(true);
-                        }
-                    };
-                    navigator.serviceWorker.addEventListener('message', listener);
-                    
-                    setTimeout(() => {
-                        navigator.serviceWorker.removeEventListener('message', listener);
-                        resolve(false);
-                    }, 5000);
-                });
-            }
-            return false;
-        };
-
-        window.unregisterServiceWorker = async function() {
-            if (navigator.serviceWorker) {
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                    console.log('🗑️ Service Worker desregistrado');
-                }
-                showToast('Service Worker removido! 🗑️', 'warning');
+        // Debug
+        window.debugApp = {
+            reload: () => location.reload(),
+            getUrl: () => MERCADO_URL,
+            clearCache: async () => {
+                const keys = await caches.keys();
+                await Promise.all(keys.map(k => caches.delete(k)));
+                localStorage.clear();
+                sessionStorage.clear();
+                showToast('Cache limpo! 🧹', 'success');
             }
         };
-
-        if (window.debugApp) {
-            window.debugApp.clearSWCache = window.clearServiceWorkerCache;
-            window.debugApp.unregisterSW = window.unregisterServiceWorker;
-        }
 
         console.log(`
-🔧 SERVICE WORKER TOOLS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Funções disponíveis:
-• window.clearServiceWorkerCache() - Limpar cache do SW
-• window.unregisterServiceWorker() - Desregistrar SW
-• window.debugApp.clearSWCache() - Atalho para limpar cache
-• window.debugApp.unregisterSW() - Atalho para desregistrar
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛒 MERCADO DELIVERY PWA
+━━━━━━━━━━━━━━━━━━━━━
+✅ URL Configurada
+📱 PWA Ativo
+🔧 Debug: window.debugApp
+━━━━━━━━━━━━━━━━━━━━━
         `);
+    </script>
+</body>
+</html>
