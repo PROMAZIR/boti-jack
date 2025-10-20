@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Marmitex Delicia </title>
+    <title>Mercado Delivery</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1e3a8a">
+    <meta name="theme-color" content="#059669">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="C.F">
+    <meta name="apple-mobile-web-app-title" content="Mercado Delivery">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Faça suas compras de mercado com entrega rápida">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- Icons -->
+    <!-- Icons - SUBSTITUA PELOS SEUS ÍCONES -->
     <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     
@@ -58,6 +59,10 @@
             --safe-area-inset-right: env(safe-area-inset-right);
             --safe-area-inset-bottom: env(safe-area-inset-bottom);
             --safe-area-inset-left: env(safe-area-inset-left);
+            --primary-color: #059669;
+            --primary-dark: #047857;
+            --secondary-color: #f97316;
+            --secondary-dark: #ea580c;
         }
 
         /* === SPLASH SCREEN === */
@@ -68,7 +73,7 @@
             width: 100vw;
             height: 100vh;
             height: calc(var(--vh, 1vh) * 100);
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -106,13 +111,13 @@
         .logo-wrapper {
             width: clamp(80px, 20vw, 120px);
             height: clamp(80px, 20vw, 120px);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border-radius: clamp(16px, 4vw, 24px);
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.25);
             box-shadow: 
                 0 15px 40px rgba(0, 0, 0, 0.3),
                 0 4px 15px rgba(255, 255, 255, 0.1) inset;
@@ -127,7 +132,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
             animation: logoShine 2s ease-in-out infinite;
         }
 
@@ -140,13 +145,14 @@
             font-size: clamp(2.5rem, 10vw, 4rem);
             z-index: 1;
             position: relative;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
         .app-title {
-            font-size: clamp(1.2rem, 3.5vw, 1.6rem);
-            font-weight: 600;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
             margin-top: clamp(16px, 4vw, 24px);
-            background: linear-gradient(45deg, #ffffff, #e0e7ff);
+            background: linear-gradient(45deg, #ffffff, #d1fae5);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -154,6 +160,16 @@
             letter-spacing: -0.5px;
             opacity: 0;
             animation: titleFadeIn 0.4s ease-out 0.3s forwards;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .app-subtitle {
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            font-weight: 400;
+            margin-top: 8px;
+            color: rgba(255, 255, 255, 0.85);
+            opacity: 0;
+            animation: titleFadeIn 0.4s ease-out 0.5s forwards;
         }
 
         @keyframes titleFadeIn {
@@ -167,7 +183,7 @@
             }
         }
 
-        /* Loading Progress - Simplificado */
+        /* Loading Progress */
         .loading-progress {
             position: absolute;
             bottom: clamp(50px, 12vh, 80px);
@@ -194,7 +210,7 @@
 
         .loading-text {
             font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             font-weight: 500;
         }
 
@@ -207,7 +223,7 @@
         .dot {
             width: 6px;
             height: 6px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 50%;
             animation: dotPulse 1s infinite ease-in-out;
         }
@@ -287,7 +303,7 @@
             opacity: 1;
         }
 
-        /* Loading Overlay no Iframe - Mais discreto */
+        /* Loading Overlay no Iframe */
         .iframe-loading {
             position: absolute;
             top: 0;
@@ -309,10 +325,10 @@
         }
 
         .spinner {
-            width: 32px;
-            height: 32px;
-            border: 3px solid #e5e7eb;
-            border-top: 3px solid #1e3a8a;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid var(--primary-color);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -323,9 +339,10 @@
         }
 
         .loading-text-iframe {
-            margin-top: 12px;
+            margin-top: 16px;
             color: #6b7280;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         /* === ERROR SCREEN === */
@@ -350,89 +367,119 @@
         }
 
         .error-icon {
-            font-size: clamp(2.5rem, 8vw, 3.5rem);
-            margin-bottom: clamp(12px, 3vw, 20px);
+            font-size: clamp(3rem, 10vw, 4rem);
+            margin-bottom: clamp(16px, 4vw, 24px);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
 
         .error-title {
-            font-size: clamp(1.1rem, 3.5vw, 1.4rem);
-            font-weight: 600;
-            margin-bottom: 10px;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-weight: 700;
+            margin-bottom: 12px;
             color: #374151;
         }
 
         .error-message {
-            font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+            font-size: clamp(0.9rem, 3vw, 1rem);
             color: #6b7280;
-            margin-bottom: clamp(20px, 5vw, 28px);
-            line-height: 1.5;
-            max-width: 380px;
+            margin-bottom: clamp(24px, 6vw, 32px);
+            line-height: 1.6;
+            max-width: 400px;
         }
 
         .error-actions {
             display: flex;
-            gap: clamp(10px, 2.5vw, 14px);
+            gap: clamp(12px, 3vw, 16px);
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .btn {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: clamp(9px, 2.5vw, 11px) clamp(18px, 4.5vw, 22px);
-            border-radius: clamp(7px, 1.8vw, 10px);
+            padding: clamp(10px, 2.5vw, 12px) clamp(20px, 5vw, 24px);
+            border-radius: clamp(8px, 2vw, 10px);
             cursor: pointer;
-            font-size: clamp(0.75rem, 2.2vw, 0.85rem);
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             font-weight: 600;
             transition: all 0.25s ease;
-            box-shadow: 0 3px 12px rgba(30, 58, 138, 0.3);
-            min-width: clamp(100px, 25vw, 140px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            min-width: clamp(110px, 28vw, 150px);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 16px rgba(30, 58, 138, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn.secondary {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn.secondary:hover {
+            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
         }
 
         .btn.danger {
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn.danger:hover {
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
         }
 
         /* Toast */
         .toast {
             position: fixed;
-            bottom: -60px;
+            bottom: -80px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(17, 24, 39, 0.95);
             color: white;
-            padding: clamp(10px, 2.5vw, 14px) clamp(14px, 3.5vw, 20px);
-            border-radius: clamp(7px, 1.8vw, 10px);
-            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+            padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px);
+            border-radius: clamp(8px, 2vw, 12px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
             z-index: 2000;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             opacity: 0;
-            font-size: clamp(0.75rem, 2.2vw, 0.85rem);
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             font-weight: 500;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.1);
-            max-width: 85%;
+            max-width: 90%;
             text-align: center;
         }
 
         .toast.show {
-            bottom: clamp(18px, 4.5vw, 25px);
+            bottom: clamp(20px, 5vw, 30px);
             opacity: 1;
         }
 
-        .toast.success { background: rgba(5, 150, 105, 0.95); }
-        .toast.error { background: rgba(239, 68, 68, 0.95); }
-        .toast.warning { background: rgba(245, 158, 11, 0.95); }
+        .toast.success { 
+            background: rgba(5, 150, 105, 0.95);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .toast.error { 
+            background: rgba(239, 68, 68, 0.95);
+            border-color: rgba(248, 113, 113, 0.3);
+        }
+        
+        .toast.warning { 
+            background: rgba(245, 158, 11, 0.95);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
 
         /* Mobile optimizations */
         @media (max-width: 480px) {
@@ -443,7 +490,7 @@
             
             .btn {
                 width: 100%;
-                max-width: 180px;
+                max-width: 220px;
             }
         }
 
@@ -458,6 +505,16 @@
             -webkit-focus-ring-color: transparent;
             outline: none;
         }
+
+        /* Animação de pulso para o ícone do carrinho */
+        @keyframes cartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-emoji {
+            animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), cartPulse 2s ease-in-out infinite 1s;
+        }
     </style>
 </head>
 <body>
@@ -465,9 +522,10 @@
     <div class="splash-screen" id="splashScreen">
         <div class="logo-container">
             <div class="logo-wrapper">
-                <div class="logo-emoji">🍽️</div>
+                <div class="logo-emoji">🛒</div>
             </div>
-            <h1 class="app-title">StarkTech</h1>
+            <h1 class="app-title">Mercado Delivery</h1>
+            <p class="app-subtitle">Compras rápidas e fáceis</p>
         </div>
 
         <div class="loading-progress">
@@ -486,13 +544,13 @@
             <!-- Loading overlay for iframe -->
             <div class="iframe-loading" id="iframeLoading">
                 <div class="spinner"></div>
-                <div class="loading-text-iframe">Carregando aplicativo...</div>
+                <div class="loading-text-iframe">Carregando mercado...</div>
             </div>
             
             <iframe 
                 id="mainIframe" 
                 src=""
-                title="StarkTech"
+                title="Mercado Delivery"
                 loading="eager"
                 allow="geolocation; microphone; camera; midi; encrypted-media; autoplay; clipboard-read; clipboard-write"
                 sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-downloads"
@@ -502,15 +560,21 @@
 
     <!-- Error Screen -->
     <div class="error-screen" id="errorScreen">
-        <div class="error-icon">⚠️</div>
-        <h2 class="error-title">Erro de Carregamento</h2>
+        <div class="error-icon">🚫</div>
+        <h2 class="error-title">Erro de Conexão</h2>
         <p class="error-message" id="errorMessage">
-            Ocorreu um erro ao carregar o aplicativo. Tente novamente.
+            Não foi possível carregar o mercado. Verifique sua conexão e tente novamente.
         </p>
         <div class="error-actions">
-            <button class="btn" onclick="reloadApp()">Tentar Novamente</button>
-            <button class="btn secondary" onclick="openDirectly()">Abrir Direto</button>
-            <button class="btn danger" onclick="forceHardReload()">Reload Forçado</button>
+            <button class="btn" onclick="reloadApp()">
+                <span>🔄</span> Tentar Novamente
+            </button>
+            <button class="btn secondary" onclick="openDirectly()">
+                <span>🌐</span> Abrir Direto
+            </button>
+            <button class="btn danger" onclick="forceHardReload()">
+                <span>⚡</span> Reload Forçado
+            </button>
         </div>
     </div>
 
@@ -518,14 +582,24 @@
     <div class="toast" id="toast"></div>
 
     <script>
+        // === CONFIGURAÇÃO PRINCIPAL ===
+        // ⚠️ IMPORTANTE: SUBSTITUA PELA URL DO SEU MERCADO-DELIVERY
+        const MERCADO_URL = 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec';
+        
+        // Configurações
+        const CONFIG = {
+            maxRetries: 2,
+            loadTimeout: 8000,
+            splashDuration: 800,
+            toastDuration: 2500
+        };
+
         // === GLOBAL VARIABLES ===
         let loadStartTime = Date.now();
         let connectionRetries = 0;
-        let maxRetries = 2;
-        let iframeUrl = 'https://script.google.com/macros/s/AKfycbwWbbZUVj-KMOwoyi6f1NA6Qmjuv5CE0TZPOiH4KSH40YWMY3TcFKlK4RDh-o9GKje_3g/exec';
         let loadTimeout;
 
-        // === CACHE BUSTING OTIMIZADO ===
+        // === CACHE BUSTING ===
         function generateCacheBuster() {
             const timestamp = Date.now();
             const random = Math.random().toString(36).substring(2, 8);
@@ -533,12 +607,18 @@
         }
 
         function buildNoCacheUrl() {
-            const cleanUrl = iframeUrl.split('?')[0];
+            if (!MERCADO_URL || MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI') {
+                console.error('❌ URL do mercado não configurada!');
+                showError('Configure a URL do mercado-delivery no código');
+                return null;
+            }
+            
+            const cleanUrl = MERCADO_URL.split('?')[0];
             const separator = cleanUrl.includes('?') ? '&' : '?';
             return cleanUrl + separator + generateCacheBuster();
         }
 
-        // === CLEAR CACHE RÁPIDO ===
+        // === CLEAR CACHE ===
         async function clearAllCaches() {
             try {
                 if ('caches' in window) {
@@ -548,15 +628,16 @@
                 if ('localStorage' in window) localStorage.clear();
                 if ('sessionStorage' in window) sessionStorage.clear();
                 
-                showToast('Cache limpo!', 'success');
+                showToast('Cache limpo com sucesso! 🧹', 'success');
                 return true;
             } catch (error) {
                 console.error('Erro ao limpar cache:', error);
+                showToast('Erro ao limpar cache', 'error');
                 return false;
             }
         }
 
-        // === IFRAME MANAGEMENT OTIMIZADO ===
+        // === IFRAME MANAGEMENT ===
         function loadIframe() {
             const iframe = document.getElementById('mainIframe');
             const iframeLoading = document.getElementById('iframeLoading');
@@ -566,66 +647,82 @@
             // Clear timeout anterior
             if (loadTimeout) clearTimeout(loadTimeout);
             
-            // Timeout reduzido para 8 segundos
-            loadTimeout = setTimeout(handleLoadTimeout, 8000);
+            // Timeout para carregamento
+            loadTimeout = setTimeout(handleLoadTimeout, CONFIG.loadTimeout);
             
-            // URL com cache busting simples
+            // URL com cache busting
             const noCacheUrl = buildNoCacheUrl();
             
-            console.log('Loading iframe:', noCacheUrl);
+            if (!noCacheUrl) {
+                showError('URL do mercado não configurada. Verifique o código.');
+                return;
+            }
+            
+            console.log('🛒 Carregando mercado:', noCacheUrl);
             
             // Configurar eventos antes de definir src
             iframe.onload = handleIframeLoad;
             iframe.onerror = handleIframeError;
             
-            // Carregar imediatamente
+            // Carregar iframe
             iframe.src = noCacheUrl;
             
-            // Atualizar texto
-            document.getElementById('progressText').textContent = 'Conectando...';
+            // Atualizar texto de progresso
+            document.getElementById('progressText').textContent = 'Conectando ao mercado...';
         }
 
         function handleIframeLoad() {
             clearTimeout(loadTimeout);
             const loadTime = Date.now() - loadStartTime;
             
-            console.log(`Iframe carregado em ${loadTime}ms`);
+            console.log(`✅ Mercado carregado em ${loadTime}ms`);
             
             const iframe = document.getElementById('mainIframe');
             const iframeLoading = document.getElementById('iframeLoading');
             
-            // Transição rápida
+            // Transição suave
             iframe.classList.add('loaded');
             iframeLoading.classList.add('hide');
             
-            // Mostrar app imediatamente
+            // Mostrar app
             setTimeout(showMainApp, 100);
-            showToast('Carregado!', 'success');
+            showToast('Mercado carregado! 🛒', 'success');
+            
+            // Reset retries
+            connectionRetries = 0;
         }
 
         function handleIframeError() {
             clearTimeout(loadTimeout);
-            console.error('Erro ao carregar iframe');
-            showError('Erro ao carregar. Tentando novamente...');
+            console.error('❌ Erro ao carregar iframe do mercado');
             
-            // Auto-retry rápido
-            if (connectionRetries < maxRetries) {
+            connectionRetries++;
+            
+            if (connectionRetries <= CONFIG.maxRetries) {
+                showToast(`Tentativa ${connectionRetries}/${CONFIG.maxRetries}...`, 'warning');
                 setTimeout(reloadApp, 1000);
+            } else {
+                showError('Erro ao conectar com o mercado. Verifique sua conexão.');
             }
         }
 
         function handleLoadTimeout() {
-            console.error('Timeout ao carregar iframe');
-            showError('Timeout de carregamento. Limpando cache...');
+            console.error('⏱️ Timeout ao carregar mercado');
             
-            // Auto-clear cache no timeout
-            setTimeout(async () => {
-                await clearAllCaches();
-                reloadApp();
-            }, 500);
+            connectionRetries++;
+            
+            if (connectionRetries <= CONFIG.maxRetries) {
+                showToast('Carregamento lento... Tentando novamente', 'warning');
+                setTimeout(async () => {
+                    await clearAllCaches();
+                    reloadApp();
+                }, 500);
+            } else {
+                showError('Tempo esgotado. Verifique sua conexão de internet.');
+            }
         }
 
-        // === UI MANAGEMENT RÁPIDO ===
+        // === UI MANAGEMENT ===
         function showMainApp() {
             const splashScreen = document.getElementById('splashScreen');
             const appContainer = document.getElementById('appContainer');
@@ -633,7 +730,6 @@
             splashScreen.classList.add('fade-out');
             appContainer.classList.add('show');
             
-            // Remover splash mais rápido
             setTimeout(() => {
                 splashScreen.style.display = 'none';
             }, 300);
@@ -655,14 +751,15 @@
             document.getElementById('errorScreen').classList.remove('show');
         }
 
-        // === ACTION HANDLERS OTIMIZADOS ===
+        // === ACTION HANDLERS ===
         function reloadApp() {
-            showToast('Recarregando...', 'warning');
-            connectionRetries++;
+            console.log('🔄 Recarregando aplicativo...');
+            
+            showToast('Recarregando mercado...', 'warning');
             
             hideError();
             
-            // Reset rápido
+            // Reset iframe
             const iframe = document.getElementById('mainIframe');
             const iframeLoading = document.getElementById('iframeLoading');
             
@@ -675,57 +772,77 @@
             splashScreen.style.display = 'flex';
             splashScreen.classList.remove('fade-out');
             
-            // Carregar imediatamente, sem delay
+            // Carregar após pequeno delay
             setTimeout(loadIframe, 100);
         }
 
         function openDirectly() {
-            showToast('Abrindo em nova aba...', 'warning');
-            window.open(buildNoCacheUrl(), '_blank');
+            const url = buildNoCacheUrl();
+            if (url) {
+                showToast('Abrindo em nova aba... 🌐', 'warning');
+                window.open(url, '_blank');
+            }
         }
 
         function forceHardReload() {
-            showToast('Reload forçado...', 'warning');
+            showToast('Limpando cache e recarregando... ⚡', 'warning');
             clearAllCaches().then(() => {
-                setTimeout(() => window.location.reload(true), 500);
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 500);
             });
         }
 
-        // === TOAST OTIMIZADO ===
+        // === TOAST SYSTEM ===
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.className = `toast ${type}`;
             toast.classList.add('show');
             
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, CONFIG.toastDuration);
         }
 
-        // === PRELOAD OTIMIZADO ===
+        // === PRELOAD RESOURCES ===
         function preloadResources() {
-            // DNS prefetch
-            const dnsPrefetch = document.createElement('link');
-            dnsPrefetch.rel = 'dns-prefetch';
-            dnsPrefetch.href = 'https://script.google.com';
-            document.head.appendChild(dnsPrefetch);
+            if (!MERCADO_URL || MERCADO_URL === 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec') {
+                return;
+            }
 
-            // Preconnect
-            const preconnect = document.createElement('link');
-            preconnect.rel = 'preconnect';
-            preconnect.href = 'https://script.google.com';
-            document.head.appendChild(preconnect);
+            try {
+                const url = new URL(MERCADO_URL);
+                const domain = url.origin;
+
+                // DNS prefetch
+                const dnsPrefetch = document.createElement('link');
+                dnsPrefetch.rel = 'dns-prefetch';
+                dnsPrefetch.href = domain;
+                document.head.appendChild(dnsPrefetch);
+
+                // Preconnect
+                const preconnect = document.createElement('link');
+                preconnect.rel = 'preconnect';
+                preconnect.href = domain;
+                document.head.appendChild(preconnect);
+
+                console.log('🚀 Preload configurado para:', domain);
+            } catch (error) {
+                console.error('Erro ao configurar preload:', error);
+            }
         }
 
         // === EVENT LISTENERS ===
         window.addEventListener('online', () => {
-            showToast('Conexão restaurada!', 'success');
+            showToast('Conexão restaurada! ✅', 'success');
             if (document.getElementById('errorScreen').classList.contains('show')) {
                 setTimeout(reloadApp, 500);
             }
         });
 
         window.addEventListener('offline', () => {
-            showToast('Sem conexão', 'error');
+            showToast('Sem conexão com a internet 📡', 'error');
         });
 
         // Keyboard shortcuts
@@ -736,47 +853,89 @@
             }
         });
 
-        // === INICIALIZAÇÃO OTIMIZADA ===
+        // === INICIALIZAÇÃO ===
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Inicializando app otimizado...');
+            console.log('🛒 Inicializando Mercado Delivery PWA...');
             
-            // Preload imediato
+            // Verificar configuração
+            if (!MERCADO_URL || MERCADO_URL === 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec') {
+                console.error('❌ URL do mercado não configurada!');
+                setTimeout(() => {
+                    showError('Configure a URL do mercado-delivery no arquivo index.html (linha com MERCADO_URL)');
+                }, CONFIG.splashDuration);
+                return;
+            }
+            
+            // Preload de recursos
             preloadResources();
             
-            // Carregar iframe imediatamente após splash mínimo
+            // Carregar iframe após splash mínimo
             setTimeout(() => {
-                document.getElementById('progressText').textContent = 'Conectando...';
+                document.getElementById('progressText').textContent = 'Conectando ao mercado...';
                 loadIframe();
-            }, 800); // Reduzido de 2800ms para 800ms
+            }, CONFIG.splashDuration);
         });
 
-        // === DEBUGGING ===
+        // === DEBUGGING & INFO ===
         window.addEventListener('load', () => {
             console.log(`
-🚀 APP OTIMIZADO CARREGADO
-• Splash: 800ms (reduzido de 2800ms)
-• Timeout iframe: 8s (reduzido de 12s)
-• Transições: 100-300ms (reduzido de 600ms)
-• Cache busting: Simplificado
-• Auto-retry: Habilitado
+🛒 MERCADO DELIVERY PWA CARREGADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 Versão: 1.0.0
+⚙️  Splash: ${CONFIG.splashDuration}ms
+⏱️  Timeout: ${CONFIG.loadTimeout}ms
+🔄 Max retries: ${CONFIG.maxRetries}
+🌐 URL: ${MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI' ? '❌ NÃO CONFIGURADA' : '✅ Configurada'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🛠️  Debug disponível via console:
+   - window.debugApp.reload()
+   - window.debugApp.open()
+   - window.debugApp.clearCache()
+   - window.debugApp.hardReload()
+   - window.debugApp.getUrl()
             `);
             
+            // Debug tools
             window.debugApp = {
                 reload: reloadApp,
                 open: openDirectly,
                 clearCache: clearAllCaches,
                 hardReload: forceHardReload,
-                buildUrl: buildNoCacheUrl
+                getUrl: buildNoCacheUrl,
+                info: () => console.log({
+                    url: MERCADO_URL,
+                    retries: connectionRetries,
+                    config: CONFIG
+                })
             };
         });
 
         // === ERROR HANDLING ===
         window.addEventListener('error', (event) => {
-            console.error('Global Error:', event.error);
+            console.error('🔴 Global Error:', event.error);
         });
 
         window.addEventListener('unhandledrejection', (event) => {
-            console.error('Promise Rejection:', event.reason);
+            console.error('🔴 Promise Rejection:', event.reason);
+        });
+
+        // === PWA INSTALL PROMPT ===
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('💡 PWA pode ser instalado');
+            
+            // Você pode mostrar um botão de instalação aqui
+            showToast('Adicione à tela inicial! 📱', 'success');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ PWA instalado com sucesso');
+            showToast('App instalado! 🎉', 'success');
+            deferredPrompt = null;
         });
     </script>
 </body>
