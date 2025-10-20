@@ -16,7 +16,7 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- Icons - SUBSTITUA PELOS SEUS ÍCONES -->
+    <!-- Icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     
@@ -91,7 +91,6 @@
             pointer-events: none;
         }
 
-        /* Logo Container */
         .logo-container {
             position: relative;
             animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -146,6 +145,12 @@
             z-index: 1;
             position: relative;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), cartPulse 2s ease-in-out infinite 1s;
+        }
+
+        @keyframes cartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .app-title {
@@ -183,7 +188,6 @@
             }
         }
 
-        /* Loading Progress */
         .loading-progress {
             position: absolute;
             bottom: clamp(50px, 12vh, 80px);
@@ -303,7 +307,6 @@
             opacity: 1;
         }
 
-        /* Loading Overlay no Iframe */
         .iframe-loading {
             position: absolute;
             top: 0;
@@ -481,7 +484,6 @@
             border-color: rgba(251, 191, 36, 0.3);
         }
 
-        /* Mobile optimizations */
         @media (max-width: 480px) {
             .error-actions {
                 flex-direction: column;
@@ -494,7 +496,6 @@
             }
         }
 
-        /* Prevent overscroll */
         body {
             overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
@@ -504,16 +505,6 @@
             -webkit-tap-highlight-color: transparent;
             -webkit-focus-ring-color: transparent;
             outline: none;
-        }
-
-        /* Animação de pulso para o ícone do carrinho */
-        @keyframes cartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .logo-emoji {
-            animation: logoEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), cartPulse 2s ease-in-out infinite 1s;
         }
     </style>
 </head>
@@ -541,7 +532,6 @@
     <!-- Main App Container -->
     <div class="app-container" id="appContainer">
         <div class="iframe-container">
-            <!-- Loading overlay for iframe -->
             <div class="iframe-loading" id="iframeLoading">
                 <div class="spinner"></div>
                 <div class="loading-text-iframe">Carregando mercado...</div>
@@ -583,10 +573,8 @@
 
     <script>
         // === CONFIGURAÇÃO PRINCIPAL ===
-        // ⚠️ IMPORTANTE: SUBSTITUA PELA URL DO SEU MERCADO-DELIVERY
         const MERCADO_URL = 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec';
         
-        // Configurações
         const CONFIG = {
             maxRetries: 2,
             loadTimeout: 8000,
@@ -594,12 +582,10 @@
             toastDuration: 2500
         };
 
-        // === GLOBAL VARIABLES ===
         let loadStartTime = Date.now();
         let connectionRetries = 0;
         let loadTimeout;
 
-        // === CACHE BUSTING ===
         function generateCacheBuster() {
             const timestamp = Date.now();
             const random = Math.random().toString(36).substring(2, 8);
@@ -618,7 +604,6 @@
             return cleanUrl + separator + generateCacheBuster();
         }
 
-        // === CLEAR CACHE ===
         async function clearAllCaches() {
             try {
                 if ('caches' in window) {
@@ -637,20 +622,16 @@
             }
         }
 
-        // === IFRAME MANAGEMENT ===
         function loadIframe() {
             const iframe = document.getElementById('mainIframe');
             const iframeLoading = document.getElementById('iframeLoading');
             
             loadStartTime = Date.now();
             
-            // Clear timeout anterior
             if (loadTimeout) clearTimeout(loadTimeout);
             
-            // Timeout para carregamento
             loadTimeout = setTimeout(handleLoadTimeout, CONFIG.loadTimeout);
             
-            // URL com cache busting
             const noCacheUrl = buildNoCacheUrl();
             
             if (!noCacheUrl) {
@@ -660,14 +641,11 @@
             
             console.log('🛒 Carregando mercado:', noCacheUrl);
             
-            // Configurar eventos antes de definir src
             iframe.onload = handleIframeLoad;
             iframe.onerror = handleIframeError;
             
-            // Carregar iframe
             iframe.src = noCacheUrl;
             
-            // Atualizar texto de progresso
             document.getElementById('progressText').textContent = 'Conectando ao mercado...';
         }
 
@@ -680,15 +658,12 @@
             const iframe = document.getElementById('mainIframe');
             const iframeLoading = document.getElementById('iframeLoading');
             
-            // Transição suave
             iframe.classList.add('loaded');
             iframeLoading.classList.add('hide');
             
-            // Mostrar app
             setTimeout(showMainApp, 100);
             showToast('Mercado carregado! 🛒', 'success');
             
-            // Reset retries
             connectionRetries = 0;
         }
 
@@ -722,7 +697,6 @@
             }
         }
 
-        // === UI MANAGEMENT ===
         function showMainApp() {
             const splashScreen = document.getElementById('splashScreen');
             const appContainer = document.getElementById('appContainer');
@@ -751,7 +725,6 @@
             document.getElementById('errorScreen').classList.remove('show');
         }
 
-        // === ACTION HANDLERS ===
         function reloadApp() {
             console.log('🔄 Recarregando aplicativo...');
             
@@ -759,7 +732,6 @@
             
             hideError();
             
-            // Reset iframe
             const iframe = document.getElementById('mainIframe');
             const iframeLoading = document.getElementById('iframeLoading');
             
@@ -767,12 +739,10 @@
             iframe.classList.remove('loaded');
             iframeLoading.classList.remove('hide');
             
-            // Mostrar splash novamente
             const splashScreen = document.getElementById('splashScreen');
             splashScreen.style.display = 'flex';
             splashScreen.classList.remove('fade-out');
             
-            // Carregar após pequeno delay
             setTimeout(loadIframe, 100);
         }
 
@@ -793,7 +763,6 @@
             });
         }
 
-        // === TOAST SYSTEM ===
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -805,9 +774,8 @@
             }, CONFIG.toastDuration);
         }
 
-        // === PRELOAD RESOURCES ===
         function preloadResources() {
-            if (!MERCADO_URL || MERCADO_URL === 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec') {
+            if (!MERCADO_URL || MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI') {
                 return;
             }
 
@@ -815,13 +783,11 @@
                 const url = new URL(MERCADO_URL);
                 const domain = url.origin;
 
-                // DNS prefetch
                 const dnsPrefetch = document.createElement('link');
                 dnsPrefetch.rel = 'dns-prefetch';
                 dnsPrefetch.href = domain;
                 document.head.appendChild(dnsPrefetch);
 
-                // Preconnect
                 const preconnect = document.createElement('link');
                 preconnect.rel = 'preconnect';
                 preconnect.href = domain;
@@ -833,7 +799,6 @@
             }
         }
 
-        // === EVENT LISTENERS ===
         window.addEventListener('online', () => {
             showToast('Conexão restaurada! ✅', 'success');
             if (document.getElementById('errorScreen').classList.contains('show')) {
@@ -845,7 +810,6 @@
             showToast('Sem conexão com a internet 📡', 'error');
         });
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
                 e.preventDefault();
@@ -853,12 +817,10 @@
             }
         });
 
-        // === INICIALIZAÇÃO ===
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🛒 Inicializando Mercado Delivery PWA...');
             
-            // Verificar configuração
-            if (!MERCADO_URL || MERCADO_URL === 'https://script.google.com/macros/s/AKfycbwGC8fBQP3ZIwl63476KqwTHSvZzx5VZHesLRlfFzyZjzLEs1hd9RntI3VMp5P2d0sJ/exec') {
+            if (!MERCADO_URL || MERCADO_URL === 'SUA_URL_DO_MERCADO_DELIVERY_AQUI') {
                 console.error('❌ URL do mercado não configurada!');
                 setTimeout(() => {
                     showError('Configure a URL do mercado-delivery no arquivo index.html (linha com MERCADO_URL)');
@@ -866,17 +828,14 @@
                 return;
             }
             
-            // Preload de recursos
             preloadResources();
             
-            // Carregar iframe após splash mínimo
             setTimeout(() => {
                 document.getElementById('progressText').textContent = 'Conectando ao mercado...';
                 loadIframe();
             }, CONFIG.splashDuration);
         });
 
-        // === DEBUGGING & INFO ===
         window.addEventListener('load', () => {
             console.log(`
 🛒 MERCADO DELIVERY PWA CARREGADO
@@ -895,8 +854,10 @@
    - window.debugApp.hardReload()
    - window.debugApp.getUrl()
             `);
+    </script>
+</body>
+</html>
             
-            // Debug tools
             window.debugApp = {
                 reload: reloadApp,
                 open: openDirectly,
@@ -911,7 +872,6 @@
             };
         });
 
-        // === ERROR HANDLING ===
         window.addEventListener('error', (event) => {
             console.error('🔴 Global Error:', event.error);
         });
@@ -920,15 +880,12 @@
             console.error('🔴 Promise Rejection:', event.reason);
         });
 
-        // === PWA INSTALL PROMPT ===
         let deferredPrompt;
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             console.log('💡 PWA pode ser instalado');
-            
-            // Você pode mostrar um botão de instalação aqui
             showToast('Adicione à tela inicial! 📱', 'success');
         });
 
@@ -937,216 +894,195 @@
             showToast('App instalado! 🎉', 'success');
             deferredPrompt = null;
         });
-    </script>
-    // === REGISTRO DO SERVICE WORKER ===
-// Adicione este código no final do index.html, antes do </body>
 
-// Verificar suporte a Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    registerServiceWorker();
-  });
-}
-
-async function registerServiceWorker() {
-  try {
-    console.log('🔧 Registrando Service Worker...');
-    
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-      updateViaCache: 'none' // Força verificação de atualizações
-    });
-
-    console.log('✅ Service Worker registrado:', registration.scope);
-
-    // Verificar atualizações a cada 1 hora
-    setInterval(() => {
-      registration.update();
-    }, 60 * 60 * 1000);
-
-    // Listener para atualizações do SW
-    registration.addEventListener('updatefound', () => {
-      const newWorker = registration.installing;
-      console.log('🆕 Nova versão do Service Worker encontrada');
-
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          console.log('✨ Nova versão disponível!');
-          
-          // Mostrar notificação ao usuário
-          showUpdateNotification();
+        // === REGISTRO DO SERVICE WORKER ===
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                registerServiceWorker();
+            });
         }
-      });
-    });
 
-    // Escutar mensagens do Service Worker
-    navigator.serviceWorker.addEventListener('message', event => {
-      if (event.data && event.data.type === 'CACHE_CLEARED') {
-        console.log('✅ Cache limpo pelo Service Worker');
-      }
-      
-      if (event.data && event.data.type === 'VERSION') {
-        console.log('📦 Versão do SW:', event.data.version);
-        console.log('📦 Cache Name:', event.data.cacheName);
-      }
-    });
+        async function registerServiceWorker() {
+            try {
+                console.log('🔧 Registrando Service Worker...');
+                
+                const registration = await navigator.serviceWorker.register('/sw.js', {
+                    scope: '/',
+                    updateViaCache: 'none'
+                });
 
-    // Solicitar versão do SW
-    if (registration.active) {
-      registration.active.postMessage({ type: 'GET_VERSION' });
-    }
+                console.log('✅ Service Worker registrado:', registration.scope);
 
-  } catch (error) {
-    console.error('❌ Erro ao registrar Service Worker:', error);
-  }
-}
+                setInterval(() => {
+                    registration.update();
+                }, 60 * 60 * 1000);
 
-// Mostrar notificação de atualização disponível
-function showUpdateNotification() {
-  const updateBanner = document.createElement('div');
-  updateBanner.style.cssText = `
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    padding: 16px 24px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    max-width: 90%;
-    animation: slideDown 0.3s ease-out;
-  `;
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('🆕 Nova versão do Service Worker encontrada');
 
-  updateBanner.innerHTML = `
-    <div style="flex: 1;">
-      <div style="font-weight: 600; margin-bottom: 4px;">Nova versão disponível! 🎉</div>
-      <div style="font-size: 0.85rem; opacity: 0.9;">Atualize para obter as últimas melhorias</div>
-    </div>
-    <button id="updateBtn" style="
-      background: white;
-      color: #059669;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.9rem;
-    ">
-      Atualizar
-    </button>
-    <button id="dismissBtn" style="
-      background: transparent;
-      color: white;
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      font-size: 0.9rem;
-    ">
-      Depois
-    </button>
-  `;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('✨ Nova versão disponível!');
+                            showUpdateNotification();
+                        }
+                    });
+                });
 
-  // Adicionar animação
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-    }
-  `;
-  document.head.appendChild(style);
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'CACHE_CLEARED') {
+                        console.log('✅ Cache limpo pelo Service Worker');
+                    }
+                    
+                    if (event.data && event.data.type === 'VERSION') {
+                        console.log('📦 Versão do SW:', event.data.version);
+                        console.log('📦 Cache Name:', event.data.cacheName);
+                    }
+                });
 
-  document.body.appendChild(updateBanner);
+                if (registration.active) {
+                    registration.active.postMessage({ type: 'GET_VERSION' });
+                }
 
-  // Botão Atualizar
-  document.getElementById('updateBtn').addEventListener('click', () => {
-    showToast('Atualizando aplicativo... ⚡', 'warning');
-    
-    // Enviar mensagem para o SW pular a espera
-    if (navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
-    }
-    
-    // Recarregar após breve delay
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
-  });
-
-  // Botão Dispensar
-  document.getElementById('dismissBtn').addEventListener('click', () => {
-    updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
-    setTimeout(() => updateBanner.remove(), 300);
-  });
-
-  // Auto-remover após 10 segundos
-  setTimeout(() => {
-    if (updateBanner.parentElement) {
-      updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
-      setTimeout(() => updateBanner.remove(), 300);
-    }
-  }, 10000);
-}
-
-// Função auxiliar para limpar cache via SW
-window.clearServiceWorkerCache = async function() {
-  if (navigator.serviceWorker.controller) {
-    navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
-    showToast('Limpando cache... 🗑️', 'warning');
-    
-    // Aguardar confirmação
-    return new Promise((resolve) => {
-      const listener = (event) => {
-        if (event.data && event.data.type === 'CACHE_CLEARED') {
-          navigator.serviceWorker.removeEventListener('message', listener);
-          showToast('Cache limpo com sucesso! ✅', 'success');
-          resolve(true);
+            } catch (error) {
+                console.error('❌ Erro ao registrar Service Worker:', error);
+            }
         }
-      };
-      navigator.serviceWorker.addEventListener('message', listener);
-      
-      // Timeout de 5s
-      setTimeout(() => {
-        navigator.serviceWorker.removeEventListener('message', listener);
-        resolve(false);
-      }, 5000);
-    });
-  }
-  return false;
-};
 
-// Desregistrar Service Worker (útil para debugging)
-window.unregisterServiceWorker = async function() {
-  if (navigator.serviceWorker) {
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    for (let registration of registrations) {
-      await registration.unregister();
-      console.log('🗑️ Service Worker desregistrado');
-    }
-    showToast('Service Worker removido! 🗑️', 'warning');
-  }
-};
+        function showUpdateNotification() {
+            const updateBanner = document.createElement('div');
+            updateBanner.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                max-width: 90%;
+                animation: slideDown 0.3s ease-out;
+            `;
 
-// Adicionar funções ao objeto de debug
-if (window.debugApp) {
-  window.debugApp.clearSWCache = window.clearServiceWorkerCache;
-  window.debugApp.unregisterSW = window.unregisterServiceWorker;
-}
+            updateBanner.innerHTML = `
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 4px;">Nova versão disponível! 🎉</div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">Atualize para obter as últimas melhorias</div>
+                </div>
+                <button id="updateBtn" style="
+                    background: white;
+                    color: #059669;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">
+                    Atualizar
+                </button>
+                <button id="dismissBtn" style="
+                    background: transparent;
+                    color: white;
+                    border: 1px solid rgba(255,255,255,0.3);
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                ">
+                    Depois
+                </button>
+            `;
 
-console.log(`
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-50%) translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(updateBanner);
+
+            document.getElementById('updateBtn').addEventListener('click', () => {
+                showToast('Atualizando aplicativo... ⚡', 'warning');
+                
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+                }
+                
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            });
+
+            document.getElementById('dismissBtn').addEventListener('click', () => {
+                updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
+                setTimeout(() => updateBanner.remove(), 300);
+            });
+
+            setTimeout(() => {
+                if (updateBanner.parentElement) {
+                    updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
+                    setTimeout(() => updateBanner.remove(), 300);
+                }
+            }, 10000);
+        }
+
+        window.clearServiceWorkerCache = async function() {
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+                showToast('Limpando cache... 🗑️', 'warning');
+                
+                return new Promise((resolve) => {
+                    const listener = (event) => {
+                        if (event.data && event.data.type === 'CACHE_CLEARED') {
+                            navigator.serviceWorker.removeEventListener('message', listener);
+                            showToast('Cache limpo com sucesso! ✅', 'success');
+                            resolve(true);
+                        }
+                    };
+                    navigator.serviceWorker.addEventListener('message', listener);
+                    
+                    setTimeout(() => {
+                        navigator.serviceWorker.removeEventListener('message', listener);
+                        resolve(false);
+                    }, 5000);
+                });
+            }
+            return false;
+        };
+
+        window.unregisterServiceWorker = async function() {
+            if (navigator.serviceWorker) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (let registration of registrations) {
+                    await registration.unregister();
+                    console.log('🗑️ Service Worker desregistrado');
+                }
+                showToast('Service Worker removido! 🗑️', 'warning');
+            }
+        };
+
+        if (window.debugApp) {
+            window.debugApp.clearSWCache = window.clearServiceWorkerCache;
+            window.debugApp.unregisterSW = window.unregisterServiceWorker;
+        }
+
+        console.log(`
 🔧 SERVICE WORKER TOOLS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Funções disponíveis:
@@ -1155,6 +1091,4 @@ Funções disponíveis:
 • window.debugApp.clearSWCache() - Atalho para limpar cache
 • window.debugApp.unregisterSW() - Atalho para desregistrar
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-`);
-</body>
-</html>
+        `);
