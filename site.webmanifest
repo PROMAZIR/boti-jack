@@ -1,1 +1,120 @@
-{"name":"","short_name":"","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+  "name": "Mercado Delivery",
+  "short_name": "Mercado",
+  "description": "Faça suas compras de mercado com entrega rápida e fácil",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "https://via.placeholder.com/540x720/059669/FFFFFF?text=Mercado+Delivery",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "https://via.placeholder.com/1280x720/059669/FFFFFF?text=Mercado+Delivery+Desktop",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  
+  "categories": [
+    "shopping",
+    "food",
+    "lifestyle"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Nova Compra",
+      "short_name": "Comprar",
+      "description": "Iniciar nova compra no mercado",
+      "url": "/?action=shop",
+      "icons": [
+        {
+          "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Meus Pedidos",
+      "short_name": "Pedidos",
+      "description": "Ver histórico de pedidos",
+      "url": "/?action=orders",
+      "icons": [
+        {
+          "src": "https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  
+  "share_target": {
+    "action": "/share",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+mercado",
+      "url": "/?product=%s"
+    }
+  ],
+  
+  "related_applications": [],
+  
+  "iarc_rating_id": "",
+  
+  "permissions": [
+    "geolocation",
+    "notifications",
+    "persistent-storage"
+  ]
+}
