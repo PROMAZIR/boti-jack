@@ -938,5 +938,223 @@
             deferredPrompt = null;
         });
     </script>
+    // === REGISTRO DO SERVICE WORKER ===
+// Adicione este código no final do index.html, antes do </body>
+
+// Verificar suporte a Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    registerServiceWorker();
+  });
+}
+
+async function registerServiceWorker() {
+  try {
+    console.log('🔧 Registrando Service Worker...');
+    
+    const registration = await navigator.serviceWorker.register('/sw.js', {
+      scope: '/',
+      updateViaCache: 'none' // Força verificação de atualizações
+    });
+
+    console.log('✅ Service Worker registrado:', registration.scope);
+
+    // Verificar atualizações a cada 1 hora
+    setInterval(() => {
+      registration.update();
+    }, 60 * 60 * 1000);
+
+    // Listener para atualizações do SW
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+      console.log('🆕 Nova versão do Service Worker encontrada');
+
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          console.log('✨ Nova versão disponível!');
+          
+          // Mostrar notificação ao usuário
+          showUpdateNotification();
+        }
+      });
+    });
+
+    // Escutar mensagens do Service Worker
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data && event.data.type === 'CACHE_CLEARED') {
+        console.log('✅ Cache limpo pelo Service Worker');
+      }
+      
+      if (event.data && event.data.type === 'VERSION') {
+        console.log('📦 Versão do SW:', event.data.version);
+        console.log('📦 Cache Name:', event.data.cacheName);
+      }
+    });
+
+    // Solicitar versão do SW
+    if (registration.active) {
+      registration.active.postMessage({ type: 'GET_VERSION' });
+    }
+
+  } catch (error) {
+    console.error('❌ Erro ao registrar Service Worker:', error);
+  }
+}
+
+// Mostrar notificação de atualização disponível
+function showUpdateNotification() {
+  const updateBanner = document.createElement('div');
+  updateBanner.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 90%;
+    animation: slideDown 0.3s ease-out;
+  `;
+
+  updateBanner.innerHTML = `
+    <div style="flex: 1;">
+      <div style="font-weight: 600; margin-bottom: 4px;">Nova versão disponível! 🎉</div>
+      <div style="font-size: 0.85rem; opacity: 0.9;">Atualize para obter as últimas melhorias</div>
+    </div>
+    <button id="updateBtn" style="
+      background: white;
+      color: #059669;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    ">
+      Atualizar
+    </button>
+    <button id="dismissBtn" style="
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 0.9rem;
+    ">
+      Depois
+    </button>
+  `;
+
+  // Adicionar animação
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  document.body.appendChild(updateBanner);
+
+  // Botão Atualizar
+  document.getElementById('updateBtn').addEventListener('click', () => {
+    showToast('Atualizando aplicativo... ⚡', 'warning');
+    
+    // Enviar mensagem para o SW pular a espera
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    }
+    
+    // Recarregar após breve delay
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  });
+
+  // Botão Dispensar
+  document.getElementById('dismissBtn').addEventListener('click', () => {
+    updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
+    setTimeout(() => updateBanner.remove(), 300);
+  });
+
+  // Auto-remover após 10 segundos
+  setTimeout(() => {
+    if (updateBanner.parentElement) {
+      updateBanner.style.animation = 'slideDown 0.3s ease-out reverse';
+      setTimeout(() => updateBanner.remove(), 300);
+    }
+  }, 10000);
+}
+
+// Função auxiliar para limpar cache via SW
+window.clearServiceWorkerCache = async function() {
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+    showToast('Limpando cache... 🗑️', 'warning');
+    
+    // Aguardar confirmação
+    return new Promise((resolve) => {
+      const listener = (event) => {
+        if (event.data && event.data.type === 'CACHE_CLEARED') {
+          navigator.serviceWorker.removeEventListener('message', listener);
+          showToast('Cache limpo com sucesso! ✅', 'success');
+          resolve(true);
+        }
+      };
+      navigator.serviceWorker.addEventListener('message', listener);
+      
+      // Timeout de 5s
+      setTimeout(() => {
+        navigator.serviceWorker.removeEventListener('message', listener);
+        resolve(false);
+      }, 5000);
+    });
+  }
+  return false;
+};
+
+// Desregistrar Service Worker (útil para debugging)
+window.unregisterServiceWorker = async function() {
+  if (navigator.serviceWorker) {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    for (let registration of registrations) {
+      await registration.unregister();
+      console.log('🗑️ Service Worker desregistrado');
+    }
+    showToast('Service Worker removido! 🗑️', 'warning');
+  }
+};
+
+// Adicionar funções ao objeto de debug
+if (window.debugApp) {
+  window.debugApp.clearSWCache = window.clearServiceWorkerCache;
+  window.debugApp.unregisterSW = window.unregisterServiceWorker;
+}
+
+console.log(`
+🔧 SERVICE WORKER TOOLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Funções disponíveis:
+• window.clearServiceWorkerCache() - Limpar cache do SW
+• window.unregisterServiceWorker() - Desregistrar SW
+• window.debugApp.clearSWCache() - Atalho para limpar cache
+• window.debugApp.unregisterSW() - Atalho para desregistrar
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`);
 </body>
 </html>
