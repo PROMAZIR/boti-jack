@@ -3,37 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> 👻 Mercado Delivery 🎃 </title>
+    <title>🔥 BLACK FRIDAY - Mercado Delivery 🛒</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#059669">
+    <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Mercado Delivery">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Black Friday Mercado">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="Faça suas compras de mercado com entrega rápida">
+    <meta name="description" content="Black Friday! Ofertas imperdíveis no Mercado Delivery">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
+    <!-- Preload crítico para velocidade -->
+    <link rel="preconnect" href="https://script.google.com" crossorigin>
+    <link rel="dns-prefetch" href="https://script.google.com">
+    <link rel="preload" as="fetch" href="https://script.google.com/macros/s/AKfycbyEvu2F1tD3jHHNWvTAGFYsoosmAlYWRv8bwmmUtWujN0R0UXspfxxr298AoWut73YZ/exec" crossorigin>
+    
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="192x192" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
-    <!-- Icons - Múltiplos formatos e tamanhos -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
-    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#FF6B35">
-
-<!-- Fallback para URL externa (caso os locais falhem) -->
-<link rel="alternate icon" href="https://i.ibb.co/vx4BtbSv/Sem-t-tulo-1.png">
-    
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://script.google.com">
-    <link rel="dns-prefetch" href="https://script.google.com">
     
     <style>
         * {
@@ -48,31 +38,49 @@
             height: 100%;
             overflow: hidden;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #ffffff;
+            background: #000000;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             overscroll-behavior: none;
         }
 
+        /* BLACK FRIDAY THEME */
         :root {
-            --primary: #059669;
-            --primary-dark: #047857;
+            --bf-black: #000000;
+            --bf-orange: #FF6B35;
+            --bf-red: #FF3333;
+            --bf-yellow: #FFD700;
+            --bf-white: #FFFFFF;
         }
 
+        /* Splash Screen BLACK FRIDAY */
         .splash-screen {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #000000 0%, #1a0a00 50%, #330000 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
             color: white;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
+            overflow: hidden;
+        }
+
+        .splash-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 51, 51, 0.1) 0%, transparent 50%);
+            animation: gradientShift 4s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
         }
 
         .splash-screen.fade-out {
@@ -80,128 +88,285 @@
             pointer-events: none;
         }
 
+        /* Logo com efeito Black Friday */
         .logo-wrapper {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, var(--bf-orange), var(--bf-red));
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            animation: logoFloat 0.6s ease-out;
+            box-shadow: 
+                0 0 40px rgba(255, 107, 53, 0.6),
+                0 0 80px rgba(255, 51, 51, 0.4),
+                0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: logoFloat 0.6s ease-out, logoPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+
+        .logo-wrapper::after {
+            content: '🔥';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 2rem;
+            animation: fireFlicker 1s ease-in-out infinite;
         }
 
         @keyframes logoFloat {
-            from { opacity: 0; transform: scale(0.5); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 107, 53, 0.6), 0 0 80px rgba(255, 51, 51, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(255, 107, 53, 0.8), 0 0 100px rgba(255, 51, 51, 0.6); }
+        }
+
+        @keyframes fireFlicker {
+            0%, 100% { opacity: 1; transform: scale(1) translateY(0); }
+            50% { opacity: 0.8; transform: scale(1.1) translateY(-2px); }
         }
 
         .logo-emoji {
-            font-size: 4rem;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            font-size: 4.5rem;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+            animation: emojiFloat 1.5s ease-in-out infinite;
         }
 
-        .app-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-top: 24px;
-            animation: fadeIn 0.4s ease-out 0.3s forwards;
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* BLACK FRIDAY Badge */
+        .bf-badge {
+            position: absolute;
+            top: -25px;
+            background: linear-gradient(135deg, var(--bf-red), #990000);
+            color: var(--bf-yellow);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.5);
+            animation: badgeBounce 0.6s ease-out 0.3s forwards, badgeGlow 2s ease-in-out infinite;
             opacity: 0;
+        }
+
+        @keyframes badgeBounce {
+            0% { opacity: 0; transform: translateY(-20px); }
+            60% { transform: translateY(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 4px 15px rgba(255, 51, 51, 0.5); }
+            50% { box-shadow: 0 4px 25px rgba(255, 51, 51, 0.8), 0 0 40px rgba(255, 215, 0, 0.4); }
+        }
+
+        /* Título */
+        .app-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-top: 35px;
+            background: linear-gradient(135deg, var(--bf-orange), var(--bf-red), var(--bf-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.4s ease-out 0.3s forwards, titleShine 3s ease-in-out infinite;
+            opacity: 0;
+            text-shadow: 0 2px 20px rgba(255, 107, 53, 0.5);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes titleShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
         }
 
         .app-subtitle {
-            font-size: 1rem;
-            margin-top: 8px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            color: var(--bf-yellow);
+            font-weight: 700;
             opacity: 0;
-            animation: fadeIn 0.4s ease-out 0.5s forwards;
+            animation: fadeInUp 0.4s ease-out 0.5s forwards;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        .discount-tag {
+            display: inline-block;
+            background: var(--bf-red);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-top: 15px;
+            opacity: 0;
+            animation: fadeInUp 0.4s ease-out 0.7s forwards, tagPulse 1.5s ease-in-out infinite;
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.4);
         }
 
+        @keyframes tagPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Loading animado */
         .loading-dots {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-top: 40px;
         }
 
         .dot {
-            width: 8px;
-            height: 8px;
-            background: white;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--bf-orange), var(--bf-red));
             border-radius: 50%;
             animation: dotBounce 1s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.6);
         }
 
-        .dot:nth-child(1) { animation-delay: -0.2s; }
-        .dot:nth-child(2) { animation-delay: -0.1s; }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
 
         @keyframes dotBounce {
-            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
-            40% { transform: scale(1.2); opacity: 1; }
+            0%, 80%, 100% { 
+                transform: scale(0.8) translateY(0); 
+                opacity: 0.5; 
+            }
+            40% { 
+                transform: scale(1.3) translateY(-10px); 
+                opacity: 1; 
+            }
         }
 
+        /* App Container */
         .app-container {
             position: fixed;
             inset: 0;
-            background: #f8fafc;
+            background: #000000;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s ease;
         }
 
         .app-container.show {
             opacity: 1;
         }
 
+        /* Iframe otimizado */
         #mainIframe {
             width: 100%;
             height: 100%;
             border: none;
             display: block;
+            background: #000000;
         }
 
+        /* Toast melhorado */
         .toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(17, 24, 39, 0.95);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 10, 0, 0.95));
             color: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            padding: 14px 28px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255, 107, 53, 0.3);
             z-index: 10000;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: all 0.3s ease;
             pointer-events: none;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .toast.show {
             opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
         }
 
-        .toast.success { background: rgba(5, 150, 105, 0.95); }
-        .toast.error { background: rgba(239, 68, 68, 0.95); }
-        .toast.warning { background: rgba(245, 158, 11, 0.95); }
+        .toast.success { 
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.95), rgba(255, 51, 51, 0.95));
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4);
+        }
+        
+        .toast.error { 
+            background: linear-gradient(135deg, rgba(153, 0, 0, 0.95), rgba(102, 0, 0, 0.95));
+        }
+        
+        .toast.warning { 
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.95), rgba(255, 165, 0, 0.95));
+            color: #000;
+        }
 
+        /* Install Button */
+        .install-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: linear-gradient(135deg, var(--bf-orange), var(--bf-red));
+            color: white;
+            padding: 14px 32px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 10001;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.5);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .install-btn.show {
+            transform: translateX(-50%) scale(1);
+        }
+
+        .install-btn:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        /* Responsivo */
         @media (max-width: 768px) {
+            .logo-wrapper { width: 120px; height: 120px; }
+            .logo-emoji { font-size: 3.5rem; }
+            .app-title { font-size: 1.7rem; }
+            .app-subtitle { font-size: 1rem; }
+            .discount-tag { font-size: 0.85rem; padding: 5px 14px; }
+            .install-btn { font-size: 0.9rem; padding: 12px 28px; }
+        }
+
+        @media (max-width: 380px) {
             .logo-wrapper { width: 100px; height: 100px; }
             .logo-emoji { font-size: 3rem; }
-            .app-title { font-size: 1.5rem; }
-            .app-subtitle { font-size: 0.9rem; }
+            .app-title { font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
+    <!-- Splash Screen BLACK FRIDAY -->
     <div class="splash-screen" id="splash">
+        <div class="bf-badge">🔥 BLACK FRIDAY 🔥</div>
         <div class="logo-wrapper">
             <div class="logo-emoji">🛒</div>
         </div>
         <h1 class="app-title">Mercado Delivery</h1>
-        <p class="app-subtitle">Compras rápidas e fáceis</p>
+        <p class="app-subtitle">Ofertas Imperdíveis!</p>
+        <div class="discount-tag">ATÉ 70% OFF</div>
         <div class="loading-dots">
             <div class="dot"></div>
             <div class="dot"></div>
@@ -209,105 +374,206 @@
         </div>
     </div>
 
+    <!-- App Container -->
     <div class="app-container" id="app">
         <iframe 
             id="mainIframe"
-            title="Mercado Delivery"
+            title="Mercado Delivery Black Friday"
+            loading="eager"
+            importance="high"
             allow="geolocation; camera; microphone"
-            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-downloads"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-downloads allow-modals"
         ></iframe>
     </div>
 
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <!-- Install Button -->
+    <button class="install-btn" id="installBtn" style="display: none;">
+        <span>📱</span>
+        <span>Instalar App</span>
+    </button>
+
     <script>
+        // Configuração
         const MERCADO_URL = 'https://script.google.com/macros/s/AKfycbyEvu2F1tD3jHHNWvTAGFYsoosmAlYWRv8bwmmUtWujN0R0UXspfxxr298AoWut73YZ/exec';
+        const SPLASH_MIN_TIME = 1200; // Tempo mínimo de splash
         
         const splash = document.getElementById('splash');
         const app = document.getElementById('app');
         const iframe = document.getElementById('mainIframe');
         const toast = document.getElementById('toast');
+        const installBtn = document.getElementById('installBtn');
 
+        let loadStartTime = Date.now();
+
+        // Toast com tema Black Friday
         function showToast(msg, type = 'info') {
             toast.textContent = msg;
             toast.className = `toast ${type} show`;
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        // Cache bust otimizado
         function cacheBust(url) {
             const separator = url.includes('?') ? '&' : '?';
-            return `${url}${separator}_t=${Date.now()}&_r=${Math.random().toString(36).substr(2, 8)}`;
+            const timestamp = Math.floor(Date.now() / 60000); // Cache de 1 minuto
+            return `${url}${separator}_t=${timestamp}`;
         }
 
+        // Carregamento RÁPIDO do iframe
         function loadApp() {
-            console.log('🛒 Carregando mercado...');
+            console.log('🔥 BLACK FRIDAY - Carregando mercado...');
             
-            iframe.onload = () => {
-                console.log('✅ Mercado carregado!');
+            const loadComplete = () => {
+                const loadTime = Date.now() - loadStartTime;
+                const remainingTime = Math.max(0, SPLASH_MIN_TIME - loadTime);
+                
+                console.log(`✅ Carregado em ${loadTime}ms`);
+                
                 setTimeout(() => {
                     splash.classList.add('fade-out');
                     app.classList.add('show');
-                    setTimeout(() => splash.style.display = 'none', 300);
-                }, 500);
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 300);
+                }, remainingTime);
             };
 
+            iframe.onload = loadComplete;
+            
             iframe.onerror = () => {
                 console.error('❌ Erro ao carregar');
-                showToast('Erro ao carregar mercado', 'error');
+                showToast('Erro ao carregar. Tentando novamente...', 'error');
+                setTimeout(() => {
+                    iframe.src = cacheBust(MERCADO_URL);
+                }, 2000);
             };
 
+            // Carregamento prioritário
             iframe.src = cacheBust(MERCADO_URL);
         }
 
-        // Service Worker
+        // Service Worker para PWA
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('✅ SW registrado:', reg.scope))
-                .catch(err => console.log('❌ SW erro:', err));
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => {
+                        console.log('✅ Service Worker registrado:', reg.scope);
+                    })
+                    .catch(err => {
+                        console.log('⚠️ Service Worker não disponível:', err);
+                    });
+            });
         }
 
-        // PWA Install
+        // PWA Install com botão
         let deferredPrompt;
+        
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             deferredPrompt = e;
-            showToast('Adicione à tela inicial! 📱', 'success');
+            
+            // Mostrar botão de instalação
+            installBtn.style.display = 'flex';
+            setTimeout(() => {
+                installBtn.classList.add('show');
+            }, 100);
+            
+            showToast('📱 Instale o app para acesso rápido!', 'success');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                showToast('🎉 App instalado com sucesso!', 'success');
+            }
+            
+            deferredPrompt = null;
+            installBtn.classList.remove('show');
+            setTimeout(() => {
+                installBtn.style.display = 'none';
+            }, 300);
         });
 
         window.addEventListener('appinstalled', () => {
-            showToast('App instalado! 🎉', 'success');
+            showToast('🎉 BLACK FRIDAY APP instalado!', 'success');
             deferredPrompt = null;
+            installBtn.classList.remove('show');
         });
 
-        // Online/Offline
-        window.addEventListener('online', () => showToast('Online! ✅', 'success'));
-        window.addEventListener('offline', () => showToast('Offline 📡', 'warning'));
-
-        // Inicializar
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(loadApp, 800);
+        // Status de conexão
+        window.addEventListener('online', () => {
+            showToast('✅ Conectado - Aproveite as ofertas!', 'success');
+        });
+        
+        window.addEventListener('offline', () => {
+            showToast('📡 Sem conexão - Reconectando...', 'warning');
         });
 
-        // Debug
+        // Otimização de performance
+        const prefetchURL = () => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = cacheBust(MERCADO_URL);
+            document.head.appendChild(link);
+        };
+
+        // Inicialização otimizada
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(loadApp, 300);
+                prefetchURL();
+            });
+        } else {
+            setTimeout(loadApp, 300);
+            prefetchURL();
+        }
+
+        // Debug tools
         window.debugApp = {
             reload: () => location.reload(),
             getUrl: () => MERCADO_URL,
             clearCache: async () => {
-                const keys = await caches.keys();
-                await Promise.all(keys.map(k => caches.delete(k)));
+                if ('caches' in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                }
                 localStorage.clear();
                 sessionStorage.clear();
-                showToast('Cache limpo! 🧹', 'success');
+                showToast('🧹 Cache limpo!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            },
+            testToast: (msg, type) => showToast(msg, type),
+            showInstall: () => {
+                installBtn.style.display = 'flex';
+                installBtn.classList.add('show');
             }
         };
 
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            if (window.performance) {
+                const perfData = window.performance.timing;
+                const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+                console.log(`📊 Tempo total de carregamento: ${pageLoadTime}ms`);
+            }
+        });
+
         console.log(`
-🛒 MERCADO DELIVERY PWA
-━━━━━━━━━━━━━━━━━━━━━
-✅ URL Configurada
-📱 PWA Ativo
+🔥 BLACK FRIDAY - MERCADO DELIVERY PWA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛒 Ofertas Imperdíveis
+📱 PWA Instalável
+⚡ Carregamento Otimizado
+🎨 Tema Black Friday
 🔧 Debug: window.debugApp
-━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         `);
     </script>
 </body>
