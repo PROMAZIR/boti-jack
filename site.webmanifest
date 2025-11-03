@@ -1,61 +1,26 @@
 {
-  "name": "Black Friday - Mercado Delivery",
-  "short_name": "BF Mercado",
-  "description": "Black Friday! Ofertas imperdíveis no Mercado Delivery - Até 10% OFF",
-  "start_url": "/",
+  "name": "Mercado Delivery - Black Friday",
+  "short_name": "Mercado BF",
+  "description": "Black Friday! Ofertas imperdíveis no Mercado Delivery",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
   "orientation": "portrait",
-  "scope": "/",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "categories": ["shopping", "lifestyle"],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23FF6B35' width='192' height='192' rx='40'/><text x='96' y='140' font-size='110' text-anchor='middle' fill='white'>🛒</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23FF6B35' width='192' height='192' rx='40'/><text x='96' y='140' font-size='100' text-anchor='middle' fill='white'>🛒</text></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23FF6B35' width='512' height='512' rx='100'/><text x='256' y='380' font-size='300' text-anchor='middle' fill='white'>🛒</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23FF6B35' width='512' height='512' rx='100'/><text x='256' y='380' font-size='280' text-anchor='middle' fill='white'>🛒</text></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ],
-  "categories": ["shopping", "lifestyle", "business"],
-  "shortcuts": [
-    {
-      "name": "Ver Ofertas",
-      "short_name": "Ofertas",
-      "description": "Ver todas as ofertas da Black Friday",
-      "url": "/?action=ofertas",
-      "icons": [
-        {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='48' y='70' font-size='60' text-anchor='middle'>🔥</text></svg>",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "Carrinho",
-      "short_name": "Carrinho",
-      "description": "Ver seu carrinho de compras",
-      "url": "/?action=carrinho",
-      "icons": [
-        {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='48' y='70' font-size='60' text-anchor='middle'>🛍️</text></svg>",
-          "sizes": "96x96"
-        }
-      ]
-    }
-  ],
-  "share_target": {
-    "action": "/share",
-    "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  }
+  ]
 }
