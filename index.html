@@ -283,6 +283,8 @@
             pointer-events: none;
             font-weight: 600;
             font-size: 0.95rem;
+            max-width: 90%;
+            text-align: center;
         }
 
         .toast.show {
@@ -366,7 +368,6 @@
             loading="eager"
             importance="high"
             allow="geolocation; camera; microphone"
-            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-downloads allow-modals"
         ></iframe>
     </div>
 
@@ -389,6 +390,8 @@
 
         let loadStartTime = Date.now();
         let deferredPrompt = null;
+        let iframeLoadAttempts = 0;
+        const MAX_LOAD_ATTEMPTS = 3;
 
         function showToast(msg, type = 'info') {
             toast.textContent = msg;
@@ -404,12 +407,13 @@
 
         function loadApp() {
             console.log('🔥 BLACK FRIDAY - Carregando mercado...');
+            iframeLoadAttempts++;
             
             const loadComplete = () => {
                 const loadTime = Date.now() - loadStartTime;
                 const remainingTime = Math.max(0, SPLASH_MIN_TIME - loadTime);
                 
-                console.log(`✅ Carregado em ${loadTime}ms`);
+                console.log(`✅ Iframe carregado em ${loadTime}ms`);
                 
                 setTimeout(() => {
                     splash.classList.add('fade-out');
@@ -418,12 +422,50 @@
                 }, remainingTime);
             };
 
-            iframe.onload = loadComplete;
-            iframe.onerror = () => {
-                console.error('❌ Erro ao carregar');
-                showToast('Erro ao carregar. Tentando novamente...', 'error');
-                setTimeout(() => iframe.src = cacheBust(MERCADO_URL), 2000);
+            const loadError = (error) => {
+                console.error('❌ Erro ao carregar iframe:', error);
+                
+                if (iframeLoadAttempts < MAX_LOAD_ATTEMPTS) {
+                    showToast(`Tentando novamente... (${iframeLoadAttempts}/${MAX_LOAD_ATTEMPTS})`, 'warning');
+                    setTimeout(() => {
+                        iframe.src = cacheBust(MERCADO_URL);
+                    }, 2000);
+                } else {
+                    showToast('❌ Erro ao carregar. Verifique sua conexão.', 'error');
+                    setTimeout(() => {
+                        splash.classList.add('fade-out');
+                        setTimeout(() => {
+                            splash.innerHTML = `
+                                <div style="text-align: center; padding: 20px;">
+                                    <h2 style="color: #FF6B35; margin-bottom: 20px;">⚠️ Erro de Carregamento</h2>
+                                    <p style="color: white; margin-bottom: 20px;">Não foi possível carregar o mercado.</p>
+                                    <button onclick="location.reload()" style="background: linear-gradient(135deg, #FF6B35, #FF3333); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer;">
+                                        🔄 Tentar Novamente
+                                    </button>
+                                </div>
+                            `;
+                            splash.classList.remove('fade-out');
+                        }, 300);
+                    }, 1000);
+                }
             };
+
+            iframe.onload = () => {
+                console.log('✅ Iframe onload disparado');
+                loadComplete();
+            };
+            
+            iframe.onerror = loadError;
+
+            // Timeout de segurança
+            const loadTimeout = setTimeout(() => {
+                console.warn('⚠️ Timeout no carregamento do iframe');
+                loadError('timeout');
+            }, 15000);
+
+            iframe.addEventListener('load', () => {
+                clearTimeout(loadTimeout);
+            });
 
             iframe.src = cacheBust(MERCADO_URL);
         }
@@ -431,7 +473,7 @@
         // Service Worker - CRÍTICO para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: '/' })
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
                     .then(reg => {
                         console.log('✅ Service Worker registrado:', reg.scope);
                         
@@ -450,6 +492,8 @@
                         showToast('⚠️ Modo offline não disponível', 'warning');
                     });
             });
+        } else {
+            console.warn('⚠️ Service Worker não suportado neste navegador');
         }
 
         // PWA Install Prompt
@@ -482,6 +526,7 @@
                 showToast('🎉 App instalado com sucesso!', 'success');
             } else {
                 showToast('Instalação cancelada', 'info');
+                setTimeout(() => installBtn.classList.add('show'), 2000);
             }
             
             deferredPrompt = null;
@@ -495,8 +540,15 @@
         });
 
         // Status de conexão
-        window.addEventListener('online', () => showToast('✅ Conectado!', 'success'));
-        window.addEventListener('offline', () => showToast('📡 Sem conexão', 'warning'));
+        window.addEventListener('online', () => {
+            console.log('✅ Conexão restaurada');
+            showToast('✅ Conectado!', 'success');
+        });
+        
+        window.addEventListener('offline', () => {
+            console.log('📡 Sem conexão');
+            showToast('📡 Sem conexão', 'warning');
+        });
 
         // Inicialização
         if (document.readyState === 'loading') {
@@ -505,7 +557,12 @@
             setTimeout(loadApp, 300);
         }
 
-        // Debug
+        // iOS: Detecta se já está instalado
+        if (window.navigator.standalone === true) {
+            console.log('📱 App já instalado no iOS');
+        }
+
+        // Debug tools
         window.debugApp = {
             reload: () => location.reload(),
             showInstall: () => installBtn.classList.add('show'),
@@ -514,17 +571,28 @@
                 const reg = await navigator.serviceWorker.getRegistration();
                 console.log('Service Worker:', reg);
                 return reg;
+            },
+            forceInstallPrompt: () => {
+                installBtn.classList.add('show');
+                showToast('📱 Botão de instalação ativado para teste', 'info');
+            },
+            testIframe: () => {
+                console.log('Testando iframe...');
+                console.log('URL:', iframe.src);
+                console.log('Loaded:', iframe.contentWindow);
             }
         };
 
         console.log(`
-🔥 BLACK FRIDAY PWA v1.0
-━━━━━━━━━━━━━━━━━━━━━━
+🔥 BLACK FRIDAY PWA v1.1
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🛒 Ofertas Imperdíveis
 📱 PWA Instalável
 ⚡ Service Worker: ${('serviceWorker' in navigator) ? '✅' : '❌'}
+🌐 Online: ${navigator.onLine ? '✅' : '❌'}
+📱 iOS Standalone: ${window.navigator.standalone ? '✅' : '❌'}
 🔧 Debug: window.debugApp
-━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         `);
     </script>
 </body>
