@@ -1,128 +1,104 @@
-// Service Worker - Black Friday Mercado Delivery PWA
-const CACHE_VERSION = 'bf-mercado-v1.0.0';
-const CACHE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+const CACHE_VERSION = 'v1.0.0';
+const CACHE_NAME = `mercado-bf-${CACHE_VERSION}`;
+const OFFLINE_URL = './';
+
+// Arquivos para cache
+const FILES_TO_CACHE = [
+  './',
+  './manifest.json'
 ];
 
-// URLs dinâmicas (não cachear)
-const DYNAMIC_URLS = [
-  'https://script.google.com/macros/s/AKfycbyEvu2F1tD3jHHNWvTAGFYsoosmAlYWRv8bwmmUtWujN0R0UXspfxxr298AoWut73YZ/exec'
-];
-
-// Instalação - Cache de assets estáticos
+// Instalação - cacheia arquivos essenciais
 self.addEventListener('install', event => {
-  console.log('🔥 Service Worker: Instalando...');
+  console.log('🔥 Service Worker instalando...');
   
   event.waitUntil(
-    caches.open(CACHE_VERSION)
+    caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('📦 Cache aberto');
-        return cache.addAll(CACHE_ASSETS);
+        console.log('✅ Cache aberto');
+        return cache.addAll(FILES_TO_CACHE);
       })
-      .then(() => {
-        console.log('✅ Assets em cache');
-        return self.skipWaiting();
-      })
-      .catch(err => {
-        console.error('❌ Erro no cache:', err);
-      })
+      .then(() => self.skipWaiting())
   );
 });
 
-// Ativação - Limpar caches antigos
+// Ativação - limpa caches antigos
 self.addEventListener('activate', event => {
-  console.log('🔥 Service Worker: Ativando...');
+  console.log('🔥 Service Worker ativando...');
   
   event.waitUntil(
     caches.keys()
       .then(cacheNames => {
         return Promise.all(
-          cacheNames.map(cacheName => {
-            if (cacheName !== CACHE_VERSION) {
+          cacheNames
+            .filter(cacheName => cacheName !== CACHE_NAME)
+            .map(cacheName => {
               console.log('🗑️ Removendo cache antigo:', cacheName);
               return caches.delete(cacheName);
-            }
-          })
+            })
         );
       })
-      .then(() => {
-        console.log('✅ Service Worker ativado');
-        return self.clients.claim();
-      })
+      .then(() => self.clients.claim())
   );
 });
 
-// Estratégia: Network First com fallback para Cache
+// Fetch - estratégia Network First para Google Apps Script
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
-
-  // Ignorar requisições não-GET
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // Ignorar chrome-extension e outras URLs especiais
-  if (!url.protocol.startsWith('http')) {
-    return;
-  }
-
-  // Para URLs dinâmicas (Google Apps Script): sempre buscar da rede
-  const isDynamicUrl = DYNAMIC_URLS.some(dynUrl => request.url.includes(dynUrl));
   
-  if (isDynamicUrl) {
+  // Para Google Apps Script, sempre tenta a rede primeiro
+  if (url.hostname.includes('google.com') || url.hostname.includes('googleapis.com')) {
     event.respondWith(
       fetch(request)
+        .then(response => {
+          // Clona a resposta antes de cachear
+          const responseToCache = response.clone();
+          
+          // Cacheia apenas respostas bem-sucedidas
+          if (response.status === 200) {
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(request, responseToCache));
+          }
+          
+          return response;
+        })
         .catch(() => {
-          // Se offline, retornar mensagem
-          return new Response(
-            JSON.stringify({ 
-              error: 'Sem conexão. Conecte-se à internet para continuar.' 
-            }),
-            { 
-              headers: { 'Content-Type': 'application/json' } 
-            }
-          );
+          // Se falhar, tenta o cache
+          return caches.match(request)
+            .then(cachedResponse => {
+              if (cachedResponse) {
+                return cachedResponse;
+              }
+              // Se não houver cache, retorna página offline
+              return caches.match(OFFLINE_URL);
+            });
         })
     );
     return;
   }
-
-  // Para assets estáticos: Cache First
+  
+  // Para outros recursos, usa cache first
   event.respondWith(
     caches.match(request)
       .then(cachedResponse => {
         if (cachedResponse) {
           return cachedResponse;
         }
-
+        
         return fetch(request)
           .then(response => {
-            // Cachear apenas respostas válidas
+            // Não cacheia respostas não-OK
             if (!response || response.status !== 200 || response.type === 'error') {
               return response;
             }
-
-            // Clonar resposta para cache
+            
             const responseToCache = response.clone();
             
-            caches.open(CACHE_VERSION)
-              .then(cache => {
-                cache.put(request, responseToCache);
-              });
-
+            caches.open(CACHE_NAME)
+              .then(cache => cache.put(request, responseToCache));
+            
             return response;
-          })
-          .catch(() => {
-            // Fallback offline
-            return new Response(
-              '<!DOCTYPE html><html><head><title>Offline</title><style>body{font-family:sans-serif;text-align:center;padding:50px;background:#000;color:#fff;}h1{color:#FF6B35;}</style></head><body><h1>🔥 Black Friday</h1><p>Sem conexão</p><p>Conecte-se à internet para continuar</p></body></html>',
-              { 
-                headers: { 'Content-Type': 'text/html' } 
-              }
-            );
           });
       })
   );
@@ -133,45 +109,6 @@ self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
-  if (event.data && event.data.type === 'CLEAR_CACHE') {
-    event.waitUntil(
-      caches.keys()
-        .then(cacheNames => {
-          return Promise.all(
-            cacheNames.map(cacheName => caches.delete(cacheName))
-          );
-        })
-        .then(() => {
-          return self.clients.matchAll();
-        })
-        .then(clients => {
-          clients.forEach(client => {
-            client.postMessage({ type: 'CACHE_CLEARED' });
-          });
-        })
-    );
-  }
 });
 
-// Background Sync (se suportado)
-if (self.registration.sync) {
-  self.addEventListener('sync', event => {
-    if (event.tag === 'sync-orders') {
-      event.waitUntil(
-        // Sincronizar pedidos pendentes
-        console.log('🔄 Sincronizando pedidos...')
-      );
-    }
-  });
-}
-
-console.log(`
-🔥 BLACK FRIDAY SERVICE WORKER
-━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Versão: ${CACHE_VERSION}
-📦 Assets em cache
-⚡ Network First
-🔄 Auto-update
-━━━━━━━━━━━━━━━━━━━━━━━━━━━
-`);
+console.log('🔥 Service Worker BLACK FRIDAY carregado!');
